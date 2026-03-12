@@ -211,16 +211,12 @@ window.location=formURL+params;
 
 }
 
-function addQty(item,qtyId){
-
-let qty=document.getElementById(qtyId).value;
-
-for(let i=0;i<qty;i++){
-cart.push(item);
-}
-
-render();
-
+function addQty(item, qtyId) {
+    let qty = document.getElementById(qtyId).value;  // Get quantity from the input field
+    for (let i = 0; i < qty; i++) {
+        cart.push(item);  // Add the item to the cart 'qty' number of times
+    }
+    render();  // Re-render the cart display
 }
 
 function removeItem(item){
