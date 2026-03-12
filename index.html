@@ -87,50 +87,52 @@ Handmade Oboe and English Horn Reeds
 let cart=[];
 
 function add(item){
-cart.push(item)
-render()
+cart.push(item);
+render();
 }
 
 function render(){
-let list=document.getElementById("cartlist")
-list.innerHTML=""
+let list=document.getElementById("cartlist");
+list.innerHTML="";
 
 cart.forEach(i=>{
-let li=document.createElement("li")
-li.textContent=i
-list.appendChild(li)
-})
+let li=document.createElement("li");
+li.textContent=i;
+list.appendChild(li);
+});
 }
 
 function checkout(){
 
-let oboeQty=0
-let ehQty=0
-let oboeType=""
-let ehType=""
+let oboeQty=0;
+let ehQty=0;
+let oboeType="";
+let ehType="";
 
 cart.forEach(i=>{
 
 if(i.includes("Oboe")){
-oboeQty++
-oboeType=i.includes("Student") ? "Student" : "Advanced"
+oboeQty++;
+oboeType=i.includes("Student") ? "Student" : "Advanced";
 }
 
 if(i.includes("EH")){
-ehQty++
-ehType=i.includes("Student") ? "Student" : "Advanced"
+ehQty++;
+ehType=i.includes("Student") ? "Student" : "Advanced";
 }
 
-})
+});
 
-let formURL="https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?"
+let formURL="https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?";
 
 let params=
 "entry.1548577114="+oboeQty+
 "&entry.363462995="+oboeType+
 "&entry.691546721="+ehQty+
-"&entry.1694258351="+ehType
+"&entry.1694258351="+ehType;
 
-window.location=formURL+params
+window.location=formURL+params;
 
 }
+
+</script>
