@@ -52,40 +52,60 @@ Handmade Oboe and English Horn Reeds
 <h2>Shop</h2>
 
 <div class="product">
+  
 <h3>Student Oboe Reed — $22</h3>
+  
 <p>Reliable and stable reeds designed for developing players.</p>
+  
 <input type="number" id="studentOboeQty" value="1" min="1" style="width:60px">
 
 <button onclick="addQty('Student Oboe','studentOboeQty')">
 Add to Cart
 </button>
 
+</div>
+
 <div class="product">
+  
 <h3>Advanced Oboe Reed — $26</h3>
+  
 <p>Flexible reeds with greater color and dynamic response.</p>
+  
 <input type="number" id="advOboeQty" value="1" min="1" style="width:60px">
 
 <button onclick="addQty('Advanced Oboe','advOboeQty')">
 Add to Cart
 </button>
 
+</div>
+
 <div class="product">
+  
 <h3>Student English Horn Reed — $30</h3>
+  
 <p>Stable reeds with consistent response.</p>
+  
 <input type="number" id="studentEHQty" value="1" min="1" style="width:60px">
 
 <button onclick="addQty('Student EH','studentEHQty')">
 Add to Cart
 </button>
 
+</div>
+  
 <div class="product">
+  
 <h3>Advanced English Horn Reed — $34</h3>
+  
 <p>Responsive reeds designed for experienced players.</p>
+  
 <input type="number" id="advEHQty" value="1" min="1" style="width:60px">
 
 <button onclick="addQty('Advanced EH','advEHQty')">
 Add to Cart
 </button>
+
+</div>
 
 <h2>Your Cart</h2>
 
@@ -104,14 +124,25 @@ render();
 }
 
 function render(){
+
 let list=document.getElementById("cartlist");
 list.innerHTML="";
 
+let counts={};
+
 cart.forEach(i=>{
-let li=document.createElement("li");
-li.textContent=i;
-list.appendChild(li);
+counts[i]=(counts[i]||0)+1;
 });
+
+for(let item in counts){
+
+let li=document.createElement("li");
+li.textContent=item+" x"+counts[item];
+
+list.appendChild(li);
+
+}
+
 }
 
 function checkout(){
