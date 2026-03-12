@@ -54,26 +54,38 @@ Handmade Oboe and English Horn Reeds
 <div class="product">
 <h3>Student Oboe Reed — $22</h3>
 <p>Reliable and stable reeds designed for developing players.</p>
-<button onclick="add('Student Oboe')">Add Student Oboe</button>
-</div>
+<input type="number" id="studentOboeQty" value="1" min="1" style="width:60px">
+
+<button onclick="addQty('Student Oboe','studentOboeQty')">
+Add to Cart
+</button>
 
 <div class="product">
 <h3>Advanced Oboe Reed — $26</h3>
 <p>Flexible reeds with greater color and dynamic response.</p>
-<button onclick="add('Advanced Oboe')">Add Advanced Oboe</button>
-</div>
+<input type="number" id="advOboeQty" value="1" min="1" style="width:60px">
+
+<button onclick="addQty('Advanced Oboe','advOboeQty')">
+Add to Cart
+</button>
 
 <div class="product">
 <h3>Student English Horn Reed — $30</h3>
 <p>Stable reeds with consistent response.</p>
-<button onclick="add('Student EH')">Add Student EH</button>
-</div>
+<input type="number" id="studentEHQty" value="1" min="1" style="width:60px">
+
+<button onclick="addQty('Student EH','studentEHQty')">
+Add to Cart
+</button>
 
 <div class="product">
 <h3>Advanced English Horn Reed — $34</h3>
 <p>Responsive reeds designed for experienced players.</p>
-<button onclick="add('Advanced EH')">Add Advanced EH</button>
-</div>
+<input type="number" id="advEHQty" value="1" min="1" style="width:60px">
+
+<button onclick="addQty('Advanced EH','advEHQty')">
+Add to Cart
+</button>
 
 <h2>Your Cart</h2>
 
@@ -132,6 +144,18 @@ let params=
 "&entry.1694258351="+ehType;
 
 window.location=formURL+params;
+
+}
+
+function addQty(item,qtyId){
+
+let qty=document.getElementById(qtyId).value;
+
+for(let i=0;i<qty;i++){
+cart.push(item);
+}
+
+render();
 
 }
 
