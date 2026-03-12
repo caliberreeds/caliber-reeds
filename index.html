@@ -107,7 +107,7 @@ Add to Cart
 
 </div>
 
-<h2>Your Cart</h2>
+<h2 id="cartTitle">Your Cart (0 items)</h2>
 
 <div id="cart">
 <ul id="cartlist"></ul>
@@ -143,6 +143,7 @@ function render() {
     let list = document.getElementById("cartlist");
     let totalBox = document.getElementById("total");
     let shippingSelect = document.getElementById("shippingMethod");
+    let cartTitle = document.getElementById("cartTitle");
 
     list.innerHTML = "";
 
@@ -174,6 +175,8 @@ function render() {
 
     // Update total price with shipping cost
     totalBox.textContent = total;
+
+    cartTitle.textContent = "Cart (" + cart.length + " items)";
 
 }
 
