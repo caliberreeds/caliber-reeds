@@ -111,6 +111,9 @@ Add to Cart
 
 <div id="cart">
 <ul id="cartlist"></ul>
+
+<p><strong>Total: $<span id="total">0</span></strong></p>
+
 <button onclick="checkout()">Checkout</button>
 </div>
 
@@ -126,12 +129,24 @@ render();
 function render(){
 
 let list=document.getElementById("cartlist");
+let totalBox=document.getElementById("total");
+
 list.innerHTML="";
 
 let counts={};
 
+let prices={
+"Student Oboe":22,
+"Advanced Oboe":26,
+"Student EH":30,
+"Advanced EH":34
+};
+
+let total=0;
+
 cart.forEach(i=>{
 counts[i]=(counts[i]||0)+1;
+total+=prices[i];
 });
 
 for(let item in counts){
@@ -142,6 +157,8 @@ li.textContent=item+" x"+counts[item];
 list.appendChild(li);
 
 }
+
+totalBox.textContent=total;
 
 }
 
