@@ -152,8 +152,7 @@ total+=prices[i];
 for(let item in counts){
 
 let li=document.createElement("li");
-li.textContent=item+" x"+counts[item];
-
+li.innerHTML=item+" x"+counts[item]+" <button onclick=\"removeItem('"+item+"')\">-</button>";
 list.appendChild(li);
 
 }
@@ -201,6 +200,18 @@ let qty=document.getElementById(qtyId).value;
 
 for(let i=0;i<qty;i++){
 cart.push(item);
+}
+
+render();
+
+}
+
+function removeItem(item){
+
+let index=cart.indexOf(item);
+
+if(index>-1){
+cart.splice(index,1);
 }
 
 render();
