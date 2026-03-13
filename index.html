@@ -112,14 +112,18 @@ Add to Cart
 <div id="cart">
 <ul id="cartlist"></ul>
 
-<p><strong>Total: $<span id="total">0</span></strong></p>
+<p><strong>Estimated Total (before shipping): $<span id="total">0</span></strong></p>
 
 <!-- Shipping options -->
 <p><strong>Shipping:</strong>
   <select id="shippingMethod" onchange="updateShipping()">
-    <option value="5">USPS First Class - $5</option>
-    <option value="9">USPS Priority - $9</option>
+    <option value="5">USPS Ground Advantage (est. $4–6)</option>
+    <option value="9">USPS Priority Mail (est. $8–10)</option>
   </select>
+</p>
+
+<p style="font-size:12px;color:#555;">
+Final shipping cost will be calculated when your order ships.
 </p>
 
 <p style="font-size:12px;color:#555;">
@@ -201,6 +205,8 @@ let ehQty=0;
 let oboeType="";
 let ehType="";
 
+let shippingMethod = document.getElementById("shippingMethod").selectedOptions[0].text;
+
 cart.forEach(i=>{
 
 if(i.includes("Oboe")){
@@ -217,13 +223,14 @@ ehType=i.includes("Student") ? "Student" : "Advanced";
 
 let formURL="https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?";
 
-let params=
+let params =
 "entry.1548577114="+oboeQty+
 "&entry.363462995="+oboeType+
 "&entry.691546721="+ehQty+
 "&entry.1694258351="+ehType+
-"&entry.1658249047=$"+total;
-  
+"&entry.1658249047=$"+total+
+"&entry.1854306217="+shippingMethod;
+
 window.location=formURL+params;
 
 }
