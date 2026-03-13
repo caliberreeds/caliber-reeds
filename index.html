@@ -178,9 +178,6 @@ function render() {
         list.appendChild(li);
     }
 
-    // Add shipping cost
-    let shippingCost = parseInt(shippingSelect.value);
-    total += shippingCost;
 
     // Update total price with shipping cost
     totalBox.textContent = total;
