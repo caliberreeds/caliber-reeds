@@ -75,11 +75,33 @@ border:2px solid #444;
 border-radius:8px;
 }
 
+#cartBar{
+position:fixed;
+top:0;
+left:0;
+right:0;
+background:#2f5e3f;
+color:white;
+padding:12px;
+text-align:center;
+font-weight:bold;
+z-index:1000;
+}
+
+body{
+padding-top:60px;
+}
+
 </style>
 
 </head>
 
 <body>
+
+<div id="cartBar">
+🛒 Cart (<span id="cartCount">0</span>)
+</div>
+  
 <div class="header">
 <h1>Caliber Reeds by Ben</h1>
 
@@ -232,6 +254,8 @@ function render() {
     totalBox.textContent = total;
 
     cartTitle.textContent = "Your Cart (" + cart.length + " items)";
+
+    document.getElementById("cartCount").textContent = cart.length;
 
     localStorage.setItem("reedCart", JSON.stringify(cart));
 
