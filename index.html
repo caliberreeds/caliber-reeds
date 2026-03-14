@@ -324,9 +324,13 @@ checkout();
 
 function payCard(){
 
-alert("You will be directed to pay by card after submitting the order.");
-
 checkout();
+
+setTimeout(function(){
+
+window.open("pay.html","_blank");
+
+},1500);
 
 }
 
