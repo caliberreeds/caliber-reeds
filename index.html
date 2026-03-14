@@ -142,6 +142,11 @@ Taxes may be added to your order if required based on your location.
 let cart=[];
 let total=0;
 
+let savedCart = localStorage.getItem("reedCart");
+if(savedCart){
+cart = JSON.parse(savedCart);
+}
+
 function add(item){
 cart.push(item);
 render();
@@ -183,6 +188,8 @@ function render() {
     totalBox.textContent = total;
 
     cartTitle.textContent = "Your Cart (" + cart.length + " items)";
+
+    localStorage.setItem("reedCart", JSON.stringify(cart));
 
 }
 
