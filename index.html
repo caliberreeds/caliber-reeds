@@ -261,7 +261,10 @@ function render() {
 
     cartTitle.textContent = "Your Cart (" + cart.length + " items)";
 
-    document.getElementById("cartCount").textContent = cart.length;
+    let cartCount = document.getElementById("cartCount");
+    if(cartCount){
+    cartCount.textContent = cart.length;
+    }
 
     localStorage.setItem("reedCart", JSON.stringify(cart));
 
