@@ -87,4 +87,27 @@ let ehType="";
 
 cart.forEach(i=>{
 
-if(i.includes
+if(i.includes("Oboe")){
+oboeQty++;
+oboeType=i.includes("Student") ? "Student" : "Advanced";
+}
+
+if(i.includes("EH")){
+ehQty++;
+ehType=i.includes("Student") ? "Student" : "Advanced";
+}
+
+});
+
+let formURL="https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?embedded=true";
+
+let params =
+"&entry.1548577114="+oboeQty+
+"&entry.363462995="+oboeType+
+"&entry.691546721="+ehQty+
+"&entry.1694258351="+ehType+
+"&entry.1658249047=$"+total;
+
+document.getElementById("orderForm").src=formURL+params;
+
+</script>
