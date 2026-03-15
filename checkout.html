@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<title>Checkout - Caliber Reeds by Ben</title>
+<title>Checkout - Caliber Reeds</title>
 
 <style>
 
@@ -18,16 +18,17 @@ h1{
 text-align:center;
 }
 
-.checkoutBox{
+.orderSummary{
 background:white;
 padding:25px;
-border-radius:8px;
 border:1px solid #ccc;
+border-radius:8px;
+margin-bottom:30px;
 }
 
 iframe{
 width:100%;
-height:3000px;
+height:2200px;
 border:none;
 }
 
@@ -39,16 +40,51 @@ border:none;
 
 <h1>Checkout</h1>
 
-<p style="text-align:center;">
-Complete your order below
-</p>
+<div class="orderSummary">
 
-<div class="checkoutBox">
+<h2>Your Order</h2>
 
-<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?embedded=true"></iframe>
+<div id="summary"></div>
+
+<p><strong>Estimated Total (before shipping): $<span id="summaryTotal"></span></strong></p>
 
 </div>
 
-</body>
+<iframe id="orderForm"></iframe>
 
-</html>
+<script>
+
+let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
+
+let prices = {
+"Student Oboe":23,
+"Advanced Oboe":27,
+"Student EH":31,
+"Advanced EH":35
+};
+
+let counts={};
+let total=0;
+
+cart.forEach(i=>{
+counts[i]=(counts[i]||0)+1;
+total+=prices[i];
+});
+
+let summaryHTML="";
+
+for(let item in counts){
+summaryHTML += item + " x" + counts[item] + "<br>";
+}
+
+document.getElementById("summary").innerHTML=summaryHTML;
+document.getElementById("summaryTotal").textContent=total;
+
+let oboeQty=0;
+let ehQty=0;
+let oboeType="";
+let ehType="";
+
+cart.forEach(i=>{
+
+if(i.includes
