@@ -211,7 +211,7 @@ Taxes may be added to your order if required based on your location.
 
 <script>
 
-let cart=[];
+let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
 let total=0;
 
 let savedCart = localStorage.getItem("reedCart");
