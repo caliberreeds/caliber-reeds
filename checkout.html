@@ -92,51 +92,57 @@ let prices = {
 "Advanced EH":35
 };
 
-let counts={};
-let total=0;
+let counts = {};
+let total = 0;
 
-cart.forEach(i=>{
-counts[i]=(counts[i]||0)+1;
-total+=prices[i];
+let oboeQty = 0;
+let ehQty = 0;
+let oboeType = "";
+let ehType = "";
+
+// count items
+cart.forEach(i => {
+
+counts[i] = (counts[i] || 0) + 1;
+total += prices[i];
+
+if(i.includes("Oboe")){
+oboeQty++;
+oboeType = i.includes("Student") ? "Student" : "Advanced";
+}
+
+if(i.includes("EH")){
+ehQty++;
+ehType = i.includes("Student") ? "Student" : "Advanced";
+}
+
 });
 
-let summaryHTML="";
+// build summary
+let summaryHTML = "";
 
 for(let item in counts){
 summaryHTML += item + " x" + counts[item] + "<br>";
 }
 
-document.getElementById("summary").innerHTML=summaryHTML;
-document.getElementById("summaryTotal").textContent=total;
+document.getElementById("summary").innerHTML = summaryHTML;
+document.getElementById("summaryTotal").textContent = total;
 
-let oboeQty=0;
-let ehQty=0;
-let oboeType="";
-let ehType="";
 
-cart.forEach(i=>{
+// open the order form
+function openOrderForm(){
 
-if(i.includes("Oboe")){
-oboeQty++;
-oboeType=i.includes("Student") ? "Student" : "Advanced";
-}
-
-if(i.includes("EH")){
-ehQty++;
-ehType=i.includes("Student") ? "Student" : "Advanced";
-}
-
-});
-
-let formURL="https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?embedded=true";
+let formURL="https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?";
 
 let params =
-"&entry.1548577114="+oboeQty+
+"entry.1548577114="+oboeQty+
 "&entry.363462995="+oboeType+
 "&entry.691546721="+ehQty+
 "&entry.1694258351="+ehType+
 "&entry.1658249047=$"+total;
 
-document.getElementById("orderForm").src=formURL+params;
+window.location = formURL + params;
+
+}
 
 </script>
