@@ -358,5 +358,20 @@ render();
 }
 
 render();
+
+function openOrderForm(){
+
+let formURL="https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?";
+
+let params =
+"entry.1548577114="+oboeQty+
+"&entry.363462995="+oboeType+
+"&entry.691546721="+ehQty+
+"&entry.1694258351="+ehType+
+"&entry.1658249047=$"+total;
+
+window.location=formURL+params;
+
+}
   
 </script>
