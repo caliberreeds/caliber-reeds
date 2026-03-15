@@ -277,6 +277,12 @@ alert("Your cart is empty.");
 return;
 }
 
+let cartString = encodeURIComponent(JSON.stringify(cart));
+
+window.location = "checkout.html?cart=" + cartString;
+
+}
+
 let oboeQty=0;
 let ehQty=0;
 let oboeType="";
