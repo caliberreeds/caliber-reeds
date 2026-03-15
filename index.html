@@ -214,11 +214,6 @@ Taxes may be added to your order if required based on your location.
 let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
 let total=0;
 
-let savedCart = localStorage.getItem("reedCart");
-if(savedCart){
-cart = JSON.parse(savedCart);
-}
-
 function add(item){
 cart.push(item);
 render();
@@ -313,7 +308,6 @@ let params =
 "&entry.1658249047=$"+total+
 "&entry.1854306217="+shippingMethod;
 
-localStorage.removeItem("reedCart");
 window.location="checkout.html";
 
 }
@@ -359,8 +353,6 @@ render();
 }
 
 render();
-
-function openOrderForm(){
 
 let formURL="https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?";
 
