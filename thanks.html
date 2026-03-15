@@ -2,14 +2,15 @@
 <html>
 
 <head>
-<title>Order Received – Caliber Reeds</title>
+<title>Order Received - Caliber Reeds</title>
 
 <style>
+
 body{
 font-family:Arial;
 max-width:700px;
 margin:auto;
-padding:40px;
+padding:60px;
 text-align:center;
 background:#fafafa;
 }
@@ -18,22 +19,28 @@ background:#fafafa;
 background:white;
 padding:40px;
 border-radius:10px;
-border:1px solid #ccc;
+border:1px solid #ddd;
+box-shadow:0 3px 8px rgba(0,0,0,0.08);
 }
 
 h1{
-margin-bottom:20px;
+color:#2f5e3f;
 }
 
-a{
-display:inline-block;
-margin-top:20px;
+button{
 padding:12px 20px;
-background:#333;
+margin-top:25px;
+background:#2f5e3f;
 color:white;
-text-decoration:none;
+border:none;
 border-radius:6px;
+cursor:pointer;
 }
+
+button:hover{
+background:#3f7a52;
+}
+
 </style>
 
 </head>
@@ -42,18 +49,24 @@ border-radius:6px;
 
 <div class="box">
 
-<h1>Thank You for Your Order!</h1>
+<h1>Thank You!</h1>
 
 <p>Your order has been received.</p>
 
-<p>You will receive a confirmation email shortly with your order number.</p>
+<p>
+You will receive an email confirmation shortly.  
+If you selected <strong>Pay Later</strong>, a payment request will follow soon.
+</p>
 
-<p>If you selected <strong>Pay Later</strong>, a payment request will be sent soon.</p>
+<p>
+All reed orders ship with tracking.
+</p>
 
-<a href="index.html">Return to Store</a>
+<button onclick="window.location='index.html'">
+Return to Shop
+</button>
 
 </div>
 
 </body>
-
 </html>
