@@ -85,7 +85,8 @@ Continue to Order Form
 
 <script>
 
-let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
+let params = new URLSearchParams(window.location.search);
+let cart = JSON.parse(decodeURIComponent(params.get("cart"))) || [];
 
 let prices = {
 "Student Oboe":23,
