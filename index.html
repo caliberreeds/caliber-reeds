@@ -182,9 +182,9 @@ Add to Cart
 
 <!-- Shipping options -->
 <p><strong>Shipping:</strong>
-  <select id="shippingMethod" onchange="updateShipping()">
-    <option value="5">USPS Ground Advantage (est. $4–6)</option>
-    <option value="9">USPS Priority Mail (est. $8–10)</option>
+  <select id="shippingMethod">
+  <option value="5">USPS Ground Advantage - $5</option>
+  <option value="9">USPS Priority Mail - $9</option>
   </select>
 </p>
 
@@ -257,7 +257,8 @@ function render() {
 
 
     // Update total price with shipping cost
-    totalBox.textContent = total;
+    let shipping = parseInt(shippingSelect.value);
+    totalBox.textContent = total + shipping;
 
     cartTitle.textContent = "Your Cart (" + cart.length + " items)";
 
