@@ -59,7 +59,9 @@ font-size:14px;
 
 <div id="summary"></div>
 
-<p><strong>Estimated Total (before shipping): $<span id="summaryTotal"></span></strong></p>
+<p>
+<strong>Estimated Total (before shipping): $<span id="summaryTotal"></span></strong>
+</p>
 
 </div>
 
@@ -101,24 +103,24 @@ let oboeType = "";
 let ehType = "";
 
 // count items
-cart.forEach(i => {
+cart.forEach(function(item){
 
-counts[i] = (counts[i] || 0) + 1;
-total += prices[i];
+counts[item] = (counts[item] || 0) + 1;
+total += prices[item];
 
-if(i.includes("Oboe")){
+if(item.includes("Oboe")){
 oboeQty++;
-oboeType = i.includes("Student") ? "Student" : "Advanced";
+oboeType = item.includes("Student") ? "Student" : "Advanced";
 }
 
-if(i.includes("EH")){
+if(item.includes("EH")){
 ehQty++;
-ehType = i.includes("Student") ? "Student" : "Advanced";
+ehType = item.includes("Student") ? "Student" : "Advanced";
 }
 
 });
 
-// build summary
+// build order summary
 let summaryHTML = "";
 
 for(let item in counts){
@@ -129,17 +131,17 @@ document.getElementById("summary").innerHTML = summaryHTML;
 document.getElementById("summaryTotal").textContent = total;
 
 
-// open the order form
+// button opens prefilled order form
 function openOrderForm(){
 
-let formURL="https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?";
+let formURL = "https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?";
 
 let params =
-"entry.1548577114="+oboeQty+
-"&entry.363462995="+oboeType+
-"&entry.691546721="+ehQty+
-"&entry.1694258351="+ehType+
-"&entry.1658249047=$"+total;
+"entry.1548577114=" + oboeQty +
+"&entry.363462995=" + oboeType +
+"&entry.691546721=" + ehQty +
+"&entry.1694258351=" + ehType +
+"&entry.1658249047=$" + total;
 
 window.location = formURL + params;
 
