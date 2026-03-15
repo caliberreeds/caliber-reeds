@@ -95,6 +95,8 @@ window.location = "index.html";
 
 let cart = JSON.parse(decodeURIComponent(cartParam));
 
+localStorage.removeItem("reedCart");
+
 let prices = {
 "Student Oboe":23,
 "Advanced Oboe":27,
