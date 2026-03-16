@@ -93,7 +93,8 @@ let shipping = localStorage.getItem("reedShipping") || 0;
 shipping = parseInt(shipping);
 
 let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
-
+let shipping = parseInt(localStorage.getItem("reedShipping")) || 0;
+  
 if(cart.length === 0){
   alert("Your cart is empty.");
   window.location = "index.html";
