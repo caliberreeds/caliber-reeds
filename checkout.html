@@ -86,14 +86,11 @@ Continue to Order Form
 <script>
 
 let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
-let shippingMethod = "";
 
 if(cart.length === 0){
-
-alert("Your cart is empty.");
-window.location = "index.html";
-
-} else {
+  alert("Your cart is empty.");
+  window.location = "index.html";
+}
 
 let prices = {
 "Student Oboe":23,
@@ -110,7 +107,7 @@ let ehQty = 0;
 let oboeType = "";
 let ehType = "";
 
-// count items
+// Count items
 cart.forEach(function(item){
 
 counts[item] = (counts[item] || 0) + 1;
@@ -128,7 +125,7 @@ ehType = item.includes("Student") ? "Student" : "Advanced";
 
 });
 
-// build order summary
+// Build order summary
 let summaryHTML = "";
 
 for(let item in counts){
@@ -139,7 +136,7 @@ document.getElementById("summary").innerHTML = summaryHTML;
 document.getElementById("summaryTotal").textContent = total;
 
 
-// button opens prefilled order form
+// Continue to order form
 function openOrderForm(){
 
 let formURL = "https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?";
@@ -149,13 +146,10 @@ let params =
 "&entry.363462995=" + oboeType +
 "&entry.691546721=" + ehQty +
 "&entry.1694258351=" + ehType +
-"&entry.1658249047=$" + total +
-"&entry.1854306217=" + shippingMethod;
+"&entry.1658249047=$" + total;
 
 window.location = formURL + params;
 
 }
 
 </script>
-
-}
