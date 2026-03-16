@@ -92,11 +92,10 @@ let shippingMethod = decodeURIComponent(params.get("shipping") || "");
 if(!cartParam){
 alert("Your cart is empty.");
 window.location = "index.html";
+return;
 }
 
 let cart = JSON.parse(decodeURIComponent(cartParam));
-
-localStorage.removeItem("reedCart");
 
 let prices = {
 "Student Oboe":23,
