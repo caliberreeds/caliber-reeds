@@ -182,7 +182,7 @@ Add to Cart
 
 <!-- Shipping options -->
 <p><strong>Shipping:</strong>
-  <select id="shippingMethod">
+ <select id="shippingMethod" onchange="updateShipping()">
   <option value="5">USPS Ground Advantage - $5</option>
   <option value="9">USPS Priority Mail - $9</option>
   </select>
@@ -267,6 +267,8 @@ function render() {
 }
 
 function updateShipping(){
+let shipping = parseInt(document.getElementById("shippingMethod").value);
+localStorage.setItem("reedShipping", shipping);
 render();
 }
 
@@ -326,5 +328,11 @@ render();
 
 }
 
+let savedShipping = localStorage.getItem("reedShipping");
+
+if(savedShipping){
+document.getElementById("shippingMethod").value = savedShipping;
+}
+  
 render();
 </script>
