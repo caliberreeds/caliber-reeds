@@ -277,8 +277,9 @@ alert("Your cart is empty.");
 return;
 }
 
-let shipping = document.getElementById("shippingMethod").value;
+let shipping = parseInt(document.getElementById("shippingMethod").value);
 
+localStorage.setItem("reedCart", JSON.stringify(cart));
 localStorage.setItem("reedShipping", shipping);
 
 window.location = "checkout.html";
