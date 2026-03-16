@@ -87,7 +87,7 @@ Continue to Order Form
 
 let params = new URLSearchParams(window.location.search);
 let cartParam = params.get("cart");
-let shipping = params.get("shipping");
+let shippingMethod = decodeURIComponent(params.get("shipping") || "");
 
 if(!cartParam){
 alert("Your cart is empty.");
