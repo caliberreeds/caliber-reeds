@@ -85,17 +85,14 @@ Continue to Order Form
 
 <script>
 
-let params = new URLSearchParams(window.location.search);
-let cartParam = params.get("cart");
-let shippingMethod = decodeURIComponent(params.get("shipping") || "");
+let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
+let shippingMethod = "";
 
-if(!cartParam){
+if(cart.length === 0){
 alert("Your cart is empty.");
 window.location = "index.html";
 return;
 }
-
-let cart = JSON.parse(decodeURIComponent(cartParam));
 
 let prices = {
 "Student Oboe":23,
