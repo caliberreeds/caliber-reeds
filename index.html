@@ -278,10 +278,9 @@ return;
 }
 
 let cartString = encodeURIComponent(JSON.stringify(cart));
+let shippingMethod = document.getElementById("shippingMethod").selectedOptions[0].text;
 
-let shipping = document.getElementById("shippingMethod").value;
-
-window.location = "checkout.html?cart=" + cartString + "&shipping=" + shipping;
+window.location = "checkout.html?cart=" + cartString + "&shipping=" + encodeURIComponent(shippingMethod);
 
 }
 
