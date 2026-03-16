@@ -89,10 +89,11 @@ let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
 let shippingMethod = "";
 
 if(cart.length === 0){
+
 alert("Your cart is empty.");
 window.location = "index.html";
-return;
-}
+
+} else {
 
 let prices = {
 "Student Oboe":23,
@@ -156,3 +157,5 @@ window.location = formURL + params;
 }
 
 </script>
+
+}
