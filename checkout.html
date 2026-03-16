@@ -60,6 +60,10 @@ font-size:14px;
 <div id="summary"></div>
 
 <p>
+<strong>Shipping:</strong> $<span id="shippingCost"></span>
+</p>
+
+<p>
 <strong>Order Total (before possible taxes): $<span id="summaryTotal"></span></strong>
 </p>
 
@@ -84,6 +88,9 @@ Continue to Order Form
 </div>
 
 <script>
+
+let shipping = localStorage.getItem("reedShipping") || 0;
+shipping = parseInt(shipping);
 
 let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
 
@@ -132,8 +139,8 @@ for(let item in counts){
 summaryHTML += item + " x" + counts[item] + "<br>";
 }
 
-document.getElementById("summary").innerHTML = summaryHTML;
-document.getElementById("summaryTotal").textContent = total;
+document.getElementById("shippingCost").textContent = shipping;
+document.getElementById("summaryTotal").textContent = total + shipping;
 
 
 // Continue to order form
