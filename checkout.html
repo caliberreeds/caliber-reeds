@@ -5,7 +5,6 @@
 <title>Checkout - Caliber Reeds</title>
 
 <style>
-
 body{
 font-family:Arial;
 max-width:900px;
@@ -14,9 +13,7 @@ padding:40px;
 background:#fafafa;
 }
 
-h1{
-text-align:center;
-}
+h1{text-align:center;}
 
 .orderSummary{
 background:white;
@@ -26,12 +23,11 @@ border-radius:8px;
 margin-bottom:30px;
 }
 
-iframe{
+input, textarea{
 width:100%;
-height:2200px;
-border:none;
+padding:10px;
+margin:5px 0;
 }
-
 </style>
 
 </head>
@@ -40,47 +36,22 @@ border:none;
 
 <h1>Checkout</h1>
 
-<p style="text-align:center;margin-bottom:30px;">
-<a href="index.html" style="
-text-decoration:none;
-padding:10px 18px;
-background:#444;
-color:white;
-border-radius:6px;
-font-size:14px;
-">
-← Continue Shopping
-</a>
-</p>
-
 <div class="orderSummary">
-
 <h2>Your Order</h2>
-
 <div id="summary"></div>
 
-<p>
-<strong>Shipping:</strong> $<span id="shippingCost"></span>
-</p>
-
-<p>
-<strong>Order Total (before possible taxes): $<span id="summaryTotal"></span></strong>
-</p>
-
+<p><strong>Shipping:</strong> $<span id="shippingCost"></span></p>
+<p><strong>Total:</strong> $<span id="summaryTotal"></span></p>
 </div>
 
 <h3>Customer Info</h3>
 
-<input id="custName" placeholder="Full Name" style="width:100%;padding:10px;margin:5px 0;">
+<input id="custName" placeholder="Full Name">
+<input id="custEmail" placeholder="Email">
+<textarea id="custAddress" placeholder="Shipping Address"></textarea>
+<textarea id="custNotes" placeholder="Notes (optional)"></textarea>
 
-<input id="custEmail" placeholder="Email" style="width:100%;padding:10px;margin:5px 0;">
-
-<textarea id="custAddress" placeholder="Shipping Address" style="width:100%;padding:10px;margin:5px 0;"></textarea>
-
-<textarea id="custNotes" placeholder="Notes (optional)" style="width:100%;padding:10px;margin:5px 0;"></textarea>
-  
 <div style="text-align:center;margin-top:30px;">
-
 <button onclick="placeOrder()" style="
 padding:14px 26px;
 font-size:16px;
@@ -90,23 +61,22 @@ border:none;
 border-radius:6px;
 cursor:pointer;
 ">
-
 Place Order
-
 </button>
-  
 </div>
 
 <script>
 
+// CART DATA
 let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
 let shipping = parseInt(localStorage.getItem("reedShipping")) || 0;
 
 if(cart.length === 0){
-  alert("Your cart is empty.");
-  window.location = "index.html";
+alert("Your cart is empty.");
+window.location = "index.html";
 }
 
+// PRICES
 let prices = {
 "Student Oboe":23,
 "Advanced Oboe":27,
@@ -118,49 +88,27 @@ let counts = {};
 let total = 0;
 let orderText = "";
 
-// Count items
+// BUILD ORDER
 cart.forEach(function(item){
-
 counts[item] = (counts[item] || 0) + 1;
 total += prices[item];
-
 });
 
-// Build order summary
 let summaryHTML = "";
 
 for(let item in counts){
-
 summaryHTML += item + " x" + counts[item] + "<br>";
-
 orderText += item + " x" + counts[item] + ", ";
-
 }
 
-// Show summary
+// DISPLAY
 document.getElementById("summary").innerHTML = summaryHTML;
-
 document.getElementById("shippingCost").textContent = shipping;
-
 document.getElementById("summaryTotal").textContent = total + shipping;
 
 
-// Continue to order form
-function openOrderForm(){
-
-let formURL = "https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?";
-
-let params =
-"entry.1548577114=" + encodeURIComponent(orderText) +
-"&entry.1658249047=" + (total + shipping) +
-"&entry.1111111111=" + shipping; // replace with shipping field ID
-
-window.location = formURL + params;
-
-}
-
+// 🔥 PLACE ORDER FUNCTION
 async function placeOrder(){
-document.querySelector("button").disabled = true;
 
 let name = document.getElementById("custName").value;
 let email = document.getElementById("custEmail").value;
@@ -182,22 +130,32 @@ address: address,
 notes: notes
 };
 
+try {
+
 let response = await fetch("https://script.google.com/macros/library/d/1Rf6gGblKaxFW012dOW4JzP8JXsB3QRggVkGxUFD1wh2iI7tpkJkzgdn7/1", {
 method: "POST",
 body: JSON.stringify(orderData)
 });
 
-let text = await response.text();
-alert(text);
+let result = await response.text();
 
-let result = await response.json();
+// DEBUG (we’ll remove later)
+alert(result);
 
+// clear cart
 localStorage.removeItem("reedCart");
 
-alert("Order placed! Order #" + result.order);
+// redirect
+window.location = "index.html";
 
-window.location="index.html";
+} catch(err){
+alert("Error placing order. Check console.");
+console.error(err);
+}
 
 }
 
 </script>
+
+</body>
+</html>
