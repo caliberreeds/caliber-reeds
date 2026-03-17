@@ -81,7 +81,7 @@ font-size:14px;
   
 <div style="text-align:center;margin-top:30px;">
 
-<button onclick="openOrderForm()" style="
+<button onclick="placeOrder()" style="
 padding:14px 26px;
 font-size:16px;
 background:#444;
@@ -91,10 +91,10 @@ border-radius:6px;
 cursor:pointer;
 ">
 
-Continue to Order Form
+Place Order
 
 </button>
-
+  
 </div>
 
 <script>
@@ -128,7 +128,6 @@ total += prices[item];
 
 // Build order summary
 let summaryHTML = "";
-let orderText = "";
 
 for(let item in counts){
 
@@ -161,6 +160,7 @@ window.location = formURL + params;
 }
 
 async function placeOrder(){
+document.querySelector("button").disabled = true;
 
 let name = document.getElementById("custName").value;
 let email = document.getElementById("custEmail").value;
@@ -182,7 +182,7 @@ address: address,
 notes: notes
 };
 
-let response = await fetch(https://script.google.com/macros/s/AKfycbzYTkIUof6om8kYvKYGVNyngSZS9YjjkPpg_5iHuLEkpEsXZ_iwspAr2g1fBrI20pHOvQ/exec,{
+let response = await fetch("https://script.google.com/macros/s/AKfycbzYTkIUof6om8kYvKYGVNyngSZS9YjjkPpg_5iHuLEkpEsXZ_iwspAr2g1fBrI20pHOvQ/exec",{
 method:"POST",
 body: JSON.stringify(orderData)
 });
