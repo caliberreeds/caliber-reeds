@@ -69,6 +69,16 @@ font-size:14px;
 
 </div>
 
+<h3>Customer Info</h3>
+
+<input id="custName" placeholder="Full Name" style="width:100%;padding:10px;margin:5px 0;">
+
+<input id="custEmail" placeholder="Email" style="width:100%;padding:10px;margin:5px 0;">
+
+<textarea id="custAddress" placeholder="Shipping Address" style="width:100%;padding:10px;margin:5px 0;"></textarea>
+
+<textarea id="custNotes" placeholder="Notes (optional)" style="width:100%;padding:10px;margin:5px 0;"></textarea>
+  
 <div style="text-align:center;margin-top:30px;">
 
 <button onclick="openOrderForm()" style="
@@ -89,12 +99,9 @@ Continue to Order Form
 
 <script>
 
-let shipping = localStorage.getItem("reedShipping") || 0;
-shipping = parseInt(shipping);
-
 let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
 let shipping = parseInt(localStorage.getItem("reedShipping")) || 0;
-  
+
 if(cart.length === 0){
   alert("Your cart is empty.");
   window.location = "index.html";
@@ -110,37 +117,30 @@ let prices = {
 let counts = {};
 let total = 0;
 
-let oboeQty = 0;
-let ehQty = 0;
-let oboeType = "";
-let ehType = "";
-
 // Count items
 cart.forEach(function(item){
 
 counts[item] = (counts[item] || 0) + 1;
 total += prices[item];
 
-if(item.includes("Oboe")){
-oboeQty++;
-oboeType = item.includes("Student") ? "Student" : "Advanced";
-}
-
-if(item.includes("EH")){
-ehQty++;
-ehType = item.includes("Student") ? "Student" : "Advanced";
-}
-
 });
 
 // Build order summary
 let summaryHTML = "";
+let orderText = "";
 
 for(let item in counts){
+
 summaryHTML += item + " x" + counts[item] + "<br>";
+orderText += item + " x" + counts[item] + ", ";
+
 }
 
+// Show summary
+document.getElementById("summary").innerHTML = summaryHTML;
+
 document.getElementById("shippingCost").textContent = shipping;
+
 document.getElementById("summaryTotal").textContent = total + shipping;
 
 
@@ -150,11 +150,9 @@ function openOrderForm(){
 let formURL = "https://docs.google.com/forms/d/e/1FAIpQLSeGOgPiLsBQym6UJV2T4p3e_S57GjEkKObhVjlscKygzqFiRQ/viewform?";
 
 let params =
-"entry.1548577114=" + oboeQty +
-"&entry.363462995=" + oboeType +
-"&entry.691546721=" + ehQty +
-"&entry.1694258351=" + ehType +
-"&entry.1658249047=$" + total;
+"entry.1548577114=" + encodeURIComponent(orderText) +
+"&entry.1658249047=" + (total + shipping) +
+"&entry.1111111111=" + shipping; // replace with shipping field ID
 
 window.location = formURL + params;
 
