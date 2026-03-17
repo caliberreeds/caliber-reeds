@@ -47,7 +47,6 @@ margin:5px 0;
 <input id="custName" placeholder="Full Name">
 <input id="custEmail" placeholder="Email">
 <textarea id="custAddress" placeholder="Shipping Address"></textarea>
-<textarea id="custNotes" placeholder="Notes (optional)"></textarea>
 
 <button onclick="placeOrder()">Place Order</button>
 
@@ -82,18 +81,15 @@ document.getElementById("shippingCost").textContent = shipping;
 document.getElementById("summaryTotal").textContent = total + shipping;
 
 
-// FINAL CLEAN ORDER FUNCTION
+// SIMPLE ORDER FUNCTION
 async function placeOrder(){
 
 let name = document.getElementById("custName").value;
 let email = document.getElementById("custEmail").value;
 let address = document.getElementById("custAddress").value;
 
-let notesField = document.getElementById("custNotes");
-let notes = notesField ? notesField.value : "";
-
 if(!name || !email || !address){
-alert("Please fill out all required fields.");
+alert("Fill out all fields");
 return;
 }
 
@@ -103,8 +99,7 @@ shipping: shipping,
 total: total + shipping,
 name: name,
 email: email,
-address: address,
-notes: notes
+address: address
 };
 
 try {
@@ -112,14 +107,14 @@ try {
 let res = await fetch("https://script.google.com/macros/s/AKfycbzYTkIUof6om8kYvKYGVNyngSZS9YjjkPpg_5iHuLEkpEsXZ_iwspAr2g1fBrI20pHOvQ/exec", {
 method: "POST",
 headers: {
-  "Content-Type": "application/json"
+"Content-Type": "application/json"
 },
 body: JSON.stringify(orderData)
 });
 
 let result = await res.json();
 
-alert("Order placed! Order #" + result.order);
+alert("Order placed!");
 
 // clear cart
 localStorage.removeItem("reedCart");
@@ -128,7 +123,7 @@ localStorage.removeItem("reedCart");
 window.location.href = "index.html";
 
 } catch(err){
-alert("Order failed. Please try again.");
+alert("Order failed.");
 }
 
 }
