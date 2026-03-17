@@ -82,7 +82,7 @@ document.getElementById("summaryTotal").textContent = total + shipping;
 
 
 // SIMPLE ORDER FUNCTION
-async function placeOrder(){
+function placeOrder(){
 
 let name = document.getElementById("custName").value;
 let email = document.getElementById("custEmail").value;
@@ -93,39 +93,39 @@ alert("Fill out all fields");
 return;
 }
 
-let orderData = {
-items: orderText,
-shipping: shipping,
-total: total + shipping,
-name: name,
-email: email,
-address: address
-};
+// Create hidden form
+let form = document.createElement("form");
+form.method = "POST";
+form.action = "https://script.google.com/macros/s/AKfycbzYTkIUof6om8kYvKYGVNyngSZS9YjjkPpg_5iHuLEkpEsXZ_iwspAr2g1fBrI20pHOvQ/exec";
 
-try {
+// helper function
+function addField(name, value){
+let input = document.createElement("input");
+input.type = "hidden";
+input.name = name;
+input.value = value;
+form.appendChild(input);
+}
 
-await fetch("https://script.google.com/macros/s/AKfycbzYTkIUof6om8kYvKYGVNyngSZS9YjjkPpg_5iHuLEkpEsXZ_iwspAr2g1fBrI20pHOvQ/exec", {
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify(orderData)
-});
+// add fields
+addField("items", orderText);
+addField("shipping", shipping);
+addField("total", total + shipping);
+addField("name", name);
+addField("email", email);
+addField("address", address);
 
-alert("Order placed!");
+// submit
+document.body.appendChild(form);
+form.submit();
 
 // clear cart
 localStorage.removeItem("reedCart");
 
-// redirect
-window.location.href = "index.html";
-
-} catch(err){
-alert("Order failed.");
-}
+// simple confirmation
+alert("Order placed!");
 
 }
-
 </script>
 
 </body>
