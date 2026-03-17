@@ -111,6 +111,9 @@ try {
 
 let res = await fetch("https://script.google.com/macros/s/AKfycbzYTkIUof6om8kYvKYGVNyngSZS9YjjkPpg_5iHuLEkpEsXZ_iwspAr2g1fBrI20pHOvQ/exec", {
 method: "POST",
+headers: {
+  "Content-Type": "application/json"
+},
 body: JSON.stringify(orderData)
 });
 
