@@ -57,10 +57,6 @@ margin:5px 0;
 let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
 let shipping = parseInt(localStorage.getItem("reedShipping")) || 0;
 
-if(cart.length === 0){
-alert("Cart is empty");
-}
-
 // PRICES
 let prices = {
 "Student Oboe":23,
@@ -74,27 +70,30 @@ let summaryHTML = "";
 let orderText = "";
 
 // BUILD SUMMARY
-cart.forEach(item => {
+cart.forEach(function(item){
 summaryHTML += item + "<br>";
 total += prices[item];
 orderText += item + ", ";
 });
 
+// DISPLAY
 document.getElementById("summary").innerHTML = summaryHTML;
 document.getElementById("shippingCost").textContent = shipping;
 document.getElementById("summaryTotal").textContent = total + shipping;
 
 
-// SIMPLE ORDER FUNCTION
+// FINAL CLEAN ORDER FUNCTION
 async function placeOrder(){
 
 let name = document.getElementById("custName").value;
 let email = document.getElementById("custEmail").value;
 let address = document.getElementById("custAddress").value;
-let notes = document.getElementById("custNotes")?.value || "";
+
+let notesField = document.getElementById("custNotes");
+let notes = notesField ? notesField.value : "";
 
 if(!name || !email || !address){
-alert("Fill out all fields");
+alert("Please fill out all required fields.");
 return;
 }
 
@@ -110,24 +109,23 @@ notes: notes
 
 try {
 
-let res = await fetch("YOUR_SCRIPT_URL_HERE", {
+let res = await fetch("https://script.google.com/macros/s/AKfycbzYTkIUof6om8kYvKYGVNyngSZS9YjjkPpg_5iHuLEkpEsXZ_iwspAr2g1fBrI20pHOvQ/exec", {
 method: "POST",
 body: JSON.stringify(orderData)
 });
 
 let result = await res.json();
 
-// ✅ success message
 alert("Order placed! Order #" + result.order);
 
-// ✅ clear cart
+// clear cart
 localStorage.removeItem("reedCart");
 
-// ✅ redirect back to shop
+// redirect
 window.location.href = "index.html";
 
 } catch(err){
-alert("FAILED: " + err);
+alert("Order failed. Please try again.");
 }
 
 }
