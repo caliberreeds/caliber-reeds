@@ -132,6 +132,36 @@ notes: notes
 
 try {
 
+let response = await fetch("YOUR_SCRIPT_URL_HERE", {
+method: "POST",
+body: JSON.stringify(orderData)
+});
+
+// 👇 THIS IS THE IMPORTANT PART
+let text = await response.text();
+alert("SERVER RESPONSE:\n\n" + text);
+
+} catch(err){
+
+// 👇 THIS WILL SHOW THE REAL ERROR
+alert("FETCH ERROR:\n\n" + err);
+
+}
+
+}
+
+let orderData = {
+items: orderText,
+shipping: shipping,
+total: total + shipping,
+name: name,
+email: email,
+address: address,
+notes: notes
+};
+
+try {
+
 let response = await fetch("https://script.google.com/macros/library/d/1Rf6gGblKaxFW012dOW4JzP8JXsB3QRggVkGxUFD1wh2iI7tpkJkzgdn7/1", {
 method: "POST",
 body: JSON.stringify(orderData)
