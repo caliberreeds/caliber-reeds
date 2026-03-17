@@ -93,12 +93,10 @@ alert("Fill out all fields");
 return;
 }
 
-// Create hidden form
 let form = document.createElement("form");
 form.method = "POST";
 form.action = "https://script.google.com/macros/s/AKfycbwAGmSwZvD9I6bkoKm1zQJzSx9HMXLRCefsZBete9F4OAwyxq6abjvwsps3dc1DGPazDA/exec";
 
-// helper function
 function addField(name, value){
 let input = document.createElement("input");
 input.type = "hidden";
@@ -107,7 +105,6 @@ input.value = value;
 form.appendChild(input);
 }
 
-// add fields
 addField("items", orderText);
 addField("shipping", shipping);
 addField("total", total + shipping);
@@ -115,15 +112,12 @@ addField("name", name);
 addField("email", email);
 addField("address", address);
 
-// submit
 document.body.appendChild(form);
 form.submit();
 
-// clear cart
-localStorage.removeItem("reedCart");
-
-// simple confirmation
 alert("Order placed!");
+
+localStorage.removeItem("reedCart");
 
 }
 </script>
