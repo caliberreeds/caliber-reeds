@@ -116,6 +116,7 @@ let prices = {
 
 let counts = {};
 let total = 0;
+let orderText = "";
 
 // Count items
 cart.forEach(function(item){
@@ -132,6 +133,7 @@ let orderText = "";
 for(let item in counts){
 
 summaryHTML += item + " x" + counts[item] + "<br>";
+
 orderText += item + " x" + counts[item] + ", ";
 
 }
