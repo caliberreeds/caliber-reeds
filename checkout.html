@@ -48,6 +48,8 @@ margin:5px 0;
 <input id="custEmail" placeholder="Email">
 <textarea id="custAddress" placeholder="Shipping Address"></textarea>
 
+<textarea id="custNotes" placeholder="Notes (optional)"></textarea>
+
 <button onclick="placeOrder()">Place Order</button>
 
 <script>
@@ -90,6 +92,7 @@ async function placeOrder(){
 let name = document.getElementById("custName").value;
 let email = document.getElementById("custEmail").value;
 let address = document.getElementById("custAddress").value;
+let notes = document.getElementById("custNotes")?.value || "";
 
 if(!name || !email || !address){
 alert("Fill out all fields");
@@ -98,19 +101,31 @@ return;
 
 let orderData = {
 items: orderText,
+shipping: shipping,
 total: total + shipping,
-name: name
+name: name,
+email: email,
+address: address,
+notes: notes
 };
 
 try {
 
-let res = await fetch("https://script.google.com/macros/s/AKfycbzYTkIUof6om8kYvKYGVNyngSZS9YjjkPpg_5iHuLEkpEsXZ_iwspAr2g1fBrI20pHOvQ/exec", {
+let res = await fetch("YOUR_SCRIPT_URL_HERE", {
 method: "POST",
 body: JSON.stringify(orderData)
 });
 
-let text = await res.text();
-alert(text);
+let result = await res.json();
+
+// ✅ success message
+alert("Order placed! Order #" + result.order);
+
+// ✅ clear cart
+localStorage.removeItem("reedCart");
+
+// ✅ redirect back to shop
+window.location.href = "index.html";
 
 } catch(err){
 alert("FAILED: " + err);
