@@ -112,8 +112,9 @@ headers: {
 body: JSON.stringify(orderData)
 });
 
-let result = await res.json();
-
+let text = await res.text();
+console.log(text);
+alert(text);
 alert("Order placed!");
 
 // clear cart
