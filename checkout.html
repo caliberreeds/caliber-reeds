@@ -158,4 +158,41 @@ window.location = formURL + params;
 
 }
 
+async function placeOrder(){
+
+let name = document.getElementById("custName").value;
+let email = document.getElementById("custEmail").value;
+let address = document.getElementById("custAddress").value;
+let notes = document.getElementById("custNotes").value;
+
+if(name=="" || email=="" || address==""){
+alert("Please fill out name, email, and address.");
+return;
+}
+
+let orderData = {
+items: orderText,
+shipping: shipping,
+total: total + shipping,
+name: name,
+email: email,
+address: address,
+notes: notes
+};
+
+let response = await fetch(https://script.google.com/macros/s/AKfycbzYTkIUof6om8kYvKYGVNyngSZS9YjjkPpg_5iHuLEkpEsXZ_iwspAr2g1fBrI20pHOvQ/exec,{
+method:"POST",
+body: JSON.stringify(orderData)
+});
+
+let result = await response.json();
+
+localStorage.removeItem("reedCart");
+
+alert("Order placed! Order #" + result.order);
+
+window.location="index.html";
+
+}
+
 </script>
