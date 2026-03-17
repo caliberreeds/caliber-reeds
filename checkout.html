@@ -13,8 +13,6 @@ padding:40px;
 background:#fafafa;
 }
 
-h1{text-align:center;}
-
 .orderSummary{
 background:white;
 padding:25px;
@@ -49,31 +47,17 @@ margin:5px 0;
 <input id="custName" placeholder="Full Name">
 <input id="custEmail" placeholder="Email">
 <textarea id="custAddress" placeholder="Shipping Address"></textarea>
-<textarea id="custNotes" placeholder="Notes (optional)"></textarea>
 
-<div style="text-align:center;margin-top:30px;">
-<button onclick="placeOrder()" style="
-padding:14px 26px;
-font-size:16px;
-background:#444;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-">
-Place Order
-</button>
-</div>
+<button onclick="placeOrder()">Place Order</button>
 
 <script>
 
-// CART DATA
+// LOAD CART
 let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
 let shipping = parseInt(localStorage.getItem("reedShipping")) || 0;
 
 if(cart.length === 0){
-alert("Your cart is empty.");
-window.location = "index.html";
+alert("Cart is empty");
 }
 
 // PRICES
@@ -84,103 +68,52 @@ let prices = {
 "Advanced EH":35
 };
 
-let counts = {};
 let total = 0;
+let summaryHTML = "";
 let orderText = "";
 
-// BUILD ORDER
-cart.forEach(function(item){
-counts[item] = (counts[item] || 0) + 1;
+// BUILD SUMMARY
+cart.forEach(item => {
+summaryHTML += item + "<br>";
 total += prices[item];
+orderText += item + ", ";
 });
 
-let summaryHTML = "";
-
-for(let item in counts){
-summaryHTML += item + " x" + counts[item] + "<br>";
-orderText += item + " x" + counts[item] + ", ";
-}
-
-// DISPLAY
 document.getElementById("summary").innerHTML = summaryHTML;
 document.getElementById("shippingCost").textContent = shipping;
 document.getElementById("summaryTotal").textContent = total + shipping;
 
 
-// 🔥 PLACE ORDER FUNCTION
+// SIMPLE ORDER FUNCTION
 async function placeOrder(){
 
 let name = document.getElementById("custName").value;
 let email = document.getElementById("custEmail").value;
 let address = document.getElementById("custAddress").value;
-let notes = document.getElementById("custNotes").value;
 
-if(name=="" || email=="" || address==""){
-alert("Please fill out name, email, and address.");
+if(!name || !email || !address){
+alert("Fill out all fields");
 return;
 }
 
 let orderData = {
 items: orderText,
-shipping: shipping,
 total: total + shipping,
-name: name,
-email: email,
-address: address,
-notes: notes
+name: name
 };
 
 try {
 
-let response = await fetch("YOUR_SCRIPT_URL_HERE", {
+let res = await fetch("https://script.google.com/macros/s/AKfycbzYTkIUof6om8kYvKYGVNyngSZS9YjjkPpg_5iHuLEkpEsXZ_iwspAr2g1fBrI20pHOvQ/exec", {
 method: "POST",
 body: JSON.stringify(orderData)
 });
 
-// 👇 THIS IS THE IMPORTANT PART
-let text = await response.text();
-alert("SERVER RESPONSE:\n\n" + text);
+let text = await res.text();
+alert(text);
 
 } catch(err){
-
-// 👇 THIS WILL SHOW THE REAL ERROR
-alert("FETCH ERROR:\n\n" + err);
-
-}
-
-}
-
-let orderData = {
-items: orderText,
-shipping: shipping,
-total: total + shipping,
-name: name,
-email: email,
-address: address,
-notes: notes
-};
-
-try {
-
-let response = await fetch("https://script.google.com/macros/s/AKfycbzYTkIUof6om8kYvKYGVNyngSZS9YjjkPpg_5iHuLEkpEsXZ_iwspAr2g1fBrI20pHOvQ/exec", {
-method: "POST",
-body: JSON.stringify(orderData)
-});
-
-let result = await response.text();
-
-// DEBUG (we’ll remove later)
-alert(result);
-
-// clear cart
-localStorage.removeItem("reedCart");
-
-// redirect
-window.location = "index.html";
-
-} catch(err){
-alert("Error placing order. Check console.");
-console.error(err);
+alert("FAILED: " + err);
 }
 
 }
