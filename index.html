@@ -1,338 +1,384 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-<title>Caliber Reeds by Ben</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caliber Reeds by Ben</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1e3d2a;
+      --green-mid:   #2f5e3f;
+      --green-light: #4a8c60;
+      --gold:        #c9a84c;
+      --cream:       #f7f4ee;
+      --white:       #ffffff;
+      --gray-light:  #e8e4dc;
+      --gray-mid:    #999;
+      --text:        #1a1a1a;
+      --shadow:      0 4px 20px rgba(0,0,0,0.10);
+    }
 
-<style>
-.header{
-text-align:center;
-margin-bottom:40px;
-padding-bottom:15px;
-border-bottom:2px solid #ddd;
-}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.header h1{
-font-size:38px;
-margin-bottom:5px;
-color:#2f5e3f;
-}
+    html { scroll-behavior: smooth; }
 
-.product{
-border:1px solid #ddd;
-padding:25px;
-margin:25px 0;
-border-radius:10px;
-background:white;
-box-shadow:0 3px 8px rgba(0,0,0,0.08);
-}
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 80px 32px 60px;
+    }
 
-button{
-padding:12px 18px;
-margin-top:10px;
-cursor:pointer;
-border:none;
-border-radius:6px;
-background:#2f5e3f;
-color:white;
-font-weight:bold;
-}
+    /* ── Cart Bar ── */
+    #cartBar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: var(--green-dark);
+      color: var(--white);
+      padding: 13px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 0.04em;
+      z-index: 1000;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #cartBar:hover { background: var(--green-mid); }
+    #cartBar .cart-icon { font-size: 18px; }
+    #cartBadge {
+      background: var(--gold);
+      color: var(--green-dark);
+      border-radius: 50px;
+      padding: 2px 9px;
+      font-size: 13px;
+      font-weight: 700;
+    }
 
-button:hover{
-background:#3f7a52;
-}
-  
-body{
-font-family:Arial;
-max-width:900px;
-margin:auto;
-padding:40px;
-background:#fafafa;
-}
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      padding: 48px 0 40px;
+      border-bottom: 1px solid var(--gray-light);
+      margin-bottom: 48px;
+    }
+    .header-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 46px;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .header p {
+      font-size: 16px;
+      color: var(--gray-mid);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
 
-h1{
-text-align:center;
-}
+    /* ── Section Title ── */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--green-dark);
+      margin-bottom: 24px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gold);
+      display: inline-block;
+    }
 
-.product{
-border:1px solid #ccc;
-padding:20px;
-margin:20px 0;
-border-radius:8px;
-background:white;
-}
+    /* ── Product Grid ── */
+    .products { margin-bottom: 60px; }
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
 
-button{
-padding:10px 16px;
-margin-top:10px;
-cursor:pointer;
-}
+    .product {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 28px 24px 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .product:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+    }
 
-#cart{
-background:white;
-padding:20px;
-border:2px solid #444;
-border-radius:8px;
-}
+    .product-category {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .product h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--green-dark);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .product p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+      flex-grow: 1;
+      margin-bottom: 18px;
+    }
+    .product-price {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--green-mid);
+      margin-bottom: 14px;
+      font-family: 'Playfair Display', serif;
+    }
 
-#cartBar{
-position:fixed;
-top:0;
-left:0;
-right:0;
-background:#2f5e3f;
-color:white;
-padding:12px;
-text-align:center;
-font-weight:bold;
-z-index:1000;
-}
+    .product-footer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: auto;
+    }
+    .qty-input {
+      width: 58px;
+      padding: 9px 8px;
+      border: 1px solid var(--gray-light);
+      border-radius: 6px;
+      font-size: 15px;
+      text-align: center;
+      background: var(--cream);
+      color: var(--text);
+      font-family: 'Source Sans 3', sans-serif;
+    }
+    .qty-input:focus { outline: 2px solid var(--green-light); border-color: transparent; }
 
-body{
-padding-top:60px;
-}
+    .btn-add {
+      flex: 1;
+      padding: 10px 14px;
+      background: var(--green-mid);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Source Sans 3', sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-add:hover { background: var(--green-dark); }
+    .btn-add:active { transform: scale(0.97); }
+    .btn-add.added {
+      background: var(--gold);
+      color: var(--green-dark);
+    }
 
-html{
-scroll-behavior:smooth;
-}
+    /* ── Cart Section ── */
+    #cartSection {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 32px 28px;
+      box-shadow: var(--shadow);
+    }
 
-</style>
+    #cartSection h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: var(--green-dark);
+      margin-bottom: 20px;
+    }
 
+    .empty-cart {
+      color: var(--gray-mid);
+      font-size: 15px;
+      padding: 12px 0 4px;
+      font-style: italic;
+    }
+
+    #cartList {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+    #cartList li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--gray-light);
+      font-size: 15px;
+    }
+    #cartList li:last-child { border-bottom: none; }
+
+    .cart-item-name { font-weight: 600; color: var(--green-dark); }
+    .cart-item-qty  { color: var(--gray-mid); font-size: 14px; margin-left: 6px; }
+    .cart-item-price { color: var(--green-mid); font-weight: 600; margin-right: 10px; }
+
+    .btn-remove {
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 50%;
+      width: 26px; height: 26px;
+      cursor: pointer;
+      font-size: 15px;
+      color: #999;
+      line-height: 1;
+      transition: background 0.15s, color 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .btn-remove:hover { background: #fee; color: #c00; border-color: #fcc; }
+
+    .cart-totals { margin: 18px 0 6px; }
+    .cart-totals p {
+      font-size: 15px;
+      margin-bottom: 6px;
+      color: #555;
+    }
+    .cart-totals .grand-total {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--green-dark);
+      font-family: 'Playfair Display', serif;
+      margin-top: 10px;
+    }
+
+    .shipping-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 14px 0 4px;
+    }
+    .shipping-row label {
+      font-weight: 600;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+    select#shippingMethod {
+      padding: 8px 12px;
+      border: 1px solid var(--gray-light);
+      border-radius: 6px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 14px;
+      background: var(--cream);
+      color: var(--text);
+      cursor: pointer;
+    }
+    select#shippingMethod:focus { outline: 2px solid var(--green-light); }
+
+    .cart-notes {
+      font-size: 12px;
+      color: var(--gray-mid);
+      margin-top: 10px;
+      line-height: 1.7;
+    }
+
+    .checkout-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn-checkout {
+      flex: 1;
+      min-width: 150px;
+      padding: 13px 18px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Source Sans 3', sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-checkout:active { transform: scale(0.97); }
+    .btn-primary   { background: var(--green-mid); color: var(--white); }
+    .btn-primary:hover   { background: var(--green-dark); }
+    .btn-venmo     { background: #008CFF; color: var(--white); }
+    .btn-venmo:hover     { background: #006ecc; }
+    .btn-card      { background: var(--gold); color: var(--green-dark); }
+    .btn-card:hover      { background: #b8963e; }
+
+    /* ── Footer ── */
+    .footer-note {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 13px;
+      color: var(--gray-mid);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 580px) {
+      body { padding: 70px 18px 40px; }
+      .header h1 { font-size: 34px; }
+      .product-grid { grid-template-columns: 1fr; }
+      .checkout-buttons { flex-direction: column; }
+    }
+  </style>
 </head>
-
 <body>
 
-<a href="#cart">
-<div id="cartBar">
-🛒 Cart (<span id="cartCount">0</span>)
-</div>
-</a>
-  
-<div class="header">
-<h1>Caliber Reeds by Ben</h1>
-
-<p style="text-align:center;">
-Handmade Oboe and English Horn Reeds
-</p>
-
-<h2>Shop</h2>
-
-<div class="product">
-  
-<h3>Student Oboe Reed — $23</h3>
-  
-<p>Reliable and stable reeds designed for developing players.</p>
-  
-<input type="number" id="studentOboeQty" value="1" min="1" style="width:60px">
-
-<button onclick="addQty('Student Oboe','studentOboeQty')">
-Add to Cart
-</button>
-
-</div>
-
-<div class="product">
-  
-<h3>Advanced Oboe Reed — $27</h3>
-  
-<p>Flexible reeds with greater color and dynamic response.</p>
-  
-<input type="number" id="advOboeQty" value="1" min="1" style="width:60px">
-
-<button onclick="addQty('Advanced Oboe','advOboeQty')">
-Add to Cart
-</button>
-
-</div>
-
-<div class="product">
-  
-<h3>Student English Horn Reed — $31</h3>
-  
-<p>Stable reeds with consistent response.</p>
-  
-<input type="number" id="studentEHQty" value="1" min="1" style="width:60px">
-
-<button onclick="addQty('Student EH','studentEHQty')">
-Add to Cart
-</button>
-
-</div>
-  
-<div class="product">
-  
-<h3>Advanced English Horn Reed — $35</h3>
-  
-<p>Responsive reeds designed for experienced players.</p>
-  
-<input type="number" id="advEHQty" value="1" min="1" style="width:60px">
-
-<button onclick="addQty('Advanced EH','advEHQty')">
-Add to Cart
-</button>
-
-</div>
-
-<h2 id="cartTitle">Your Cart (0 items)</h2>
-
-<div id="cart">
-<ul id="cartlist"></ul>
-
-<p><strong>Order Total (before possible taxes): $<span id="total">0</span></strong></p>
-
-<!-- Shipping options -->
-<p><strong>Shipping:</strong>
- <select id="shippingMethod" onchange="updateShipping()">
-  <option value="5">USPS Ground Advantage - $5</option>
-  <option value="9">USPS Priority Mail - $9</option>
-  </select>
-</p>
-
-<p style="font-size:12px;color:#555;">
-Most reed orders ship in a padded mailer via USPS.
-</p>
-
-<p style="font-size:12px;color:#555;">
-Taxes may be added to your order if required based on your location.
-</p>
-
-<p style="font-size:12px;color:#555;margin-top:10px;">
-✔ All orders ship with tracking
-</p>
-
-<h3>Checkout</h3>
-
-<button onclick="checkout()">Order & Pay Later</button>
-
-<button onclick="payVenmo()">Pay with Venmo</button>
-
-<button onclick="payCard()">Pay with Card</button>
-</div>
-
-<script>
-
-let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
-let total=0;
-
-function add(item){
-cart.push(item);
-render();
-}
-
-function render() {
-
-    let list = document.getElementById("cartlist");
-    let totalBox = document.getElementById("total");
-    let shippingSelect = document.getElementById("shippingMethod");
-    let cartTitle = document.getElementById("cartTitle");
-
-    list.innerHTML = "";
-
-    let counts = {};
-    let prices = {
-      "Student Oboe": 23,
-      "Advanced Oboe": 27,
-      "Student EH": 31,
-      "Advanced EH": 35
-  };
-
-    total = 0;
-
-    cart.forEach(i => {
-        counts[i] = (counts[i] || 0) + 1;
-        total += prices[i];
-    });
-
-    for (let item in counts) {
-        let li = document.createElement("li");
-        li.innerHTML = item + " x" + counts[item] + 
-        " <button onclick=\"removeItem('" + item + "')\">-</button>";
-        list.appendChild(li);
-    }
-
-
-    // Update total price with shipping cost
-    let shipping = parseInt(shippingSelect.value);
-    totalBox.textContent = total + shipping;
-
-    cartTitle.textContent = "Your Cart (" + cart.length + " items)";
-
-    let cartCount = document.getElementById("cartCount");
-    if(cartCount){
-    cartCount.textContent = cart.length;
-    }
-
-    localStorage.setItem("reedCart", JSON.stringify(cart));
-
-}
-
-function updateShipping(){
-let shipping = parseInt(document.getElementById("shippingMethod").value);
-localStorage.setItem("reedShipping", shipping);
-render();
-}
-
-function checkout(){
-
-if(cart.length === 0){
-alert("Your cart is empty.");
-return;
-}
-
-let shipping = parseInt(document.getElementById("shippingMethod").value);
-
-localStorage.setItem("reedCart", JSON.stringify(cart));
-localStorage.setItem("reedShipping", shipping);
-
-window.location = "checkout.html";
-
-}
-
-function payVenmo(){
-
-alert("You will place your order, then send payment via Venmo.");
-
-checkout();
-
-}
-
-function payCard(){
-
-checkout();
-
-setTimeout(function(){
-
-window.open("pay.html","_blank");
-
-},1500);
-
-}
-
-function addQty(item, qtyId) {
-    let qty = document.getElementById(qtyId).value;  // Get quantity from the input field
-    for (let i = 0; i < qty; i++) {
-        cart.push(item);  // Add the item to the cart 'qty' number of times
-    }
-    render();  // Re-render the cart display
-}
-
-function removeItem(item){
-
-let index=cart.indexOf(item);
-
-if(index>-1){
-cart.splice(index,1);
-}
-
-render();
-
-}
-
-let savedShipping = localStorage.getItem("reedShipping");
-
-if(savedShipping){
-document.getElementById("shippingMethod").value = savedShipping;
-}
-  
-render();
-</script>
+  <a href="#cartSection" id="cartBar">
+    <span class="cart-icon">🛒</span>
+    <span>Your Cart</span>
+    <span id="cartBadge">0</span>
+  </a>
+
+  <div class="header">
+    <div class="header-label">Handcrafted · Professional Quality</div>
+    <h1>Caliber Reeds by Ben</h1>
+    <p>Handmade Oboe &amp; English Horn Reeds</p>
+  </div>
+
+  <div class="products">
+    <h2 class="section-title">Shop</h2>
+    <div class="product-grid">
+
+      <div class="product">
+        <div class="product-category">Oboe</div>
+        <h3>Student Oboe Reed</h3>
+        <p>Reliable and stable reeds designed for developing players. Consistent response makes them great for lessons and practice.</p>
+        <div class="product-price">$23</div>
+        <div class="product-footer">
+          <input type="number" class="qty-input" id="studentOboeQty" value="1" min="1" max="20">
+          <button class="btn-add" onclick="addQty('Student Oboe', 'studentOboeQty', this)">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-category">Oboe</div>
+        <h3>Advanced Oboe Reed</h3>
+        <p>Flexible reeds with greater color and dynamic response. Ideal for auditions, performances, and serious students.</p>
+        <div class="product-price">$27</div>
+        <div class="product-footer">
+          <input type="number" class="qty-input" id="advOboeQty" value="1" min="1" max="20">
+          <button class="btn-add" onclick="addQty('Advanced Oboe', 'advOboeQty', this)">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-category">
