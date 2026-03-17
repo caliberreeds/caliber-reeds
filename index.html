@@ -381,4 +381,170 @@
       </div>
 
       <div class="product">
-        <div class="product-category">
+        <div class="product-category">English Horn</div>
+        <h3>Student English Horn Reed</h3>
+        <p>Stable reeds with consistent response, built for players developing their English horn technique.</p>
+        <div class="product-price">$31</div>
+        <div class="product-footer">
+          <input type="number" class="qty-input" id="studentEHQty" value="1" min="1" max="20">
+          <button class="btn-add" onclick="addQty('Student EH', 'studentEHQty', this)">Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-category">English Horn</div>
+        <h3>Advanced English Horn Reed</h3>
+        <p>Responsive reeds designed for experienced players seeking nuance, flexibility, and expressive control.</p>
+        <div class="product-price">$35</div>
+        <div class="product-footer">
+          <input type="number" class="qty-input" id="advEHQty" value="1" min="1" max="20">
+          <button class="btn-add" onclick="addQty('Advanced EH', 'advEHQty', this)">Add to Cart</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="cartSection">
+    <h2 id="cartTitle">Your Cart</h2>
+    <div id="emptyMsg" class="empty-cart">Your cart is empty.</div>
+    <ul id="cartList"></ul>
+
+    <div class="cart-totals" id="cartTotals" style="display:none;">
+      <div class="shipping-row">
+        <label for="shippingMethod">Shipping:</label>
+        <select id="shippingMethod" onchange="updateShipping()">
+          <option value="5">USPS Ground Advantage — $5</option>
+          <option value="9">USPS Priority Mail — $9</option>
+        </select>
+      </div>
+      <p class="grand-total">Total: $<span id="grandTotal">0</span></p>
+      <div class="cart-notes">
+        ✔ All orders ship with tracking &nbsp;·&nbsp; Most ship in a padded mailer via USPS<br>
+        Taxes may be added based on your location.
+      </div>
+    </div>
+
+    <div class="checkout-buttons" id="checkoutButtons" style="display:none;">
+      <button class="btn-checkout btn-primary" onclick="checkout()">Checkout</button>
+      <button class="btn-checkout btn-venmo"   onclick="payVenmo()">Pay with Venmo</button>
+      <button class="btn-checkout btn-card"    onclick="payCard()">Pay with Card</button>
+    </div>
+  </div>
+
+  <p class="footer-note">© Caliber Reeds by Ben · All reeds handmade to order</p>
+
+<script>
+  const prices = {
+    "Student Oboe":   23,
+    "Advanced Oboe":  27,
+    "Student EH":     31,
+    "Advanced EH":    35
+  };
+
+  let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
+
+  const savedShipping = localStorage.getItem("reedShipping");
+  if (savedShipping) {
+    document.getElementById("shippingMethod").value = savedShipping;
+  }
+
+  function getShipping() {
+    return parseInt(document.getElementById("shippingMethod").value) || 5;
+  }
+
+  function render() {
+    const list         = document.getElementById("cartList");
+    const emptyMsg     = document.getElementById("emptyMsg");
+    const cartTotals   = document.getElementById("cartTotals");
+    const checkoutBtns = document.getElementById("checkoutButtons");
+    const badge        = document.getElementById("cartBadge");
+    const cartTitle    = document.getElementById("cartTitle");
+
+    list.innerHTML = "";
+
+    const counts = {};
+    let subtotal = 0;
+    cart.forEach(item => {
+      counts[item] = (counts[item] || 0) + 1;
+      subtotal += prices[item];
+    });
+
+    const isEmpty = cart.length === 0;
+    emptyMsg.style.display     = isEmpty ? "block" : "none";
+    cartTotals.style.display   = isEmpty ? "none"  : "block";
+    checkoutBtns.style.display = isEmpty ? "none"  : "flex";
+
+    for (let item in counts) {
+      const qty       = counts[item];
+      const itemTotal = prices[item] * qty;
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <span>
+          <span class="cart-item-name">${item}</span>
+          <span class="cart-item-qty">x${qty}</span>
+        </span>
+        <span style="display:flex;align-items:center;gap:8px;">
+          <span class="cart-item-price">$${itemTotal}</span>
+          <button class="btn-remove" onclick="removeItem('${item}')" title="Remove one">−</button>
+        </span>`;
+      list.appendChild(li);
+    }
+
+    const shipping = getShipping();
+    document.getElementById("grandTotal").textContent = subtotal + shipping;
+
+    cartTitle.textContent = isEmpty
+      ? "Your Cart"
+      : `Your Cart (${cart.length} item${cart.length !== 1 ? "s" : ""})`;
+
+    badge.textContent = cart.length;
+    localStorage.setItem("reedCart", JSON.stringify(cart));
+  }
+
+  function addQty(item, qtyId, btn) {
+    const qty = parseInt(document.getElementById(qtyId).value) || 1;
+    for (let i = 0; i < qty; i++) cart.push(item);
+    render();
+    btn.textContent = "Added ✓";
+    btn.classList.add("added");
+    setTimeout(() => {
+      btn.textContent = "Add to Cart";
+      btn.classList.remove("added");
+    }, 1200);
+  }
+
+  function removeItem(item) {
+    const index = cart.indexOf(item);
+    if (index > -1) cart.splice(index, 1);
+    render();
+  }
+
+  function updateShipping() {
+    localStorage.setItem("reedShipping", getShipping());
+    render();
+  }
+
+  function checkout() {
+    if (cart.length === 0) { alert("Your cart is empty."); return; }
+    localStorage.setItem("reedCart", JSON.stringify(cart));
+    localStorage.setItem("reedShipping", getShipping());
+    window.location = "checkout.html";
+  }
+
+  function payVenmo() {
+    if (cart.length === 0) { alert("Your cart is empty."); return; }
+    localStorage.setItem("reedPayMethod", "venmo");
+    checkout();
+  }
+
+  function payCard() {
+    if (cart.length === 0) { alert("Your cart is empty."); return; }
+    localStorage.setItem("reedPayMethod", "card");
+    checkout();
+  }
+
+  render();
+</script>
+</body>
+</html>
