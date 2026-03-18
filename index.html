@@ -268,8 +268,9 @@
 
     .shipping-row {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
       margin: 14px 0 4px;
     }
     .shipping-row label {
@@ -286,6 +287,7 @@
       background: var(--cream);
       color: var(--text);
       cursor: pointer;
+      max-width: 100%;
     }
     select#shippingMethod:focus { outline: 2px solid var(--green-light); }
 
