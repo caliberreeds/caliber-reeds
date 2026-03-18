@@ -427,8 +427,6 @@
 
     <div class="checkout-buttons" id="checkoutButtons" style="display:none;">
       <button class="btn-checkout btn-primary" onclick="checkout()">Checkout</button>
-      <button class="btn-checkout btn-venmo"   onclick="payVenmo()">Pay with Venmo</button>
-      <button class="btn-checkout btn-card"    onclick="payCard()">Pay with Card</button>
     </div>
   </div>
 
@@ -530,18 +528,6 @@
     localStorage.setItem("reedCart", JSON.stringify(cart));
     localStorage.setItem("reedShipping", getShipping());
     window.location = "checkout.html";
-  }
-
-  function payVenmo() {
-    if (cart.length === 0) { alert("Your cart is empty."); return; }
-    localStorage.setItem("reedPayMethod", "venmo");
-    checkout();
-  }
-
-  function payCard() {
-    if (cart.length === 0) { alert("Your cart is empty."); return; }
-    localStorage.setItem("reedPayMethod", "card");
-    checkout();
   }
 
   render();
