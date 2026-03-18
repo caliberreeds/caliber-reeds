@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed - Caliber Reeds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1e3d2a;
+      --green-mid:   #2f5e3f;
+      --green-light: #4a8c60;
+      --gold:        #c9a84c;
+      --cream:       #f7f4ee;
+      --white:       #ffffff;
+      --gray-light:  #e8e4dc;
+      --gray-mid:    #999;
+      --text:        #1a1a1a;
+      --shadow:      0 4px 20px rgba(0,0,0,0.10);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 32px 60px;
+      text-align: center;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 48px 36px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .check {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      color: var(--green-dark);
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .venmo-box {
+      display: none;
+      background: #e8f4ff;
+      border: 1px solid #b3d9ff;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 15px;
+      color: var(--green-dark);
+      line-height: 1.7;
+    }
+
+    .venmo-box strong {
+      color: #008CFF;
+      font-size: 17px;
+    }
+
+    .later-box {
+      display: none;
+      background: #eaf4ee;
+      border: 1px solid #b2d9bf;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 15px;
+      color: var(--green-dark);
+      line-height: 1.7;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--gray-light);
+      margin: 24px 0;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gray-light);
+      text-align: left;
+    }
+    .detail-row:last-of-type { border-bottom: none; }
+    .detail-label { color: var(--gray-mid); font-weight: 600; }
+    .detail-value { color: var(--green-dark); font-weight: 600; text-align: right; max-width: 60%; }
+
+    .btn-back {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 14px 32px;
+      background: var(--green-mid);
+      color: var(--white);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: background 0.2s;
+    }
+    .btn-back:hover { background: var(--green-dark); }
+
+    .loading {
+      color: var(--gray-mid);
+      font-size: 15px;
+      padding: 40px;
+    }
+
+    @media (max-width: 580px) {
+      body  { padding: 32px 18px 48px; }
+      h1    { font-size: 28px; }
+      .card { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="loadingCard">
+    <div class="loading">Processing your order...</div>
+  </div>
+
+  <div class="card" id="confirmCard" style="display:none;">
+    <div class="check">✅</div>
+    <h1>Order Confirmed!</h1>
+    <p class="subtitle">Thank you, <strong id="confirmName"></strong>!<br>
+    A confirmation has been sent to <strong id="confirmEmail"></strong>.</p>
+
+    <div class="venmo-box" id="venmoBox">
+      💙 Please send payment to <strong>@CalibreReedsByBen</strong> on Venmo<br>
+      Amount: <strong id="venmoAmount"></strong>
+    </div>
+
+    <div class="later-box" id="laterBox">
+      📋 We'll be in touch with payment details shortly.<br>
+      Reply to your confirmation email with any questions.
+    </div>
+
+    <hr class="divider">
+
+    <div id="orderDetails"></div>
+
+    <a href="index.html" class="btn-back">← Back to Shop</a>
+  </div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwysSjPmuJUTfAFyk476iqKZCHSp6iAQg-_Alk3-Qi29Ls1657JLIJNWoBpVwC0lHNE/exec";
+
+  const prices = {
+    "Student Oboe":  23,
+    "Advanced Oboe": 27,
+    "Student EH":    31,
+    "Advanced EH":   35
+  };
+
+  async function init() {
+    const params    = new URLSearchParams(window.location.search);
+    const sessionId = params.get("session_id");
+    const method    = params.get("method");
+
+    const customerData = JSON.parse(localStorage.getItem("reedCustomer") || "{}");
+    const cart         = JSON.parse(localStorage.getItem("reedCart")     || "[]");
+    const shipping     = localStorage.getItem("reedShipping") || "5";
+
+    // Build counts and subtotal
+    const counts = {};
+    let subtotal = 0;
+    cart.forEach(item => {
+      counts[item] = (counts[item] || 0) + 1;
+      subtotal += prices[item];
+    });
+
+    const total = subtotal + parseInt(shipping);
+
+    // If coming from Stripe, submit order to sheets now
+    if (sessionId) {
+      let orderText = "";
+      for (let item in counts) {
+        orderText += `${item} x${counts[item]}, `;
+      }
+      orderText = orderText.replace(/, $/, "");
+
+      await fetch(SCRIPT_URL, {
+        method:  "POST",
+        mode:    "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items:     orderText,
+          shipping:  shipping,
+          total:     total,
+          name:      customerData.name  || "",
+          email:     customerData.email || "",
+          address:   customerData.address || "",
+          notes:     customerData.notes || "",
+          payMethod: "card"
+        })
+      });
+    }
+
+    // Clear cart
+    localStorage.removeItem("reedCart");
+    localStorage.removeItem("reedCustomer");
+    localStorage.removeItem("reedPayMethod");
+
+    // Show confirmation
+    document.getElementById("loadingCard").style.display = "none";
+    document.getElementById("confirmCard").style.display = "block";
+
+    document.getElementById("confirmName").textContent  = customerData.name  || "there";
+    document.getElementById("confirmEmail").textContent = customerData.email || "";
+
+    // Show payment specific message
+    if (sessionId) {
+      // card payment — no extra box needed
+    } else if (method === "venmo") {
+      const venmoBox = document.getElementById("venmoBox");
+      venmoBox.style.display = "block";
+      document.getElementById("venmoAmount").textContent = "$" + total;
+    } else if (method === "later") {
+      document.getElementById("laterBox").style.display = "block";
+    }
+
+    // Render order details
+    const detailsDiv = document.getElementById("orderDetails");
+
+    for (let item in counts) {
+      const row = document.createElement("div");
+      row.className = "detail-row";
+      row.innerHTML = `
+        <span class="detail-label">${item} x${counts[item]}</span>
+        <span class="detail-value">$${prices[item] * counts[item]}</span>`;
+      detailsDiv.appendChild(row);
+    }
+
+    const shippingRow = document.createElement("div");
+    shippingRow.className = "detail-row";
+    shippingRow.innerHTML = `
+      <span class="detail-label">Shipping</span>
+      <span class="detail-value">$${shipping}</span>`;
+    detailsDiv.appendChild(shippingRow);
+
+    const totalRow = document.createElement("div");
+    totalRow.className = "detail-row";
+    totalRow.innerHTML = `
+      <span class="detail-label" style="color:var(--green-dark);font-size:16px;">Total</span>
+      <span class="detail-value" style="color:var(--green-dark);font-size:16px;">$${total}</span>`;
+    detailsDiv.appendChild(totalRow);
+  }
+
+  init();
+</script>
+</body>
+</html>
