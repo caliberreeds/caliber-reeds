@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Caliber Reeds by Ben</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1e3d2a;
+      --green-mid:   #2f5e3f;
+      --green-light: #4a8c60;
+      --gold:        #c9a84c;
+      --cream:       #f7f4ee;
+      --white:       #ffffff;
+      --gray-light:  #e8e4dc;
+      --gray-mid:    #999;
+      --text:        #1a1a1a;
+      --shadow:      0 4px 20px rgba(0,0,0,0.10);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 32px 60px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--green-mid);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 36px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--green-dark); }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      padding: 48px 0 40px;
+      border-bottom: 1px solid var(--gray-light);
+      margin-bottom: 48px;
+    }
+    .header-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 46px;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .header p {
+      font-size: 16px;
+      color: var(--gray-mid);
+      font-weight: 300;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 36px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+    }
+
+    .card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: var(--green-dark);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gold);
+      display: inline-block;
+    }
+
+    .card p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 16px;
+    }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* ── Philosophy highlights ── */
+    .highlights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .highlight {
+      background: var(--cream);
+      border: 1px solid var(--gray-light);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+    .highlight .icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .highlight h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--green-dark);
+      margin-bottom: 6px;
+    }
+    .highlight p {
+      font-size: 13px;
+      color: var(--gray-mid);
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    /* ── YouTube section ── */
+    .youtube-box {
+      background: var(--cream);
+      border: 1px solid var(--gray-light);
+      border-radius: 10px;
+      padding: 24px;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .youtube-icon {
+      font-size: 42px;
+      flex-shrink: 0;
+    }
+    .youtube-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--green-dark);
+      margin-bottom: 6px;
+    }
+    .youtube-box p {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .btn-youtube {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #FF0000;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .btn-youtube:hover { background: #cc0000; }
+
+    /* ── CTA ── */
+    .cta {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--green-dark);
+      margin-bottom: 12px;
+    }
+    .cta p {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+    .btn-shop {
+      display: inline-block;
+      padding: 14px 36px;
+      background: var(--green-mid);
+      color: var(--white);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+    .btn-shop:hover { background: var(--green-dark); }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 13px;
+      color: var(--gray-mid);
+    }
+
+    @media (max-width: 580px) {
+      body { padding: 32px 18px 48px; }
+      .header h1 { font-size: 34px; }
+      .card { padding: 24px 20px; }
+      .highlights { grid-template-columns: 1fr; }
+      .youtube-box { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-link">← Back to Shop</a>
+
+  <div class="header">
+    <div class="header-label">The Maker Behind the Reeds</div>
+    <h1>About Ben</h1>
+    <p>Oboe performer, reed maker, and lifelong student of the instrument</p>
+  </div>
+
+  <!-- Story -->
+  <div class="card">
+    <h2>My Story</h2>
+    <p>
+      I grew up in upstate New York, surrounded by open land and a deep love of the outdoors — 
+      the kind of unhurried, country life that gives you time to really commit to something. 
+      For me, that something was the oboe. I started making my own reeds in high school around 2001, 
+      and what began as a necessity quickly became a craft I was genuinely passionate about.
+    </p>
+    <p>
+      Over two decades later, reed making is still one of my favorite parts of being a musician. 
+      I'm currently completing my Master of Music in Oboe Performance at the 
+      University of North Texas, graduating in May 2026 — a milestone that represents years 
+      of dedication to this instrument and everything it demands.
+    </p>
+    <p>
+      I know firsthand how much a reed affects every aspect of playing — your tone, your confidence, 
+      your stamina, even your enjoyment of music. That's why I take every reed seriously, 
+      whether it's going to a student just finding their footing or an advanced player preparing 
+      for a big performance.
+    </p>
+  </div>
+
+  <!-- Philosophy -->
+  <div class="card">
+    <h2>My Philosophy</h2>
+    <p>
+      A great reed shouldn't fight you. It should respond when you ask it to, stay in tune 
+      without constant adjustment, and help you produce the dark, rich tone that makes the 
+      oboe so special. When a reed does its job, you can stop thinking about the reed and 
+      start thinking about the music.
+    </p>
+    <p>
+      That's what I aim for with every reed I make — responsive, in tune, and articulate, 
+      so that playing feels easier, more confident, and more enjoyable.
+    </p>
+    <div class="highlights">
+      <div class="highlight">
+        <div class="icon">🎵</div>
+        <h3>Responsive</h3>
+        <p>Reacts immediately to your air and articulation without resistance</p>
+      </div>
+      <div class="highlight">
+        <div class="icon">🎯</div>
+        <h3>In Tune</h3>
+        <p>Carefully balanced so you're not constantly fighting pitch</p>
+      </div>
+      <div class="highlight">
+        <div class="icon">🌑</div>
+        <h3>Dark Tone</h3>
+        <p>Crafted to facilitate the rich, dark sound the oboe is known for</p>
+      </div>
+      <div class="highlight">
+        <div class="icon">😊</div>
+        <h3>Confidence</h3>
+        <p>When your reed works, you can focus on enjoying the music</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- YouTube -->
+  <div class="card">
+    <h2>Hear Me Play</h2>
+    <p>
+      If you'd like to get a sense of my playing before ordering, I invite you to check out 
+      my YouTube channel. You'll find a mix of newer and older recordings there — and I've 
+      intentionally kept all of them, including the ones where I'm still finding my way or 
+      make a mistake here and there.
+    </p>
+    <p>
+      The oboe is a journey, and progress takes time. I think it's important for students 
+      especially to see that even experienced players are always growing. Nobody starts out 
+      playing perfectly — and that's completely okay.
+    </p>
+    <div class="youtube-box">
+      <div class="youtube-icon">▶️</div>
+      <div>
+        <h3>Caliber Reeds by Ben on YouTube</h3>
+        <p>Oboe performances, recordings, and a honest look at a musician's journey over the years.</p>
+        <a href="https://www.youtube.com/@byoder5912" target="_blank" class="btn-youtube">
+          ▶ Watch on YouTube
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <h2>Ready to Try a Reed?</h2>
+    <p>Handmade with care and decades of experience behind every one.<br>
+    Student or advanced — there's a reed made for where you are right now.</p>
+    <a href="index.html" class="btn-shop">Shop Reeds</a>
+  </div>
+
+  <p class="footer-note">© Caliber Reeds by Ben · All reeds handmade to order</p>
+
+</body>
+</html>
