@@ -9,6 +9,9 @@ exports.handler = async (event) => {
     const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
     const data = JSON.parse(event.body);
 
+    console.log("Received data:", JSON.stringify(data));
+    console.log("Stripe key exists:", !!process.env.STRIPE_SECRET_KEY);
+
     // Build line items from cart
     const lineItems = [];
     const prices = {
@@ -22,6 +25,8 @@ exports.handler = async (event) => {
     (data.cart || []).forEach(item => {
       counts[item] = (counts[item] || 0) + 1;
     });
+
+    console.log("Counts:", JSON.stringify(counts));
 
     for (let item in counts) {
       lineItems.push({
@@ -48,6 +53,8 @@ exports.handler = async (event) => {
       quantity: 1
     });
 
+    console.log("Line items:", JSON.stringify(lineItems));
+
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -59,7 +66,6 @@ exports.handler = async (event) => {
         email:    data.email   || "",
         address:  data.address || "",
         notes:    data.notes   || "",
-        items:    JSON.stringify(counts),
         shipping: data.shipping || "5",
         total:    data.total   || "0"
       },
@@ -67,12 +73,16 @@ exports.handler = async (event) => {
       cancel_url:  data.cancelUrl
     });
 
+    console.log("Session created:", session.id);
+
     return {
       statusCode: 200,
       body: JSON.stringify({ id: session.id, url: session.url })
     };
 
   } catch (err) {
+    console.log("ERROR:", err.message);
+    console.log("ERROR STACK:", err.stack);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: err.message })
