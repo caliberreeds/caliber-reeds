@@ -150,9 +150,9 @@
       Amount: <strong id="venmoAmount"></strong>
     </div>
 
-    <div class="later-box" id="laterBox">
-      📋 We'll be in touch with payment details shortly.<br>
-      Reply to your confirmation email with any questions.
+    <div class="later-box" id="zelleBox">
+      💚 Please send payment via Zelle to <strong>caliberreeds@gmail.com</strong><br>
+      Amount: <strong id="zelleAmount"></strong>
     </div>
 
     <hr class="divider">
@@ -236,8 +236,10 @@
       const venmoBox = document.getElementById("venmoBox");
       venmoBox.style.display = "block";
       document.getElementById("venmoAmount").textContent = "$" + total;
-    } else if (method === "later") {
-      document.getElementById("laterBox").style.display = "block";
+    } else if (method === "zelle") {
+        const zelleBox = document.getElementById("zelleBox");
+        zelleBox.style.display = "block";
+        document.getElementById("zelleAmount").textContent = "$" + total;
     }
 
     // Render order details
