@@ -335,7 +335,7 @@
   }
 
   function setLoading(loading) {
-    const btns = ["cardBtn", "venmoBtn", "laterBtn"];
+    const btns = ["cardBtn", "venmoBtn", "zelleBtn"];
     btns.forEach(id => document.getElementById(id).disabled = loading);
     document.getElementById("spinner").style.display = loading ? "block" : "none";
   }
