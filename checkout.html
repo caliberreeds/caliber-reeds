@@ -365,6 +365,7 @@
       headers: { "Content-Type": "application/json" },
       body:    JSON.stringify(payload)
     });
+    localStorage.setItem("reedTotal", subtotal + parseInt(shipping));
     localStorage.removeItem("reedCart");
     localStorage.removeItem("reedPayMethod");
   }
