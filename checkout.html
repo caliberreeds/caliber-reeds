@@ -418,11 +418,11 @@
         setLoading(false);
       }
 
-    } else if (method === "later") {
+    } else if (method === "zelle") {
       try {
-        await submitToSheets(customerData, "pay later");
+        await submitToSheets(customerData, "zelle");
         localStorage.setItem("reedCustomer", JSON.stringify(customerData));
-        window.location.href = "success.html?method=later";
+        window.location.href = "success.html?method=zelle";
       } catch (err) {
         setLoading(false);
       }
