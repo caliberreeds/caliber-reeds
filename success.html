@@ -189,7 +189,8 @@
       subtotal += prices[item];
     });
 
-    const total = subtotal + parseInt(shipping);
+    const savedTotal = localStorage.getItem("reedTotal");
+    const total = savedTotal ? parseInt(savedTotal) : subtotal + parseInt(shipping);
 
     // If coming from Stripe, submit order to sheets now
     if (sessionId) {
