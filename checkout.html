@@ -357,7 +357,8 @@
       email:     customerData.email,
       address:   customerData.address,
       notes:     customerData.notes,
-      payMethod: payMethod
+      payMethod: payMethod,
+      delayAcknowledged: localStorage.getItem("reedDelayAcknowledged") || "false"
     };
     await fetch(SCRIPT_URL, {
       method:  "POST",
