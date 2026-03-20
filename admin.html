@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Caliber Reeds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1e3d2a;
+      --green-mid:   #2f5e3f;
+      --green-light: #4a8c60;
+      --gold:        #c9a84c;
+      --cream:       #f7f4ee;
+      --white:       #ffffff;
+      --gray-light:  #e8e4dc;
+      --gray-mid:    #999;
+      --text:        #1a1a1a;
+      --shadow:      0 4px 20px rgba(0,0,0,0.10);
+      --red:         #c0392b;
+      --red-light:   #fadbd8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 32px 60px;
+    }
+
+    /* ── Login Screen ── */
+    #loginScreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      text-align: center;
+    }
+
+    #loginScreen h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      color: var(--green-dark);
+      margin-bottom: 8px;
+    }
+
+    #loginScreen p {
+      color: var(--gray-mid);
+      margin-bottom: 28px;
+      font-size: 15px;
+    }
+
+    .login-box {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 15px;
+      background: var(--cream);
+      margin-bottom: 14px;
+    }
+
+    .login-box input:focus {
+      outline: 2px solid var(--green-light);
+      border-color: transparent;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Source Sans 3', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-green  { background: var(--green-mid); color: white; }
+    .btn-green:hover  { background: var(--green-dark); }
+    .btn-red    { background: var(--red); color: white; }
+    .btn-red:hover    { background: #a93226; }
+    .btn-gold   { background: var(--gold); color: var(--green-dark); }
+    .btn-gold:hover   { background: #b8963e; }
+    .btn-small  { width: auto; padding: 8px 18px; font-size: 13px; }
+
+    #loginError {
+      display: none;
+      color: var(--red);
+      font-size: 13px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    /* ── Admin Dashboard ── */
+    #adminScreen { display: none; }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .admin-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--green-dark);
+    }
+
+    .admin-header p {
+      font-size: 13px;
+      color: var(--gray-mid);
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--green-dark);
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gold);
+      display: inline-block;
+    }
+
+    /* ── Toggle Switch ── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .toggle-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--green-dark);
+    }
+
+    .toggle-sublabel {
+      font-size: 13px;
+      color: var(--gray-mid);
+      margin-top: 2px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 56px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .toggle input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #ccc;
+      border-radius: 28px;
+      transition: 0.3s;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    input:checked + .toggle-slider { background: var(--red); }
+    input:checked + .toggle-slider:before { transform: translateX(28px); }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    .badge-open   { background: #d4edda; color: #155724; }
+    .badge-paused { background: var(--red-light); color: var(--red); }
+
+    /* Pause reason */
+    .reason-row {
+      margin-bottom: 20px;
+    }
+    .reason-row label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 8px;
+    }
+    .reason-row select,
+    .reason-row input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 15px;
+      background: var(--cream);
+      color: var(--text);
+    }
+    .reason-row select:focus,
+    .reason-row input:focus {
+      outline: 2px solid var(--green-light);
+      border-color: transparent;
+    }
+
+    /* Save feedback */
+    .save-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .save-msg {
+      font-size: 14px;
+      color: var(--green-mid);
+      display: none;
+    }
+
+    /* Pause preview */
+    .preview-box {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+      font-size: 14px;
+      color: #5d4037;
+      line-height: 1.6;
+      display: none;
+    }
+    .preview-box strong { color: #e65100; }
+
+    /* Logout */
+    .logout-btn {
+      background: none;
+      border: 1px solid var(--gray-light);
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--gray-mid);
+      cursor: pointer;
+      font-family: 'Source Sans 3', sans-serif;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover { background: var(--gray-light); color: var(--text); }
+
+    @media (max-width: 580px) {
+      body { padding: 32px 18px 48px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div id="loginScreen">
+    <h1>Admin Access</h1>
+    <p>Caliber Reeds by Ben</p>
+    <div class="login-box">
+      <input type="password" id="passwordInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter') login()">
+      <button class="btn btn-green" onclick="login()">Log In</button>
+      <div id="loginError">Incorrect password. Please try again.</div>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="adminScreen">
+
+    <div class="admin-header">
+      <div>
+        <h1>Admin Dashboard</h1>
+        <p>Caliber Reeds by Ben</p>
+      </div>
+      <button class="logout-btn" onclick="logout()">Log Out</button>
+    </div>
+
+    <!-- Cart Status -->
+    <div class="card">
+      <h2>Cart Status</h2>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">
+            Cart is
+            <span id="statusBadge" class="status-badge badge-open">Open</span>
+          </div>
+          <div class="toggle-sublabel">Toggle to pause or reopen the cart</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="pauseToggle" onchange="updatePreview()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="reason-row" id="reasonRow" style="display:none;">
+        <label>Pause Reason</label>
+        <select id="pauseReason" onchange="updatePreview()">
+          <option value="high_order_volume">High Order Volume</option>
+          <option value="vacation">Vacation</option>
+        </select>
+      </div>
+
+      <div class="preview-box" id="previewBox"></div>
+
+      <div class="save-row" style="margin-top:20px;">
+        <button class="btn btn-green btn-small" onclick="saveSettings()">Save Changes</button>
+        <span class="save-msg" id="saveMsg">✓ Saved!</span>
+      </div>
+    </div>
+
+    <!-- Processing Time -->
+    <div class="card">
+      <h2>Processing Time</h2>
+      <div class="reason-row">
+        <label>Message shown to customers</label>
+        <input type="text" id="processingTime" placeholder="e.g. 1-2 weeks">
+      </div>
+      <div class="save-row">
+        <button class="btn btn-green btn-small" onclick="saveProcessingTime()">Save</button>
+        <span class="save-msg" id="processingMsg">✓ Saved!</span>
+      </div>
+    </div>
+
+    <!-- More sections coming soon -->
+    <div class="card" style="text-align:center; padding: 40px; color: var(--gray-mid);">
+      <p style="font-size:15px;">More admin features coming soon —<br>order management, pricing, and more! 🎵</p>
+    </div>
+
+  </div>
+
+<script>
+  const ADMIN_FUNCTION_URL = "/.netlify/functions/admin-settings";
+
+  let adminPassword = "";
+  let currentSettings = {};
+
+  const pauseMessages = {
+    high_order_volume: "The cart is currently paused due to high order volume. This is done out of respect for customers who have already placed orders, to ensure their reeds are fulfilled in a timely manner. If you would still like to place an order, you are welcome to do so — please just be aware that your reeds may take longer than usual to arrive.",
+    vacation: "The cart is currently paused as I am on vacation. This is done out of respect for customers who have already placed orders, to ensure their reeds are fulfilled in a timely manner. If you would still like to place an order, you are welcome to do so — please just be aware that your reeds may take longer than usual to arrive."
+  };
+
+  async function login() {
+    const password = document.getElementById("passwordInput").value;
+    if (!password) return;
+
+    try {
+      const response = await fetch(ADMIN_FUNCTION_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password, cart_paused: undefined })
+      });
+
+      if (response.status === 401) {
+        document.getElementById("loginError").style.display = "block";
+        return;
+      }
+
+      // Password correct — load settings
+      adminPassword = password;
+      await loadSettings();
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("adminScreen").style.display = "block";
+
+    } catch (err) {
+      document.getElementById("loginError").style.display = "block";
+      document.getElementById("loginError").textContent = "Could not connect. Please try again.";
+    }
+  }
+
+  async function loadSettings() {
+    const response = await fetch(ADMIN_FUNCTION_URL);
+    currentSettings = await response.json();
+
+    const paused = currentSettings.cart_paused === "true" || currentSettings.cart_paused === "TRUE";
+
+    document.getElementById("pauseToggle").checked = paused;
+    document.getElementById("pauseReason").value = currentSettings.pause_reason || "high_order_volume";
+    document.getElementById("processingTime").value = currentSettings.processing_time || "1-2 weeks";
+
+    updatePreview();
+  }
+
+  function updatePreview() {
+    const paused = document.getElementById("pauseToggle").checked;
+    const reason = document.getElementById("pauseReason").value;
+    const badge  = document.getElementById("statusBadge");
+    const reasonRow = document.getElementById("reasonRow");
+    const previewBox = document.getElementById("previewBox");
+
+    if (paused) {
+      badge.textContent = "Paused";
+      badge.className = "status-badge badge-paused";
+      reasonRow.style.display = "block";
+      previewBox.style.display = "block";
+      previewBox.innerHTML = "<strong>Preview of message customers will see:</strong><br><br>" + pauseMessages[reason];
+    } else {
+      badge.textContent = "Open";
+      badge.className = "status-badge badge-open";
+      reasonRow.style.display = "none";
+      previewBox.style.display = "none";
+    }
+  }
+
+  async function saveSettings() {
+    const paused = document.getElementById("pauseToggle").checked;
+    const reason = document.getElementById("pauseReason").value;
+
+    try {
+      await fetch(ADMIN_FUNCTION_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:    adminPassword,
+          cart_paused: paused ? "true" : "false",
+          pause_reason: reason
+        })
+      });
+
+      const msg = document.getElementById("saveMsg");
+      msg.style.display = "inline";
+      setTimeout(() => msg.style.display = "none", 2000);
+
+    } catch (err) {
+      alert("Could not save. Please try again.");
+    }
+  }
+
+  async function saveProcessingTime() {
+    const time = document.getElementById("processingTime").value.trim();
+    if (!time) return;
+
+    try {
+      await fetch(ADMIN_FUNCTION_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:        adminPassword,
+          processing_time: time
+        })
+      });
+
+      const msg = document.getElementById("processingMsg");
+      msg.style.display = "inline";
+      setTimeout(() => msg.style.display = "none", 2000);
+
+    } catch (err) {
+      alert("Could not save. Please try again.");
+    }
+  }
+
+  function logout() {
+    adminPassword = "";
+    currentSettings = {};
+    document.getElementById("passwordInput").value = "";
+    document.getElementById("loginError").style.display = "none";
+    document.getElementById("adminScreen").style.display = "none";
+    document.getElementById("loginScreen").style.display = "flex";
+  }
+</script>
+</body>
+</html>
