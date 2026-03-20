@@ -369,6 +369,7 @@
     localStorage.setItem("reedTotal", subtotal + parseInt(shipping));
     localStorage.removeItem("reedCart");
     localStorage.removeItem("reedPayMethod");
+    localStorage.removeItem("reedDelayAcknowledged");
   }
 
   async function handlePayment(method) {
