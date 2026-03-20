@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caliber Reeds by Ben</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1e3d2a;
+      --green-mid:   #2f5e3f;
+      --sage:        #7a9e7e;
+      --gold:        #c9a84c;
+      --amber:       #c49a3c;
+      --cane:        #d4b896;
+      --cork:        #8b6f4e;
+      --cork-light:  #b8936a;
+      --bg:          #f5f1ea;
+      --bg-warm:     #ede5d8;
+      --bg-tan:      #e8dece;
+      --bg-cork:     #3d2b1f;
+      --white:       #ffffff;
+      --gray-light:  #ddd8ce;
+      --gray-mid:    #999;
+      --text:        #1a1a1a;
+      --text-light:  #5a4a3a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 48px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .nav-logo {
+      font-family: 'Caveat', cursive;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--green-dark);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green-mid); }
+
+    .nav-shop-btn {
+      background: var(--cork) !important;
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 5px;
+      transition: background 0.2s !important;
+    }
+    .nav-shop-btn:hover { background: var(--bg-cork) !important; }
+
+    /* ── Page Header ── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 48px 72px 44px;
+      border-bottom: 1px solid var(--gray-light);
+      background: var(--bg);
+    }
+
+    .page-title {
+      font-family: 'Caveat', cursive;
+      font-size: 88px;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 0.92;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .page-header-right {
+      text-align: right;
+      max-width: 360px;
+      animation: fadeUp 0.6s ease 0.15s both;
+    }
+
+    .page-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--text-light);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      padding: 12px 28px;
+      background: var(--cork);
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--bg-cork); transform: translateY(-1px); }
+
+    .btn-outline {
+      padding: 12px 28px;
+      background: transparent;
+      color: var(--green-dark);
+      border: 2px solid var(--green-dark);
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .btn-outline:hover { background: var(--green-dark); color: white; transform: translateY(-1px); }
+
+    .btn-amber {
+      display: inline-block;
+      padding: 12px 28px;
+      background: transparent;
+      color: var(--amber);
+      border: 2px solid var(--amber);
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+    }
+    .btn-amber:hover { background: var(--amber); color: var(--bg-cork); transform: translateY(-1px); }
+
+    .btn-green {
+      display: inline-block;
+      padding: 12px 28px;
+      background: var(--green-mid);
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+    }
+    .btn-green:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+    .btn-youtube {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      background: #FF0000;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-youtube:hover { background: #cc0000; transform: translateY(-1px); }
+
+    /* ── Photo + Word Rows ── */
+    .photo-word-row {
+      display: grid;
+      border-top: 1px solid var(--gray-light);
+    }
+
+    .photo-word-row.left-narrow  { grid-template-columns: 0.6fr 88px 1.4fr; }
+    .photo-word-row.right-narrow { grid-template-columns: 1.5fr 88px 0.5fr; }
+
+    #row-response     .word-column { margin-left: 0; margin-right: 28px; }
+    #row-intonation   .word-column { margin-left: 18px; margin-right: 0; }
+    #row-articulation .word-column { margin-left: 0; margin-right: 10px; }
+
+    .row-photo { overflow: hidden; }
+    .row-photo img {
+      width: 100%;
+      height: 460px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .row-photo:hover img { transform: scale(1.03); }
+
+    .word-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 0;
+      border-left: 1px solid var(--gray-light);
+      border-right: 1px solid var(--gray-light);
+    }
+
+    #row-response     .word-column { background: var(--bg-tan); }
+    #row-intonation   .word-column { background: #e8e0d0; }
+    #row-articulation .word-column { background: var(--bg-warm); }
+
+    .word-letter {
+      font-family: 'Caveat', cursive;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--green-mid);
+      line-height: 1.05;
+      display: block;
+      text-align: center;
+    }
+
+    /* ── About Section ── */
+    .about-section {
+      background: var(--bg-cork);
+      padding: 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .about-text h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 54px;
+      font-weight: 700;
+      color: var(--cane);
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .about-text p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.68);
+      line-height: 1.85;
+      margin-bottom: 14px;
+    }
+
+    .about-image {
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .about-image img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Behind the Reed ── */
+    .craft-section {
+      padding: 80px;
+      text-align: center;
+      background: var(--bg);
+      border-top: 1px solid var(--gray-light);
+    }
+
+    .craft-section h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 58px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 10px;
+    }
+
+    .craft-section p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--text-light);
+      max-width: 500px;
+      margin: 0 auto 36px;
+      line-height: 1.65;
+    }
+
+    /* ── YouTube ── */
+    .youtube-section {
+      background: var(--bg-tan);
+      border-top: 1px solid var(--gray-light);
+      padding: 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .youtube-text h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 54px;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    .youtube-text p {
+      font-size: 16px;
+      color: var(--text-light);
+      line-height: 1.85;
+      margin-bottom: 28px;
+    }
+
+    .youtube-image {
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .youtube-image img {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--bg-cork);
+      color: rgba(255,255,255,0.4);
+      padding: 32px 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--cane); }
+    .footer-links { display: flex; gap: 24px; }
+
+    /* ── Animation ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 768px) {
+      nav { padding: 12px 20px; }
+      .nav-links { gap: 14px; }
+      .nav-links li:not(:last-child) { display: none; }
+
+      .page-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 24px 32px;
+        gap: 20px;
+      }
+      .page-title { font-size: 64px; }
+      .page-header-right { text-align: center; }
+      .header-buttons { justify-content: center; }
+
+      .photo-word-row.left-narrow,
+      .photo-word-row.right-narrow { grid-template-columns: 1fr 60px 1fr; }
+      #row-response     .word-column { margin-left: 0; margin-right: 16px; }
+      #row-intonation   .word-column { margin-left: 12px; margin-right: 0; }
+      #row-articulation .word-column { margin-left: 0; margin-right: 8px; }
+      .row-photo img { height: 220px; }
+      .word-letter { font-size: 24px; }
+
+      .about-section { grid-template-columns: 1fr; padding: 56px 24px; gap: 36px; }
+      .about-text h2 { font-size: 42px; }
+
+      .craft-section { padding: 56px 24px; }
+      .craft-section h2 { font-size: 42px; }
+
+      .youtube-section { grid-template-columns: 1fr; padding: 56px 24px; gap: 36px; }
+      .youtube-text h2 { font-size: 42px; }
+
+      footer { flex-direction: column; gap: 14px; padding: 28px 20px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="home.html" class="nav-logo">Caliber Reeds by Ben</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Shop</a></li>
+      <li><a href="about.html">About Ben</a></li>
+      <li><a href="behind-the-reed.html">Behind the Reed</a></li>
+      <li><a href="index.html" class="nav-shop-btn">Shop Now</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Handmade<br>Oboe<br>Reeds</h1>
+    <div class="page-header-right">
+      <p class="page-tagline">Responsive, in tune, and easy to articulate —<br>reeds that let you focus on the music.</p>
+      <div class="header-buttons">
+        <a href="index.html" class="btn-primary">Shop Reeds</a>
+        <a href="about.html" class="btn-outline">About Ben</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 1: RESPONSE -->
+  <div id="row-response" class="photo-word-row left-narrow">
+    <div class="row-photo">
+      <img src="images/red-container.jpg" alt="Reed soaking container">
+    </div>
+    <div class="word-column">
+      <span class="word-letter">R</span>
+      <span class="word-letter">E</span>
+      <span class="word-letter">S</span>
+      <span class="word-letter">P</span>
+      <span class="word-letter">O</span>
+      <span class="word-letter">N</span>
+      <span class="word-letter">S</span>
+      <span class="word-letter">E</span>
+    </div>
+    <div class="row-photo">
+      <img src="images/gouging-machine.jpg" alt="Brass gouging machine">
+    </div>
+  </div>
+
+  <!-- Row 2: INTONATION -->
+  <div id="row-intonation" class="photo-word-row right-narrow">
+    <div class="row-photo">
+      <img src="images/cane-shavings.jpg" alt="Cane shavings">
+    </div>
+    <div class="word-column">
+      <span class="word-letter">I</span>
+      <span class="word-letter">N</span>
+      <span class="word-letter">T</span>
+      <span class="word-letter">O</span>
+      <span class="word-letter">N</span>
+      <span class="word-letter">A</span>
+      <span class="word-letter">T</span>
+      <span class="word-letter">I</span>
+      <span class="word-letter">O</span>
+      <span class="word-letter">N</span>
+    </div>
+    <div class="row-photo">
+      <img src="images/reed-case.jpg" alt="Reed case">
+    </div>
+  </div>
+
+  <!-- Row 3: ARTICULATION -->
+  <div id="row-articulation" class="photo-word-row left-narrow">
+    <div class="row-photo">
+      <img src="images/workbench.jpg" alt="Reed making workbench">
+    </div>
+    <div class="word-column">
+      <span class="word-letter">A</span>
+      <span class="word-letter">R</span>
+      <span class="word-letter">T</span>
+      <span class="word-letter">I</span>
+      <span class="word-letter">C</span>
+      <span class="word-letter">U</span>
+      <span class="word-letter">L</span>
+      <span class="word-letter">A</span>
+      <span class="word-letter">T</span>
+      <span class="word-letter">I</span>
+      <span class="word-letter">O</span>
+      <span class="word-letter">N</span>
+    </div>
+    <div class="row-photo">
+      <img src="images/reeds-held.jpg" alt="Finished reeds">
+    </div>
+  </div>
+
+  <!-- About -->
+  <section class="about-section">
+    <div class="about-text">
+      <h2>Two decades of reed making</h2>
+      <p>I started making reeds in high school around 2001, growing up in upstate New York with a love of the outdoors and a deep commitment to the oboe.</p>
+      <p>Today I'm completing my Master of Music in Oboe Performance at the University of North Texas. I believe a great reed shouldn't fight you — it should respond, stay in tune, and let you focus on the music.</p>
+      <a href="about.html" class="btn-amber" style="margin-top:12px;">Read My Story</a>
+    </div>
+    <div class="about-image">
+      <img src="images/workbench.jpg" alt="Reed making">
+    </div>
+  </section>
+
+  <!-- Behind the Reed -->
+  <section class="craft-section">
+    <h2>Behind the Reed</h2>
+    <p>From raw cane to finished reed — a look at the tools, techniques, and care that goes into every single one.</p>
+    <a href="behind-the-reed.html" class="btn-green">See the Process</a>
+  </section>
+
+  <!-- YouTube -->
+  <section class="youtube-section">
+    <div class="youtube-text">
+      <h2>Hear Ben play</h2>
+      <p>Visit my YouTube channel for a mix of performances — newer and older recordings, mistakes and all. The oboe is a journey, and I think it's important to show that.</p>
+      <a href="https://www.youtube.com/@byoder5912" target="_blank" class="btn-youtube">▶ Watch on YouTube</a>
+    </div>
+    <div class="youtube-image">
+      <img src="images/reed-case.jpg" alt="Oboe reeds">
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <span>© Caliber Reeds by Ben · All reeds handmade to order</span>
+    <div class="footer-links">
+      <a href="index.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="behind-the-reed.html">Behind the Reed</a>
+      <a href="https://www.youtube.com/@byoder5912" target="_blank">YouTube</a>
+    </div>
+  </footer>
+
+</body>
+</html>
