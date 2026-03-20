@@ -340,9 +340,115 @@
       .product-grid { grid-template-columns: 1fr; }
       .checkout-buttons { flex-direction: column; }
     }
+    /* ── Pause Banner ── */
+    #pauseBanner {
+      display: none;
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      font-size: 15px;
+      color: #5d4037;
+      line-height: 1.7;
+    }
+    #pauseBanner strong { color: #e65100; font-size: 16px; }
+
+    /* ── Disclaimer Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    }
+    .modal-box h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--green-dark);
+      margin-bottom: 14px;
+    }
+    .modal-box p {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .modal-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .modal-checkbox input { margin-top: 3px; flex-shrink: 0; }
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-modal-confirm {
+      flex: 1;
+      padding: 12px;
+      background: var(--green-mid);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Source Sans 3', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-modal-confirm:hover { background: var(--green-dark); }
+    .btn-modal-cancel {
+      flex: 1;
+      padding: 12px;
+      background: var(--gray-light);
+      color: var(--text);
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Source Sans 3', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-modal-cancel:hover { background: #d5d0c8; }
   </style>
 </head>
 <body>
+  <!-- Pause Banner -->
+  <div id="pauseBanner"></div>
+
+  <!-- Disclaimer Modal -->
+  <div class="modal-overlay" id="disclaimerModal">
+    <div class="modal-box">
+      <h2>Please Note</h2>
+      <p id="modalMessage"></p>
+      <div class="modal-checkbox">
+        <input type="checkbox" id="disclaimerCheck">
+        <label for="disclaimerCheck">I understand that my order may take longer than usual to arrive and I would still like to proceed.</label>
+      </div>
+      <div class="modal-buttons">
+        <button class="btn-modal-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-modal-confirm" onclick="confirmCheckout()">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
 
   <a href="#cartSection" id="cartBar">
     <span class="cart-icon">🛒</span>
@@ -457,6 +563,42 @@
   <p class="footer-note">© Caliber Reeds by Ben · All reeds handmade to order</p>
 
 <script>
+  // Check pause status
+  let cartPaused = false;
+  const pauseMessages = {
+    high_order_volume: "The cart is currently paused due to high order volume. This is done out of respect for customers who have already placed orders, to ensure their reeds are fulfilled in a timely manner. If you would still like to place an order, you are welcome to do so — please just be aware that your reeds may take longer than usual to arrive.",
+    vacation: "The cart is currently paused as I am on vacation. This is done out of respect for customers who have already placed orders, to ensure their reeds are fulfilled in a timely manner. If you would still like to place an order, you are welcome to do so — please just be aware that your reeds may take longer than usual to arrive."
+  };
+
+  async function checkPauseStatus() {
+    try {
+      const response = await fetch("/.netlify/functions/admin-settings");
+      const settings = await response.json();
+      cartPaused = settings.cart_paused === "true" || settings.cart_paused === "TRUE";
+
+      if (cartPaused) {
+        const reason = settings.pause_reason || "high_order_volume";
+        const banner = document.getElementById("pauseBanner");
+        banner.style.display = "block";
+        banner.innerHTML = "<strong>⚠️ Cart Currently Paused</strong><br><br>" + pauseMessages[reason];
+        document.getElementById("modalMessage").textContent = pauseMessages[reason];
+      }
+
+      // Update processing time if changed
+      if (settings.processing_time) {
+        const notices = document.querySelectorAll(".processing-notice div");
+        notices.forEach(el => {
+          el.innerHTML = "<strong>Processing Time:</strong> All reeds are handmade to order and typically ship within " + settings.processing_time + ". You'll receive a tracking number by email as soon as your order is on its way.";
+        });
+      }
+
+    } catch (err) {
+      // If function unavailable, continue normally
+      console.log("Could not load settings:", err);
+    }
+  }
+
+  checkPauseStatus();
   const prices = {
     "Student Oboe":   23,
     "Advanced Oboe":  27,
@@ -551,6 +693,29 @@
     if (cart.length === 0) { alert("Your cart is empty."); return; }
     localStorage.setItem("reedCart", JSON.stringify(cart));
     localStorage.setItem("reedShipping", getShipping());
+    if (cartPaused) {
+      showDisclaimer();
+    } else {
+      window.location = "checkout.html";
+    }
+  }
+
+  function showDisclaimer() {
+    document.getElementById("disclaimerModal").classList.add("active");
+  }
+
+  function closeModal() {
+    document.getElementById("disclaimerModal").classList.remove("active");
+    document.getElementById("disclaimerCheck").checked = false;
+  }
+
+  function confirmCheckout() {
+    if (!document.getElementById("disclaimerCheck").checked) {
+      alert("Please check the box to confirm you understand before proceeding.");
+      return;
+    }
+    closeModal();
+    localStorage.setItem("reedDelayAcknowledged", "true");
     window.location = "checkout.html";
   }
 
