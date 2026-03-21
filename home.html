@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Core palette — earthy, warm, natural */
       --green-dark:  #1e3d2a;
       --green-mid:   #2f5e3f;
       --sage:        #7a9e7e;
@@ -15,15 +14,10 @@
       --amber:       #c49a3c;
       --cane:        #d4b896;
       --cork:        #8b6f4e;
-      --cork-light:  #b8936a;
-
-      /* Backgrounds */
       --bg:          #f5f1ea;
       --bg-warm:     #ede5d8;
       --bg-tan:      #e8dece;
       --bg-cork:     #3d2b1f;
-
-      /* Text & UI */
       --white:       #ffffff;
       --gray-light:  #ddd8ce;
       --gray-mid:    #999;
@@ -53,7 +47,6 @@
       background: var(--bg);
       border-bottom: 1px solid var(--gray-light);
     }
-
     .nav-logo {
       font-family: 'Caveat', cursive;
       font-size: 26px;
@@ -61,14 +54,12 @@
       color: var(--green-dark);
       text-decoration: none;
     }
-
     .nav-links {
       display: flex;
       align-items: center;
       gap: 36px;
       list-style: none;
     }
-
     .nav-links a {
       font-size: 13px;
       font-weight: 600;
@@ -79,7 +70,6 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--green-mid); }
-
     .nav-shop-btn {
       background: var(--cork) !important;
       color: white !important;
@@ -98,7 +88,6 @@
       border-bottom: 1px solid var(--gray-light);
       background: var(--bg);
     }
-
     .page-title {
       font-family: 'Caveat', cursive;
       font-size: 88px;
@@ -107,13 +96,11 @@
       line-height: 0.92;
       animation: fadeUp 0.6s ease both;
     }
-
     .page-header-right {
       text-align: right;
       max-width: 360px;
       animation: fadeUp 0.6s ease 0.15s both;
     }
-
     .page-tagline {
       font-family: 'Cormorant Garamond', serif;
       font-size: 19px;
@@ -122,7 +109,6 @@
       line-height: 1.7;
       margin-bottom: 24px;
     }
-
     .header-buttons {
       display: flex;
       gap: 12px;
@@ -207,57 +193,47 @@
     .photo-word-row {
       display: grid;
       border-top: 1px solid var(--gray-light);
+      gap: 0;
     }
+    .photo-word-row.left-narrow  { grid-template-columns: 0.6fr 100px 1.4fr; }
+    .photo-word-row.right-narrow { grid-template-columns: 1.5fr 100px 0.5fr; }
 
-    .photo-word-row.left-narrow  { grid-template-columns: 0.6fr 88px 1.4fr; }
-    .photo-word-row.right-narrow { grid-template-columns: 1.5fr 88px 0.5fr; }
+    /* Word column offsets — irregular and non-uniform */
+    #row-response     .word-column { margin-right: 28px; }
+    #row-intonation   .word-column { margin-left: 18px; }
+    #row-articulation .word-column { margin-left: 44px; }
 
-    #row-response     .word-column { margin-left: 0; margin-right: 28px; }
-    #row-intonation   .word-column { margin-left: 18px; margin-right: 0; }
-    #row-articulation .word-column { margin-left: 44px; margin-right: 0; }
-
-    .row-photo { overflow: hidden; margin: 0; padding: 0; line-height: 0; }
+    /* Photos fill full row height */
+    .row-photo {
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      line-height: 0;
+      display: flex;
+    }
     .row-photo img {
       width: 100%;
-      height: 560px;
       object-fit: cover;
       object-position: center center;
       display: block;
+      flex: 1;
       transition: transform 0.5s ease;
     }
     .row-photo:hover img { transform: scale(1.03); }
 
-    .photo-word-row {
-      display: grid;
-      border-top: 1px solid var(--gray-light);
-      align-items: stretch;
-    }
-
-    /* Each word column gets a different earthy background */
+    /* Word columns stretch to fill photo height */
     .word-column {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 32px 0;
-      margin: 0;
-      border-left: none;
-      border-right: none;
+      padding: 48px 0;
+      min-height: 500px;
     }
 
-    .word-letter {
-      font-family: 'Caveat', cursive;
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--green-mid);
-      line-height: 1.2;
-      display: block;
-      text-align: center;
-    }
-
-    #row-response   .word-column { background: var(--bg-tan); }
-    #row-intonation .word-column { background: #e8e0d0; }
+    #row-response     .word-column { background: var(--bg-tan); }
+    #row-intonation   .word-column { background: #e8e0d0; }
     #row-articulation .word-column { background: var(--bg-warm); }
 
     .word-letter {
@@ -265,12 +241,12 @@
       font-size: 36px;
       font-weight: 700;
       color: var(--green-mid);
-      line-height: 1.05;
+      line-height: 1.0;
       display: block;
       text-align: center;
     }
 
-    /* ── About Section — cork/brown background ── */
+    /* ── About Section ── */
     .about-section {
       background: var(--bg-cork);
       padding: 80px;
@@ -279,7 +255,6 @@
       gap: 64px;
       align-items: center;
     }
-
     .about-text h2 {
       font-family: 'Caveat', cursive;
       font-size: 54px;
@@ -288,14 +263,12 @@
       line-height: 1.05;
       margin-bottom: 20px;
     }
-
     .about-text p {
       font-size: 16px;
       color: rgba(255,255,255,0.68);
       line-height: 1.85;
       margin-bottom: 14px;
     }
-
     .about-image {
       border-radius: 10px;
       overflow: hidden;
@@ -307,14 +280,13 @@
       display: block;
     }
 
-    /* ── Behind the Reed — sage/green tint ── */
+    /* ── Behind the Reed ── */
     .craft-section {
       padding: 80px;
       text-align: center;
       background: var(--bg);
       border-top: 1px solid var(--gray-light);
     }
-
     .craft-section h2 {
       font-family: 'Caveat', cursive;
       font-size: 58px;
@@ -322,7 +294,6 @@
       color: var(--green-dark);
       margin-bottom: 10px;
     }
-
     .craft-section p {
       font-family: 'Cormorant Garamond', serif;
       font-size: 20px;
@@ -333,7 +304,7 @@
       line-height: 1.65;
     }
 
-    /* ── YouTube — warm tan background ── */
+    /* ── YouTube ── */
     .youtube-section {
       background: var(--bg-tan);
       border-top: 1px solid var(--gray-light);
@@ -343,7 +314,6 @@
       gap: 64px;
       align-items: center;
     }
-
     .youtube-text h2 {
       font-family: 'Caveat', cursive;
       font-size: 54px;
@@ -352,14 +322,12 @@
       line-height: 1.05;
       margin-bottom: 16px;
     }
-
     .youtube-text p {
       font-size: 16px;
       color: var(--text-light);
       line-height: 1.85;
       margin-bottom: 28px;
     }
-
     .youtube-image {
       border-radius: 10px;
       overflow: hidden;
@@ -382,7 +350,6 @@
       font-size: 13px;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
-
     footer a {
       color: rgba(255,255,255,0.4);
       text-decoration: none;
@@ -403,23 +370,18 @@
       .nav-links { gap: 14px; }
       .nav-links li:not(:last-child) { display: none; }
 
-      .page-header {
-        flex-direction: column;
-        text-align: center;
-        padding: 40px 24px 32px;
-        gap: 20px;
-      }
+      .page-header { flex-direction: column; text-align: center; padding: 40px 24px 32px; gap: 20px; }
       .page-title { font-size: 64px; }
       .page-header-right { text-align: center; }
       .header-buttons { justify-content: center; }
 
       .photo-word-row.left-narrow,
       .photo-word-row.right-narrow { grid-template-columns: 1fr 60px 1fr; }
-      #row-response     .word-column { margin-left: 0; margin-right: 16px; }
-      #row-intonation   .word-column { margin-left: 12px; margin-right: 0; }
-      #row-articulation .word-column { margin-left: 0; margin-right: 8px; }
-      .row-photo img { height: 220px; }
-      .word-letter { font-size: 24px; }
+      #row-response     .word-column { margin-right: 12px; margin-left: 0; }
+      #row-intonation   .word-column { margin-left: 8px; margin-right: 0; }
+      #row-articulation .word-column { margin-left: 16px; margin-right: 0; }
+      .word-column { min-height: 260px; gap: 4px; padding: 24px 0; }
+      .word-letter { font-size: 22px; }
 
       .about-section { grid-template-columns: 1fr; padding: 56px 24px; gap: 36px; }
       .about-text h2 { font-size: 42px; }
@@ -460,7 +422,7 @@
     </div>
   </div>
 
-  <!-- Row 1: RESPONSE — reeds-held (narrow left), gouging machine (wide right) -->
+  <!-- Row 1: RESPONSE — reeds-held narrow left, gouging machine wide right -->
   <div id="row-response" class="photo-word-row left-narrow">
     <div class="row-photo">
       <img src="images/reeds-held.jpg" alt="Handmade oboe reeds">
@@ -480,7 +442,7 @@
     </div>
   </div>
 
-  <!-- Row 2: INTONATION — workbench (wide left), reed-case (narrow right) -->
+  <!-- Row 2: INTONATION — workbench wide left, reed-case narrow right -->
   <div id="row-intonation" class="photo-word-row right-narrow">
     <div class="row-photo">
       <img src="images/workbench.jpg" alt="Reed making workbench">
@@ -502,7 +464,7 @@
     </div>
   </div>
 
-  <!-- Row 3: ARTICULATION — red container (narrow left), cane shavings (wide right) -->
+  <!-- Row 3: ARTICULATION — red container narrow left, cane shavings wide right -->
   <div id="row-articulation" class="photo-word-row left-narrow">
     <div class="row-photo">
       <img src="images/red-container.jpg" alt="Reed soaking container">
@@ -526,7 +488,7 @@
     </div>
   </div>
 
-  <!-- About — dark cork brown background -->
+  <!-- About -->
   <section class="about-section">
     <div class="about-text">
       <h2>Two decades of reed making</h2>
@@ -546,7 +508,7 @@
     <a href="behind-the-reed.html" class="btn-green">See the Process</a>
   </section>
 
-  <!-- YouTube — warm tan background -->
+  <!-- YouTube -->
   <section class="youtube-section">
     <div class="youtube-text">
       <h2>Hear Ben play</h2>
