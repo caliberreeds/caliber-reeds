@@ -227,11 +227,10 @@
     }
     .row-photo:hover img { transform: scale(1.03); }
 
-    /* Zoom out reeds-held photo to show full reed tips and wrapping */
-    #row-articulation .row-photo:last-child img {
-      object-fit: contain;
-      object-position: center center;
-      background: #111;
+    .photo-word-row {
+      display: grid;
+      border-top: 1px solid var(--gray-light);
+      align-items: stretch;
     }
 
     /* Each word column gets a different earthy background */
@@ -241,11 +240,10 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 48px 0;
+      padding: 32px 0;
       margin: 0;
       border-left: none;
       border-right: none;
-      min-height: 560px;
     }
 
     .word-letter {
@@ -462,10 +460,10 @@
     </div>
   </div>
 
-  <!-- Row 1: RESPONSE -->
+  <!-- Row 1: RESPONSE — reeds-held (narrow left), gouging machine (wide right) -->
   <div id="row-response" class="photo-word-row left-narrow">
     <div class="row-photo">
-      <img src="images/red-container.jpg" alt="Reed soaking container">
+      <img src="images/reeds-held.jpg" alt="Handmade oboe reeds">
     </div>
     <div class="word-column">
       <span class="word-letter">R</span>
@@ -482,10 +480,10 @@
     </div>
   </div>
 
-  <!-- Row 2: INTONATION -->
+  <!-- Row 2: INTONATION — workbench (wide left), reed-case (narrow right) -->
   <div id="row-intonation" class="photo-word-row right-narrow">
     <div class="row-photo">
-      <img src="images/cane-shavings.jpg" alt="Cane shavings">
+      <img src="images/workbench.jpg" alt="Reed making workbench">
     </div>
     <div class="word-column">
       <span class="word-letter">I</span>
@@ -504,10 +502,10 @@
     </div>
   </div>
 
-  <!-- Row 3: ARTICULATION -->
+  <!-- Row 3: ARTICULATION — red container (narrow left), cane shavings (wide right) -->
   <div id="row-articulation" class="photo-word-row left-narrow">
     <div class="row-photo">
-      <img src="images/workbench.jpg" alt="Reed making workbench">
+      <img src="images/red-container.jpg" alt="Reed soaking container">
     </div>
     <div class="word-column">
       <span class="word-letter">A</span>
@@ -524,7 +522,7 @@
       <span class="word-letter">N</span>
     </div>
     <div class="row-photo">
-      <img src="images/reeds-held.jpg" alt="Finished reeds">
+      <img src="images/cane-shavings.jpg" alt="Cane shavings">
     </div>
   </div>
 
@@ -537,7 +535,7 @@
       <a href="about.html" class="btn-amber" style="margin-top:12px;">Read My Story</a>
     </div>
     <div class="about-image">
-      <img src="images/workbench.jpg" alt="Reed making">
+      <img src="images/reed-case.jpg" alt="Reed making">
     </div>
   </section>
 
