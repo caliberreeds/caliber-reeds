@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     :root {
+      /* Core palette — earthy, warm, natural */
       --green-dark:  #1e3d2a;
       --green-mid:   #2f5e3f;
       --sage:        #7a9e7e;
@@ -15,10 +16,14 @@
       --cane:        #d4b896;
       --cork:        #8b6f4e;
       --cork-light:  #b8936a;
+
+      /* Backgrounds */
       --bg:          #f5f1ea;
       --bg-warm:     #ede5d8;
       --bg-tan:      #e8dece;
       --bg-cork:     #3d2b1f;
+
+      /* Text & UI */
       --white:       #ffffff;
       --gray-light:  #ddd8ce;
       --gray-mid:    #999;
@@ -209,9 +214,9 @@
 
     #row-response     .word-column { margin-left: 0; margin-right: 28px; }
     #row-intonation   .word-column { margin-left: 18px; margin-right: 0; }
-    #row-articulation .word-column { margin-left: 0; margin-right: 10px; }
+    #row-articulation .word-column { margin-left: 12px; margin-right: 0; }
 
-    .row-photo { overflow: hidden; }
+    .row-photo { overflow: hidden; margin: 0; padding: 0; }
     .row-photo img {
       width: 100%;
       height: 460px;
@@ -221,18 +226,25 @@
     }
     .row-photo:hover img { transform: scale(1.03); }
 
+    /* Show reed tips in the held reeds photo */
+    #row-articulation .row-photo:last-child img {
+      object-position: center 20%;
+    }
+
+    /* Each word column gets a different earthy background */
     .word-column {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 20px 0;
-      border-left: 1px solid var(--gray-light);
-      border-right: 1px solid var(--gray-light);
+      margin: 0;
+      border-left: none;
+      border-right: none;
     }
 
-    #row-response     .word-column { background: var(--bg-tan); }
-    #row-intonation   .word-column { background: #e8e0d0; }
+    #row-response   .word-column { background: var(--bg-tan); }
+    #row-intonation .word-column { background: #e8e0d0; }
     #row-articulation .word-column { background: var(--bg-warm); }
 
     .word-letter {
@@ -245,7 +257,7 @@
       text-align: center;
     }
 
-    /* ── About Section ── */
+    /* ── About Section — cork/brown background ── */
     .about-section {
       background: var(--bg-cork);
       padding: 80px;
@@ -282,7 +294,7 @@
       display: block;
     }
 
-    /* ── Behind the Reed ── */
+    /* ── Behind the Reed — sage/green tint ── */
     .craft-section {
       padding: 80px;
       text-align: center;
@@ -308,7 +320,7 @@
       line-height: 1.65;
     }
 
-    /* ── YouTube ── */
+    /* ── YouTube — warm tan background ── */
     .youtube-section {
       background: var(--bg-tan);
       border-top: 1px solid var(--gray-light);
@@ -501,7 +513,7 @@
     </div>
   </div>
 
-  <!-- About -->
+  <!-- About — dark cork brown background -->
   <section class="about-section">
     <div class="about-text">
       <h2>Two decades of reed making</h2>
@@ -521,7 +533,7 @@
     <a href="behind-the-reed.html" class="btn-green">See the Process</a>
   </section>
 
-  <!-- YouTube -->
+  <!-- YouTube — warm tan background -->
   <section class="youtube-section">
     <div class="youtube-text">
       <h2>Hear Ben play</h2>
@@ -529,7 +541,7 @@
       <a href="https://www.youtube.com/@byoder5912" target="_blank" class="btn-youtube">▶ Watch on YouTube</a>
     </div>
     <div class="youtube-image">
-      <img src="images/reed-case.jpg" alt="Oboe reeds">
+      <img src="images/ben-performing.png" alt="Ben performing on oboe">
     </div>
   </section>
 
