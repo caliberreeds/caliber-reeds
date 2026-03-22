@@ -228,7 +228,8 @@
     const method    = params.get("method");
 
     const customerData = JSON.parse(localStorage.getItem("reedCustomer") || "{}");
-    const cart         = JSON.parse(localStorage.getItem("reedCart")     || "[]");
+    const cart = JSON.parse(localStorage.getItem("reedCart") || "[]");
+    const savedCounts = JSON.parse(localStorage.getItem("reedCounts") || "{}");
     const shipping     = localStorage.getItem("reedShipping") || "5";
 
     // Build counts and subtotal
