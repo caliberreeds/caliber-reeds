@@ -259,8 +259,22 @@
       <input type="email" id="custEmail" placeholder="jane@example.com" autocomplete="email">
     </div>
     <div class="form-group">
-      <label for="custAddress">Shipping Address</label>
-      <textarea id="custAddress" placeholder="123 Main St&#10;City, State ZIP" autocomplete="street-address"></textarea>
+      <label for="custStreet">Street Address</label>
+      <input type="text" id="custStreet" placeholder="123 Main St" autocomplete="street-address">
+    </div>
+    <div class="form-group">
+      <label for="custCity">City</label>
+      <input type="text" id="custCity" placeholder="Honeoye Falls" autocomplete="address-level2">
+    </div>
+    <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div>
+        <label for="custState">State</label>
+        <input type="text" id="custState" placeholder="NY" maxlength="2" autocomplete="address-level1">
+      </div>
+      <div>
+        <label for="custZip">ZIP Code</label>
+        <input type="text" id="custZip" placeholder="14472" maxlength="10" autocomplete="postal-code">
+      </div>
     </div>
     <div class="form-group">
       <label for="custNotes">Order Notes (optional)</label>
