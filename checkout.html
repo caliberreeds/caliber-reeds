@@ -387,7 +387,11 @@
       total:     subtotal + parseInt(shipping),
       name:      customerData.name,
       email:     customerData.email,
-      address:   customerData.address.replace(/\n/g, ", ").replace(/\r/g, "").trim(),
+      address:   customerData.address,
+      street:    customerData.street,
+      city:      customerData.city,
+      state:     customerData.state,
+      zip:       customerData.zip,
       notes:     customerData.notes,
       payMethod: payMethod,
       delayAcknowledged: localStorage.getItem("reedDelayAcknowledged") || "false"
