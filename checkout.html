@@ -331,12 +331,15 @@
   function validate() {
     const name    = document.getElementById("custName").value.trim();
     const email   = document.getElementById("custEmail").value.trim();
-    const address = document.getElementById("custAddress").value.trim();
+    const street  = document.getElementById("custStreet").value.trim();
+    const city    = document.getElementById("custCity").value.trim();
+    const state   = document.getElementById("custState").value.trim();
+    const zip     = document.getElementById("custZip").value.trim();
     const errBox  = document.getElementById("errorMsg");
 
-    if (!name || !email || !address) {
+    if (!name || !email || !street || !city || !state || !zip) {
       errBox.style.display = "block";
-      errBox.textContent   = "Please fill out your name, email, and shipping address.";
+      errBox.textContent   = "Please fill out all fields including your full shipping address.";
       return null;
     }
     if (!email.includes("@")) {
@@ -350,10 +353,15 @@
       return null;
     }
     errBox.style.display = "none";
+    const address = street + "\n" + city + ", " + state.toUpperCase() + " " + zip;
     return {
       name,
       email,
       address,
+      street,
+      city,
+      state: state.toUpperCase(),
+      zip,
       notes: document.getElementById("custNotes").value.trim()
     };
   }
