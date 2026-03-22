@@ -233,12 +233,11 @@
     const shipping     = localStorage.getItem("reedShipping") || "5";
 
     // Build counts and subtotal
-    const counts = {};
+    const counts = Object.keys(savedCounts).length > 0 ? savedCounts : {};
     let subtotal = 0;
-    cart.forEach(item => {
-      counts[item] = (counts[item] || 0) + 1;
-      subtotal += prices[item];
-    });
+    for (let item in counts) {
+      subtotal += prices[item] * counts[item];
+    }
 
     const savedTotal = localStorage.getItem("reedTotal");
     const total = savedTotal ? parseInt(savedTotal) : subtotal + parseInt(shipping);
