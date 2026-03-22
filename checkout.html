@@ -425,7 +425,11 @@
             total:      subtotal + parseInt(shipping),
             email:      customerData.email,
             name:       customerData.name,
-            address:    customerData.address,
+            address:   customerData.address,
+            street:    customerData.street,
+            city:      customerData.city,
+            state:     customerData.state,
+            zip:       customerData.zip,
             notes:      customerData.notes,
             successUrl: window.location.origin + "/success.html",
             cancelUrl:  window.location.href
