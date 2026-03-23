@@ -567,8 +567,10 @@
   <p class="footer-note">© Caliber Reeds by Ben · All reeds handmade to order</p>
 
 <script>
-  // Check pause status
   let cartPaused = false;
+  let prices = {};
+  let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
+
   const pauseMessages = {
     high_order_volume: "The cart is currently paused due to high order volume. This is done out of respect for customers who have already placed orders, to ensure their reeds are fulfilled in a timely manner. If you would still like to place an order, you are welcome to do so — please just be aware that your reeds may take longer than usual to arrive.",
     vacation: "The cart is currently paused as I am on vacation. This is done out of respect for customers who have already placed orders, to ensure their reeds are fulfilled in a timely manner. If you would still like to place an order, you are welcome to do so — please just be aware that your reeds may take longer than usual to arrive."
@@ -588,7 +590,6 @@
         document.getElementById("modalMessage").textContent = pauseMessages[reason];
       }
 
-      // Update processing time if changed
       if (settings.processing_time) {
         const notices = document.querySelectorAll(".processing-notice div");
         notices.forEach(el => {
@@ -597,24 +598,82 @@
       }
 
     } catch (err) {
-      // If function unavailable, continue normally
       console.log("Could not load settings:", err);
     }
   }
 
-  let prices = {};
-  checkPauseStatus();
-  let prices = {};
+  async function loadProducts() {
+    try {
+      const response = await fetch("/.netlify/functions/get-products");
+      const data = await response.json();
 
-  let cart = JSON.parse(localStorage.getItem("reedCart")) || [];
+      // Build prices object
+      prices = {};
+      (data.products || []).filter(p => p.active).forEach(p => {
+        prices[p.name] = p.price;
+      });
 
-  const savedShipping = localStorage.getItem("reedShipping");
-  if (savedShipping) {
-    document.getElementById("shippingMethod").value = savedShipping;
+      // Save prices to localStorage for checkout and success pages
+      localStorage.setItem("reedPrices", JSON.stringify(prices));
+
+      // Build shipping options
+      const shipping = data.shipping || [];
+      const select = document.getElementById("shippingMethod");
+      select.innerHTML = shipping.map(s =>
+        `<option value="${s.price}">${s.label} — $${s.price}</option>`
+      ).join("");
+
+      // Restore saved shipping selection
+      const savedShipping = localStorage.getItem("reedShipping");
+      if (savedShipping) {
+        select.value = savedShipping;
+        if (!select.value) select.selectedIndex = 0;
+      }
+
+      // Group active products by category
+      const activeProducts = (data.products || []).filter(p => p.active);
+      const categories = {};
+      activeProducts.forEach(p => {
+        if (!categories[p.category]) categories[p.category] = [];
+        categories[p.category].push(p);
+      });
+
+      // Render product grid
+      const grid = document.getElementById("productGrid");
+      if (activeProducts.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray-mid);">No products available right now.</div>';
+        return;
+      }
+
+      let html = "";
+      for (let category in categories) {
+        html += `<div style="grid-column:1/-1;"><h3 style="font-family:'Playfair Display',serif;font-size:20px;color:var(--green-dark);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--gray-light);">${category}</h3></div>`;
+        categories[category].forEach(p => {
+          const safeId = p.name.replace(/\s+/g, "_");
+          html += `
+            <div class="product">
+              <div class="product-category">${p.category}</div>
+              <h3>${p.name}</h3>
+              <p>${p.description}</p>
+              <div class="product-price">$${p.price}</div>
+              <div class="product-footer">
+                <input type="number" class="qty-input" id="qty_${safeId}" value="1" min="1" max="20">
+                <button class="btn-add" onclick="addQty('${p.name}', 'qty_${safeId}', this)">Add to Cart</button>
+              </div>
+            </div>`;
+        });
+      }
+      grid.innerHTML = html;
+      render();
+
+    } catch (err) {
+      document.getElementById("productGrid").innerHTML =
+        '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray-mid);">Could not load products. Please refresh the page.</div>';
+    }
   }
 
   function getShipping() {
-    return parseInt(document.getElementById("shippingMethod").value) || 5;
+    return parseFloat(document.getElementById("shippingMethod").value) || 5.50;
   }
 
   function render() {
@@ -631,7 +690,7 @@
     let subtotal = 0;
     cart.forEach(item => {
       counts[item] = (counts[item] || 0) + 1;
-      subtotal += prices[item];
+      subtotal += prices[item] || 0;
     });
 
     const isEmpty = cart.length === 0;
@@ -641,7 +700,7 @@
 
     for (let item in counts) {
       const qty       = counts[item];
-      const itemTotal = prices[item] * qty;
+      const itemTotal = (prices[item] || 0) * qty;
       const li = document.createElement("li");
       li.innerHTML = `
         <span>
@@ -656,7 +715,7 @@
     }
 
     const shipping = getShipping();
-    document.getElementById("grandTotal").textContent = subtotal + shipping;
+    document.getElementById("grandTotal").textContent = (subtotal + shipping).toFixed(2);
 
     cartTitle.textContent = isEmpty
       ? "Your Cart"
@@ -719,7 +778,9 @@
     window.location = "checkout.html";
   }
 
-  render();
+  // Start
+  checkPauseStatus();
+  loadProducts();
 </script>
 </body>
 </html>
