@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prices - Caliber Reeds Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1e3d2a;
+      --green-mid:   #2f5e3f;
+      --green-light: #4a8c60;
+      --gold:        #c9a84c;
+      --cream:       #f7f4ee;
+      --white:       #ffffff;
+      --gray-light:  #e8e4dc;
+      --gray-mid:    #999;
+      --text:        #1a1a1a;
+      --shadow:      0 4px 20px rgba(0,0,0,0.10);
+      --red:         #c0392b;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 32px 60px;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .admin-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--green-dark);
+    }
+    .admin-header p {
+      font-size: 13px;
+      color: var(--gray-mid);
+      margin-top: 4px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .admin-nav a {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      color: var(--green-dark);
+      transition: all 0.2s;
+    }
+    .admin-nav a:hover { background: var(--green-dark); color: white; }
+    .admin-nav a.active { background: var(--green-dark); color: white; }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--green-dark);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gold);
+      display: inline-block;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 15px;
+      background: var(--cream);
+      color: var(--text);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: 2px solid var(--green-light);
+      border-color: transparent;
+    }
+    .form-group textarea { height: 80px; resize: vertical; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Source Sans 3', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-green { background: var(--green-mid); color: white; }
+    .btn-green:hover { background: var(--green-dark); }
+    .btn-gold  { background: var(--gold); color: var(--green-dark); }
+    .btn-gold:hover  { background: #b8963e; }
+    .btn-red   { background: var(--red); color: white; }
+    .btn-red:hover   { background: #a93226; }
+    .btn-gray  { background: var(--gray-light); color: var(--text); }
+    .btn-gray:hover  { background: #d5d0c8; }
+    .btn-small { padding: 7px 14px; font-size: 13px; }
+
+    .save-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .save-msg {
+      font-size: 14px;
+      color: var(--green-mid);
+      display: none;
+    }
+
+    /* ── Product list ── */
+    .product-item {
+      border: 1px solid var(--gray-light);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 14px;
+      background: var(--cream);
+      position: relative;
+    }
+    .product-item.inactive {
+      opacity: 0.5;
+    }
+    .product-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .product-item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--green-dark);
+    }
+    .product-item-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--green-mid);
+    }
+    .product-item-category {
+      font-size: 12px;
+      color: var(--gray-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .product-item-desc {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .product-item-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Edit form inside product ── */
+    .edit-form {
+      display: none;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--gray-light);
+    }
+    .edit-form.open { display: block; }
+
+    .inactive-badge {
+      display: inline-block;
+      background: #fadbd8;
+      color: var(--red);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 50px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .logout-btn {
+      background: none;
+      border: 1px solid var(--gray-light);
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--gray-mid);
+      cursor: pointer;
+      font-family: 'Source Sans 3', sans-serif;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover { background: var(--gray-light); color: var(--text); }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray-mid);
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 32px 18px 48px; }
+      .form-row { grid-template-columns: 1fr; }
+      .admin-header { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="mainContent" style="display:none;">
+
+    <div class="admin-header">
+      <div>
+        <h1>Prices & Products</h1>
+        <p>Caliber Reeds by Ben</p>
+      </div>
+      <div class="header-right">
+        <a href="admin.html" class="btn btn-gray">← Settings</a>
+        <button class="logout-btn" onclick="logout()">Log Out</button>
+      </div>
+    </div>
+
+    <div class="admin-nav">
+      <a href="admin.html">Settings</a>
+      <a href="admin-orders.html">Orders</a>
+      <a href="admin-prices.html" class="active">Prices</a>
+      <a href="admin-insights.html">Insights</a>
+    </div>
+
+    <!-- Shipping Options -->
+    <div class="card">
+      <h2>Shipping Options</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Option 1 Label</label>
+          <input type="text" id="ship1Label">
+        </div>
+        <div class="form-group">
+          <label>Option 1 Price ($)</label>
+          <input type="number" id="ship1Price" step="0.01">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Option 2 Label</label>
+          <input type="text" id="ship2Label">
+        </div>
+        <div class="form-group">
+          <label>Option 2 Price ($)</label>
+          <input type="number" id="ship2Price" step="0.01">
+        </div>
+      </div>
+      <div class="save-row">
+        <button class="btn btn-green" onclick="saveShipping()">Save Shipping</button>
+        <span class="save-msg" id="shippingMsg">✓ Saved!</span>
+      </div>
+    </div>
+
+    <!-- Current Products -->
+    <div class="card">
+      <h2>Current Products</h2>
+      <div id="productList"><div class="loading">Loading products...</div></div>
+    </div>
+
+    <!-- Add New Product -->
+    <div class="card">
+      <h2>Add New Product</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="newName" placeholder="e.g. Advanced English Horn Reed">
+        </div>
+        <div class="form-group">
+          <label>Price ($)</label>
+          <input type="number" id="newPrice" step="0.01" placeholder="35">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <input type="text" id="newCategory" placeholder="e.g. Oboe, English Horn, Reed Supplies">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="newDescription" placeholder="Describe this product..."></textarea>
+      </div>
+      <div class="save-row">
+        <button class="btn btn-green" onclick="addProduct()">Add Product</button>
+        <span class="save-msg" id="addMsg">✓ Product Added!</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="authError" style="display:none; text-align:center; padding:60px 20px;">
+    <p style="font-size:16px; color:#c00; margin-bottom:16px;">You need to log in first.</p>
+    <a href="admin.html" style="color: #2f5e3f; font-weight:600;">← Go to Admin Login</a>
+  </div>
+
+<script>
+  const GET_PRODUCTS_URL    = "/.netlify/functions/get-products";
+  const UPDATE_PRODUCTS_URL = "/.netlify/functions/update-products";
+
+  let adminPassword = sessionStorage.getItem("adminPassword") || "";
+  let allProducts = [];
+
+  async function init() {
+    if (!adminPassword) {
+      document.getElementById("authError").style.display = "block";
+      return;
+    }
+    document.getElementById("mainContent").style.display = "block";
+    await loadProducts();
+  }
+
+  async function loadProducts() {
+    try {
+      const response = await fetch(GET_PRODUCTS_URL);
+      const data = await response.json();
+
+      allProducts = data.products || [];
+
+      // Populate shipping fields
+      const shipping = data.shipping || [];
+      if (shipping[0]) {
+        document.getElementById("ship1Label").value = shipping[0].label;
+        document.getElementById("ship1Price").value = shipping[0].price;
+      }
+      if (shipping[1]) {
+        document.getElementById("ship2Label").value = shipping[1].label;
+        document.getElementById("ship2Price").value = shipping[1].price;
+      }
+
+      renderProducts();
+
+    } catch (err) {
+      document.getElementById("productList").innerHTML =
+        '<div class="loading">Could not load products. Please try again.</div>';
+    }
+  }
+
+  function renderProducts() {
+    const container = document.getElementById("productList");
+    if (allProducts.length === 0) {
+      container.innerHTML = '<div class="loading">No products found.</div>';
+      return;
+    }
+
+    container.innerHTML = allProducts.map((p, i) => `
+      <div class="product-item ${p.active ? '' : 'inactive'}" id="product-${i}">
+        <div class="product-item-header">
+          <div>
+            <span class="product-item-name">${p.name}</span>
+            ${!p.active ? '<span class="inactive-badge">Hidden</span>' : ''}
+          </div>
+          <span class="product-item-price">$${p.price}</span>
+        </div>
+        <div class="product-item-category">${p.category}</div>
+        <div class="product-item-desc">${p.description}</div>
+        <div class="product-item-actions">
+          <button class="btn btn-gold btn-small" onclick="toggleEdit(${i})">✏️ Edit</button>
+          <button class="btn btn-gray btn-small" onclick="toggleActive(${i})">
+            ${p.active ? '🙈 Hide' : '👁️ Show'}
+          </button>
+        </div>
+        <div class="edit-form" id="edit-${i}">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" id="edit-name-${i}" value="${p.name}">
+            </div>
+            <div class="form-group">
+              <label>Price ($)</label>
+              <input type="number" id="edit-price-${i}" value="${p.price}" step="0.01">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <input type="text" id="edit-category-${i}" value="${p.category}">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="edit-desc-${i}">${p.description}</textarea>
+          </div>
+          <div class="save-row">
+            <button class="btn btn-green btn-small" onclick="saveProduct(${i})">Save Changes</button>
+            <button class="btn btn-gray btn-small" onclick="toggleEdit(${i})">Cancel</button>
+            <span class="save-msg" id="edit-msg-${i}">✓ Saved!</span>
+          </div>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function toggleEdit(i) {
+    const form = document.getElementById("edit-" + i);
+    form.classList.toggle("open");
+  }
+
+  async function toggleActive(i) {
+    const product = allProducts[i];
+    product.active = !product.active;
+
+    try {
+      await fetch(UPDATE_PRODUCTS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:    adminPassword,
+          action:      "update",
+          index:       product.index,
+          name:        product.name,
+          price:       product.price,
+          category:    product.category,
+          description: product.description,
+          active:      product.active
+        })
+      });
+      renderProducts();
+    } catch (err) {
+      alert("Could not save. Please try again.");
+    }
+  }
+
+  async function saveProduct(i) {
+    const product = allProducts[i];
+    const name        = document.getElementById("edit-name-" + i).value.trim();
+    const price       = parseFloat(document.getElementById("edit-price-" + i).value);
+    const category    = document.getElementById("edit-category-" + i).value.trim();
+    const description = document.getElementById("edit-desc-" + i).value.trim();
+
+    if (!name || !price || !category || !description) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    try {
+      await fetch(UPDATE_PRODUCTS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:    adminPassword,
+          action:      "update",
+          index:       product.index,
+          name,
+          price,
+          category,
+          description,
+          active:      product.active
+        })
+      });
+
+      // Update local data
+      product.name        = name;
+      product.price       = price;
+      product.category    = category;
+      product.description = description;
+
+      const msg = document.getElementById("edit-msg-" + i);
+      msg.style.display = "inline";
+      setTimeout(() => {
+        msg.style.display = "none";
+        toggleEdit(i);
+        renderProducts();
+      }, 1500);
+
+    } catch (err) {
+      alert("Could not save. Please try again.");
+    }
+  }
+
+  async function addProduct() {
+    const name        = document.getElementById("newName").value.trim();
+    const price       = parseFloat(document.getElementById("newPrice").value);
+    const category    = document.getElementById("newCategory").value.trim();
+    const description = document.getElementById("newDescription").value.trim();
+
+    if (!name || !price || !category || !description) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    try {
+      await fetch(UPDATE_PRODUCTS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password: adminPassword,
+          action:   "add",
+          name,
+          price,
+          category,
+          description
+        })
+      });
+
+      // Clear form
+      document.getElementById("newName").value        = "";
+      document.getElementById("newPrice").value       = "";
+      document.getElementById("newCategory").value    = "";
+      document.getElementById("newDescription").value = "";
+
+      const msg = document.getElementById("addMsg");
+      msg.style.display = "inline";
+      setTimeout(() => msg.style.display = "none", 2000);
+
+      // Reload products
+      await loadProducts();
+
+    } catch (err) {
+      alert("Could not add product. Please try again.");
+    }
+  }
+
+  async function saveShipping() {
+    const shipping_1_label = document.getElementById("ship1Label").value.trim();
+    const shipping_1_price = document.getElementById("ship1Price").value;
+    const shipping_2_label = document.getElementById("ship2Label").value.trim();
+    const shipping_2_price = document.getElementById("ship2Price").value;
+
+    if (!shipping_1_label || !shipping_1_price || !shipping_2_label || !shipping_2_price) {
+      alert("Please fill out all shipping fields.");
+      return;
+    }
+
+    try {
+      await fetch(UPDATE_PRODUCTS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password: adminPassword,
+          action:   "update_shipping",
+          shipping_1_label,
+          shipping_1_price,
+          shipping_2_label,
+          shipping_2_price
+        })
+      });
+
+      const msg = document.getElementById("shippingMsg");
+      msg.style.display = "inline";
+      setTimeout(() => msg.style.display = "none", 2000);
+
+    } catch (err) {
+      alert("Could not save shipping. Please try again.");
+    }
+  }
+
+  function logout() {
+    sessionStorage.removeItem("adminPassword");
+    window.location.href = "admin.html";
+  }
+
+  init();
+</script>
+</body>
+</html>
