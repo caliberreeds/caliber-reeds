@@ -289,12 +289,10 @@
       const venmoBox = document.getElementById("venmoBox");
       venmoBox.style.display = "block";
       document.getElementById("venmoAmount").textContent = "$" + total;
-      document.getElementById("venmoOrderNum").textContent = savedTotal ? localStorage.getItem("reedOrderNum") || "" : "";
     } else if (method === "zelle") {
       const zelleBox = document.getElementById("zelleBox");
       zelleBox.style.display = "block";
       document.getElementById("zelleAmount").textContent = "$" + total;
-      document.getElementById("zelleOrderNum").textContent = savedTotal ? localStorage.getItem("reedOrderNum") || "" : "";
     }
 
     // Render order details
