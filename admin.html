@@ -500,6 +500,7 @@
   function logout() {
     adminPassword = "";
     currentSettings = {};
+    sessionStorage.removeItem("adminPassword");
     document.getElementById("passwordInput").value = "";
     document.getElementById("loginError").style.display = "none";
     document.getElementById("adminScreen").style.display = "none";
