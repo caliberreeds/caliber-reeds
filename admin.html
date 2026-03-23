@@ -379,8 +379,19 @@
 <script>
   const ADMIN_FUNCTION_URL = "/.netlify/functions/admin-settings";
 
-  let adminPassword = "";
+  let adminPassword = sessionStorage.getItem("adminPassword") || "";
   let currentSettings = {};
+
+  // Auto-login if password already in session
+  if (adminPassword) {
+    loadSettings().then(() => {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("adminScreen").style.display = "block";
+    }).catch(() => {
+      sessionStorage.removeItem("adminPassword");
+      adminPassword = "";
+    });
+  }
 
   const pauseMessages = {
     high_order_volume: "The cart is currently paused due to high order volume. This is done out of respect for customers who have already placed orders, to ensure their reeds are fulfilled in a timely manner. If you would still like to place an order, you are welcome to do so — please just be aware that your reeds may take longer than usual to arrive.",
