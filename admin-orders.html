@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders - Caliber Reeds Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1e3d2a;
+      --green-mid:   #2f5e3f;
+      --green-light: #4a8c60;
+      --gold:        #c9a84c;
+      --cream:       #f7f4ee;
+      --white:       #ffffff;
+      --gray-light:  #e8e4dc;
+      --gray-mid:    #999;
+      --text:        #1a1a1a;
+      --shadow:      0 4px 20px rgba(0,0,0,0.10);
+      --red:         #c0392b;
+      --red-light:   #fadbd8;
+      --green-light2: #d4edda;
+      --blue-light:  #cce5ff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 48px 32px 60px;
+    }
+
+    /* ── Header ── */
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .admin-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--green-dark);
+    }
+    .admin-header p {
+      font-size: 13px;
+      color: var(--gray-mid);
+      margin-top: 4px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ── Nav links ── */
+    .admin-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .admin-nav a {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      color: var(--green-dark);
+      transition: all 0.2s;
+    }
+    .admin-nav a:hover { background: var(--green-dark); color: white; }
+    .admin-nav a.active { background: var(--green-dark); color: white; }
+
+    /* ── Filters ── */
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 2px solid var(--gray-light);
+      background: var(--white);
+      color: var(--gray-mid);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Source Sans 3', sans-serif;
+    }
+    .filter-btn:hover { border-color: var(--green-mid); color: var(--green-mid); }
+    .filter-btn.active { background: var(--green-dark); border-color: var(--green-dark); color: white; }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 10px;
+      padding: 16px 20px;
+      text-align: center;
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--green-dark);
+      font-weight: 700;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--gray-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+
+    /* ── Order Cards ── */
+    .order-card {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+      border-left: 5px solid var(--gray-light);
+    }
+    .order-card.status-new-unpaid    { border-left-color: #c0392b; }
+    .order-card.status-new-paid      { border-left-color: #27ae60; }
+    .order-card.status-progress-unpaid { border-left-color: #c0392b; }
+    .order-card.status-progress-paid { border-left-color: #27ae60; }
+    .order-card.status-shipped       { border-left-color: #2980b9; }
+
+    .order-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .order-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--green-dark);
+      font-weight: 700;
+    }
+    .order-date {
+      font-size: 13px;
+      color: var(--gray-mid);
+      margin-top: 2px;
+    }
+    .order-total {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--green-mid);
+      font-weight: 700;
+    }
+
+    .order-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .order-field label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      display: block;
+      margin-bottom: 3px;
+    }
+    .order-field span {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .order-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding-top: 16px;
+      border-top: 1px solid var(--gray-light);
+    }
+
+    .status-select {
+      padding: 8px 12px;
+      border: 1px solid var(--gray-light);
+      border-radius: 6px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 13px;
+      background: var(--cream);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .status-select:focus { outline: 2px solid var(--green-light); }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Source Sans 3', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-green  { background: var(--green-mid); color: white; }
+    .btn-green:hover  { background: var(--green-dark); }
+    .btn-gold   { background: var(--gold); color: var(--green-dark); }
+    .btn-gold:hover   { background: #b8963e; }
+    .btn-blue   { background: #2980b9; color: white; }
+    .btn-blue:hover   { background: #2471a3; }
+    .btn-gray   { background: var(--gray-light); color: var(--text); }
+    .btn-gray:hover   { background: #d5d0c8; }
+
+    .save-status {
+      font-size: 13px;
+      color: var(--green-mid);
+      display: none;
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray-mid);
+      font-size: 15px;
+    }
+
+    /* ── Loading ── */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray-mid);
+      font-size: 15px;
+    }
+
+    /* ── Logout ── */
+    .logout-btn {
+      background: none;
+      border: 1px solid var(--gray-light);
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--gray-mid);
+      cursor: pointer;
+      font-family: 'Source Sans 3', sans-serif;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover { background: var(--gray-light); color: var(--text); }
+
+    @media (max-width: 600px) {
+      body { padding: 32px 18px 48px; }
+      .stats-bar { grid-template-columns: 1fr 1fr; }
+      .order-grid { grid-template-columns: 1fr; }
+      .admin-header { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="mainContent" style="display:none;">
+
+    <div class="admin-header">
+      <div>
+        <h1>Orders</h1>
+        <p>Caliber Reeds by Ben</p>
+      </div>
+      <div class="header-right">
+        <a href="admin.html" class="btn btn-gray">← Settings</a>
+        <button class="logout-btn" onclick="logout()">Log Out</button>
+      </div>
+    </div>
+
+    <div class="admin-nav">
+      <a href="admin.html">Settings</a>
+      <a href="admin-orders.html" class="active">Orders</a>
+      <a href="admin-prices.html">Prices</a>
+      <a href="admin-insights.html">Insights</a>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-number" id="statTotal">—</div>
+        <div class="stat-label">Total Orders</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" id="statUnpaid">—</div>
+        <div class="stat-label">Unpaid</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" id="statRevenue">—</div>
+        <div class="stat-label">Total Revenue</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" id="statShipped">—</div>
+        <div class="stat-label">Shipped</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterOrders('all', this)">All Orders</button>
+      <button class="filter-btn" onclick="filterOrders('unpaid', this)">Unpaid</button>
+      <button class="filter-btn" onclick="filterOrders('paid', this)">Paid</button>
+      <button class="filter-btn" onclick="filterOrders('shipped', this)">Shipped</button>
+    </div>
+
+    <div id="ordersContainer">
+      <div class="loading">Loading orders...</div>
+    </div>
+
+  </div>
+
+  <div id="authError" style="display:none; text-align:center; padding:60px 20px;">
+    <p style="font-size:16px; color:#c00; margin-bottom:16px;">You need to log in first.</p>
+    <a href="admin.html" style="color: #2f5e3f; font-weight:600;">← Go to Admin Login</a>
+  </div>
+
+<script>
+  const GET_ORDERS_URL    = "/.netlify/functions/get-orders";
+  const UPDATE_ORDER_URL  = "/.netlify/functions/update-order";
+
+  let allOrders = [];
+  let adminPassword = sessionStorage.getItem("adminPassword") || "";
+
+  const statusColors = {
+    "New - Unpaid":          "status-new-unpaid",
+    "New - Paid":            "status-new-paid",
+    "In Progress - Unpaid":  "status-progress-unpaid",
+    "In Progress - Paid":    "status-progress-paid",
+    "Shipped":               "status-shipped"
+  };
+
+  async function init() {
+    if (!adminPassword) {
+      document.getElementById("authError").style.display = "block";
+      return;
+    }
+    document.getElementById("mainContent").style.display = "block";
+    await loadOrders();
+  }
+
+  async function loadOrders() {
+    try {
+      const response = await fetch(GET_ORDERS_URL + "?password=" + encodeURIComponent(adminPassword));
+      if (response.status === 401) {
+        sessionStorage.removeItem("adminPassword");
+        document.getElementById("mainContent").style.display = "none";
+        document.getElementById("authError").style.display = "block";
+        return;
+      }
+      allOrders = await response.json();
+      updateStats();
+      renderOrders(allOrders);
+    } catch (err) {
+      document.getElementById("ordersContainer").innerHTML =
+        '<div class="empty-state">Could not load orders. Please try again.</div>';
+    }
+  }
+
+  function updateStats() {
+    const total    = allOrders.length;
+    const unpaid   = allOrders.filter(o => o.status && o.status.includes("Unpaid")).length;
+    const shipped  = allOrders.filter(o => o.status === "Shipped").length;
+    const revenue  = allOrders.reduce((sum, o) => sum + (parseFloat(o.total) || 0), 0);
+
+    document.getElementById("statTotal").textContent   = total;
+    document.getElementById("statUnpaid").textContent  = unpaid;
+    document.getElementById("statShipped").textContent = shipped;
+    document.getElementById("statRevenue").textContent = "$" + revenue.toFixed(0);
+  }
+
+  function filterOrders(filter, btn) {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    let filtered = allOrders;
+    if (filter === "unpaid") {
+      filtered = allOrders.filter(o => o.status && o.status.includes("Unpaid"));
+    } else if (filter === "paid") {
+      filtered = allOrders.filter(o => o.status && o.status.includes("Paid"));
+    } else if (filter === "shipped") {
+      filtered = allOrders.filter(o => o.status === "Shipped");
+    }
+    renderOrders(filtered);
+  }
+
+  function renderOrders(orders) {
+    const container = document.getElementById("ordersContainer");
+    if (orders.length === 0) {
+      container.innerHTML = '<div class="empty-state">No orders found.</div>';
+      return;
+    }
+
+    container.innerHTML = orders.map(order => {
+      const statusClass = statusColors[order.status] || "";
+      const dateStr = order.date ? new Date(order.date).toLocaleDateString("en-US", {
+        year: "numeric", month: "short", day: "numeric"
+      }) : "—";
+
+      return `
+        <div class="order-card ${statusClass}" id="card-${order.orderNumber}">
+          <div class="order-top">
+            <div>
+              <div class="order-number">Order #${order.orderNumber}</div>
+              <div class="order-date">${dateStr}</div>
+            </div>
+            <div class="order-total">$${order.total}</div>
+          </div>
+
+          <div class="order-grid">
+            <div class="order-field">
+              <label>Customer</label>
+              <span>${order.name}</span>
+            </div>
+            <div class="order-field">
+              <label>Email</label>
+              <span>${order.email}</span>
+            </div>
+            <div class="order-field">
+              <label>Items</label>
+              <span>${order.items}</span>
+            </div>
+            <div class="order-field">
+              <label>Ship To</label>
+              <span>${order.address}</span>
+            </div>
+            ${order.notes ? `
+            <div class="order-field">
+              <label>Notes</label>
+              <span>${order.notes}</span>
+            </div>` : ""}
+            ${order.tracking ? `
+            <div class="order-field">
+              <label>Tracking</label>
+              <span>${order.tracking}</span>
+            </div>` : ""}
+          </div>
+
+          <div class="order-actions">
+            <select class="status-select" id="status-${order.orderNumber}"
+              onchange="updateStatus('${order.orderNumber}', this)">
+              <option ${order.status === "New - Unpaid"          ? "selected" : ""}>New - Unpaid</option>
+              <option ${order.status === "New - Paid"            ? "selected" : ""}>New - Paid</option>
+              <option ${order.status === "In Progress - Unpaid"  ? "selected" : ""}>In Progress - Unpaid</option>
+              <option ${order.status === "In Progress - Paid"    ? "selected" : ""}>In Progress - Paid</option>
+              <option ${order.status === "Shipped"               ? "selected" : ""}>Shipped</option>
+            </select>
+
+            <span class="save-status" id="save-${order.orderNumber}">✓ Saved!</span>
+
+            ${order.packingSlip ? `
+              <a href="${order.packingSlip}" target="_blank" class="btn btn-gold">📄 Packing Slip</a>
+            ` : ""}
+
+            ${order.labelUrl && !["ADDRESS_PARSE_FAILED","NO_RATE_FOUND","LABEL_FAILED",""].includes(order.labelUrl) ? `
+              <a href="${order.labelUrl}" target="_blank" class="btn btn-blue">🏷️ Label</a>
+            ` : ""}
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  async function updateStatus(orderNumber, select) {
+    const newStatus = select.value;
+    const card = document.getElementById("card-" + orderNumber);
+
+    // Update card color
+    Object.values(statusColors).forEach(c => card.classList.remove(c));
+    card.classList.add(statusColors[newStatus] || "");
+
+    try {
+      await fetch(UPDATE_ORDER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:    adminPassword,
+          orderNumber: orderNumber,
+          status:      newStatus
+        })
+      });
+
+      const msg = document.getElementById("save-" + orderNumber);
+      msg.style.display = "inline";
+      setTimeout(() => msg.style.display = "none", 2000);
+
+      // Update local data
+      const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+      if (order) order.status = newStatus;
+      updateStats();
+
+    } catch (err) {
+      alert("Could not save. Please try again.");
+    }
+  }
+
+  function logout() {
+    sessionStorage.removeItem("adminPassword");
+    window.location.href = "admin.html";
+  }
+
+  init();
+</script>
+</body>
+</html>
