@@ -403,8 +403,9 @@
         return;
       }
 
-      // Password correct — load settings
+      // Password correct — save to sessionStorage and load settings
       adminPassword = password;
+      sessionStorage.setItem("adminPassword", password);
       await loadSettings();
       document.getElementById("loginScreen").style.display = "none";
       document.getElementById("adminScreen").style.display = "block";
