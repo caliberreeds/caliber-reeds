@@ -563,6 +563,176 @@
     }
   }
 
+  // ── Receipt Modal ──
+  let receiptOrderNumber = null;
+
+  function openReceiptModal(orderNumber) {
+    const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+    if (!order) return;
+    receiptOrderNumber = orderNumber;
+    document.getElementById("receiptModalDesc").textContent =
+      `Send a receipt for Order #${orderNumber} to ${order.email}?`;
+    document.getElementById("receiptModal").style.display = "flex";
+  }
+
+  function closeReceiptModal() {
+    document.getElementById("receiptModal").style.display = "none";
+    receiptOrderNumber = null;
+  }
+
+  async function confirmSendReceipt() {
+    const order = allOrders.find(o => o.orderNumber.toString() === receiptOrderNumber.toString());
+    if (!order) return;
+    closeReceiptModal();
+
+    try {
+      const res = await fetch("/.netlify/functions/send-receipt", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:    adminPassword,
+          orderNumber: order.orderNumber,
+          name:        order.name,
+          email:       order.email,
+          items:       order.items,
+          shipping:    order.shipping,
+          total:       order.total,
+          address:     order.address,
+          date:        order.date,
+          paymentIntentId: order.paymentIntentId || ""
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("✅ Receipt sent to " + order.email);
+      } else {
+        alert("⚠️ Could not send receipt: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      alert("⚠️ Could not send receipt. Please try again.");
+    }
+  }
+
+  // ── Cancel Modal ──
+  let cancelOrderNumber = null;
+  let refundType = "full";
+
+  function openCancelModal(orderNumber) {
+    const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+    if (!order) return;
+    cancelOrderNumber = orderNumber;
+    refundType = "full";
+
+    document.getElementById("cancelModalDesc").textContent =
+      `Cancel Order #${orderNumber} for ${order.name} ($${order.total})?`;
+
+    const refundSection = document.getElementById("refundSection");
+    if (order.paymentIntentId) {
+      refundSection.style.display = "block";
+      setRefundType("full");
+    } else {
+      refundSection.style.display = "none";
+    }
+
+    document.getElementById("cancelModal").style.display = "flex";
+  }
+
+  function closeCancelModal() {
+    document.getElementById("cancelModal").style.display = "none";
+    cancelOrderNumber = null;
+  }
+
+  function setRefundType(type) {
+    refundType = type;
+    document.getElementById("refundFullBtn").className    = "btn " + (type === "full"    ? "btn-green" : "btn-gray");
+    document.getElementById("refundPartialBtn").className = "btn " + (type === "partial" ? "btn-green" : "btn-gray");
+    document.getElementById("refundNoneBtn").className    = "btn " + (type === "none"    ? "btn-green" : "btn-gray");
+    document.getElementById("partialAmountRow").style.display = type === "partial" ? "block" : "none";
+  }
+
+  async function confirmCancel() {
+    const order = allOrders.find(o => o.orderNumber.toString() === cancelOrderNumber.toString());
+    if (!order) return;
+
+    let refundAmount = null;
+    if (refundType === "partial") {
+      refundAmount = parseFloat(document.getElementById("partialAmount").value);
+      if (isNaN(refundAmount) || refundAmount <= 0) {
+        alert("Please enter a valid refund amount.");
+        return;
+      }
+    }
+
+    closeCancelModal();
+
+    // Issue Stripe refund if applicable
+    let refundNote = "";
+    if (order.paymentIntentId && refundType !== "none") {
+      try {
+        const refundBody = { paymentIntentId: order.paymentIntentId };
+        if (refundType === "partial") refundBody.amount = refundAmount;
+
+        const refundRes = await fetch("/.netlify/functions/refund-order", {
+          method:  "POST",
+          headers: { "Content-Type": "application/json" },
+          body:    JSON.stringify(refundBody)
+        });
+        const refundData = await refundRes.json();
+        refundNote = refundData.success
+          ? (refundType === "full"
+              ? `Full refund of $${order.total} issued.`
+              : `Partial refund of $${refundAmount} issued.`)
+          : `Refund failed: ${refundData.error}`;
+      } catch (err) {
+        refundNote = "Refund request failed. Please refund manually in Stripe.";
+      }
+    }
+
+    // Update status in sheet
+    try {
+      await fetch("/.netlify/functions/update-order", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:    adminPassword,
+          orderNumber: order.orderNumber,
+          status:      "Cancelled"
+        })
+      });
+    } catch (err) {
+      alert("⚠️ Could not update order status. Please update manually.");
+    }
+
+    // Send cancellation email
+    try {
+      await fetch("/.netlify/functions/send-cancellation", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:    adminPassword,
+          orderNumber: order.orderNumber,
+          name:        order.name,
+          email:       order.email,
+          total:       order.total,
+          refundNote:  refundNote
+        })
+      });
+    } catch (err) {
+      console.warn("Cancellation email failed:", err);
+    }
+
+    // Update UI
+    const orderObj = allOrders.find(o => o.orderNumber.toString() === order.orderNumber.toString());
+    if (orderObj) orderObj.status = "Cancelled";
+    updateStats();
+    renderOrders(allOrders);
+
+    alert(
+      `✅ Order #${order.orderNumber} cancelled.\n` +
+      (refundNote ? refundNote + "\n" : "") +
+      `Cancellation email sent to ${order.email}.`
+    );
+  }
   function logout() {
     sessionStorage.removeItem("adminPassword");
     window.location.href = "admin.html";
