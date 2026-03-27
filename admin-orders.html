@@ -508,6 +508,7 @@
               <option ${order.status === "In Progress - Unpaid"  ? "selected" : ""}>In Progress - Unpaid</option>
               <option ${order.status === "In Progress - Paid"    ? "selected" : ""}>In Progress - Paid</option>
               <option ${order.status === "Shipped"               ? "selected" : ""}>Shipped</option>
+              <option ${order.status === "Cancelled"             ? "selected" : ""}>Cancelled</option>
             </select>
 
             <span class="save-status" id="save-${order.orderNumber}">✓ Saved!</span>
@@ -519,6 +520,11 @@
             ${order.labelUrl && !["ADDRESS_PARSE_FAILED","NO_RATE_FOUND","LABEL_FAILED",""].includes(order.labelUrl) ? `
               <a href="${order.labelUrl}" target="_blank" class="btn btn-blue">🏷️ Label</a>
             ` : ""}
+
+            ${order.status !== "Cancelled" ? `
+              <button class="btn btn-gray" onclick="openReceiptModal('${order.orderNumber}')">📧 Send Receipt</button>
+              <button class="btn btn-red" onclick="openCancelModal('${order.orderNumber}')">✕ Cancel</button>
+            ` : `<span style="font-size:13px; color:#999; font-style:italic;">Order cancelled</span>`}
           </div>
         </div>`;
     }).join("");
