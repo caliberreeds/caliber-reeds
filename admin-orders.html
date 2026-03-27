@@ -335,6 +335,45 @@
 
   </div>
 
+  <!-- Cancel/Refund Modal -->
+  <div id="cancelModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:12px; padding:36px; max-width:440px; width:90%; box-shadow:0 8px 40px rgba(0,0,0,0.2);">
+      <h2 style="font-family:'Playfair Display',serif; color:#c0392b; margin-bottom:8px;">Cancel Order</h2>
+      <p id="cancelModalDesc" style="font-size:14px; color:#555; margin-bottom:20px;"></p>
+
+      <div id="refundSection" style="display:none; margin-bottom:20px;">
+        <p style="font-size:13px; font-weight:600; color:#1e3d2a; margin-bottom:10px;">Stripe Refund</p>
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+          <button class="btn btn-green" onclick="setRefundType('full')" id="refundFullBtn">Full Refund</button>
+          <button class="btn btn-gray" onclick="setRefundType('partial')" id="refundPartialBtn">Partial Refund</button>
+          <button class="btn btn-gray" onclick="setRefundType('none')" id="refundNoneBtn">No Refund</button>
+        </div>
+        <div id="partialAmountRow" style="display:none; margin-top:8px;">
+          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Refund Amount ($)</label>
+          <input type="number" id="partialAmount" min="0.01" step="0.01"
+            style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif;">
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button class="btn btn-gray" onclick="closeCancelModal()">Go Back</button>
+        <button class="btn btn-red" onclick="confirmCancel()">Confirm Cancellation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Receipt Modal -->
+  <div id="receiptModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:12px; padding:36px; max-width:440px; width:90%; box-shadow:0 8px 40px rgba(0,0,0,0.2);">
+      <h2 style="font-family:'Playfair Display',serif; color:#1e3d2a; margin-bottom:8px;">Send Receipt</h2>
+      <p id="receiptModalDesc" style="font-size:14px; color:#555; margin-bottom:24px;"></p>
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button class="btn btn-gray" onclick="closeReceiptModal()">Cancel</button>
+        <button class="btn btn-green" onclick="confirmSendReceipt()">Send Receipt</button>
+      </div>
+    </div>
+  </div>
+
   <div id="authError" style="display:none; text-align:center; padding:60px 20px;">
     <p style="font-size:16px; color:#c00; margin-bottom:16px;">You need to log in first.</p>
     <a href="admin.html" style="color: #2f5e3f; font-weight:600;">← Go to Admin Login</a>
