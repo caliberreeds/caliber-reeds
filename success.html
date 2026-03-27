@@ -216,12 +216,7 @@
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzerDX-cX31WB9oLJ7430QAc-6TRLhjWAIyIUBI39APdaV0dresQSl478M5bhocJJhL/exec";
 
-  const prices = {
-    "Student Oboe":  23,
-    "Advanced Oboe": 27,
-    "Student EH":    31,
-    "Advanced EH":   35
-  };
+  const prices = JSON.parse(localStorage.getItem("reedPrices") || "{}");
 
   async function init() {
     const params    = new URLSearchParams(window.location.search);
