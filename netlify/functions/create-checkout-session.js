@@ -48,7 +48,7 @@ exports.handler = async (event) => {
       price_data: {
         currency: 'usd',
         product_data: { name: shippingLabel },
-        unit_amount: parseInt(data.shipping) * 100
+        unit_amount: Math.round(parseFloat(data.shipping) * 100)
       },
       quantity: 1
     });
