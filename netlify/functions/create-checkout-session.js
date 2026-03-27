@@ -33,7 +33,7 @@ exports.handler = async (event) => {
         price_data: {
           currency: 'usd',
           product_data: { name: item },
-          unit_amount: prices[item]
+          unit_amount: Math.round(prices[item] * 100)
         },
         quantity: counts[item]
       });
