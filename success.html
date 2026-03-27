@@ -246,19 +246,34 @@
       }
       orderText = orderText.replace(/, $/, "");
 
+      // Fetch Payment Intent ID securely from Netlify function
+      let paymentIntentId = "";
+      try {
+        const sessionRes = await fetch("/.netlify/functions/get-session", {
+          method:  "POST",
+          headers: { "Content-Type": "application/json" },
+          body:    JSON.stringify({ sessionId })
+        });
+        const sessionData = await sessionRes.json();
+        paymentIntentId = sessionData.paymentIntentId || "";
+      } catch (err) {
+        console.warn("Could not retrieve payment intent ID:", err);
+      }
+
       await fetch(SCRIPT_URL, {
         method:  "POST",
         mode:    "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          items:     orderText,
-          shipping:  shipping,
-          total:     total,
-          name:      customerData.name  || "",
-          email:     customerData.email || "",
-          address:   customerData.address || "",
-          notes:     customerData.notes || "",
-          payMethod: "card"
+          items:           orderText,
+          shipping:        shipping,
+          total:           total,
+          name:            customerData.name    || "",
+          email:           customerData.email   || "",
+          address:         customerData.address || "",
+          notes:           customerData.notes   || "",
+          payMethod:       "card",
+          paymentIntentId: paymentIntentId
         })
       });
     }
