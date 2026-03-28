@@ -197,13 +197,15 @@
     <div class="venmo-box" id="venmoBox">
       💙 Please send payment to <strong>@CaliberReeds</strong> on Venmo<br>
       Amount: <strong id="venmoAmount"></strong><br>
-      Please include your <strong>order number</strong> in the payment note.
+      Please include your <strong>order number</strong> in the payment note —
+      you'll find it in your confirmation email.
     </div>
 
     <div class="later-box" id="zelleBox">
       💚 Please send payment via Zelle to <strong>caliberreeds@gmail.com</strong><br>
       Amount: <strong id="zelleAmount"></strong><br>
-      Please include your <strong>order number</strong> in the payment note.
+      Please include your <strong>order number</strong> in the payment note —
+      you'll find it in your confirmation email.
     </div>
 
     <hr class="divider">
@@ -298,11 +300,11 @@
     } else if (method === "venmo") {
       const venmoBox = document.getElementById("venmoBox");
       venmoBox.style.display = "block";
-      document.getElementById("venmoAmount").textContent = "$" + total;
+      document.getElementById("venmoAmount").textContent = "$" + parseFloat(total).toFixed(2);
     } else if (method === "zelle") {
       const zelleBox = document.getElementById("zelleBox");
       zelleBox.style.display = "block";
-      document.getElementById("zelleAmount").textContent = "$" + total;
+      document.getElementById("zelleAmount").textContent = "$" + parseFloat(total).toFixed(2);
     }
 
     // Render order details
@@ -321,14 +323,14 @@
     shippingRow.className = "detail-row";
     shippingRow.innerHTML = `
       <span class="detail-label">Shipping</span>
-      <span class="detail-value">$${shipping}</span>`;
+      <span class="detail-value">$${parseFloat(shipping).toFixed(2)}</span>`;
     detailsDiv.appendChild(shippingRow);
 
     const totalRow = document.createElement("div");
     totalRow.className = "detail-row";
     totalRow.innerHTML = `
       <span class="detail-label" style="color:var(--green-dark);font-size:16px;">Total</span>
-      <span class="detail-value" style="color:var(--green-dark);font-size:16px;">$${total}</span>`;
+      <span class="detail-value" style="color:var(--green-dark);font-size:16px;">$${parseFloat(total).toFixed(2)}</span>`;
     detailsDiv.appendChild(totalRow);
   }
 

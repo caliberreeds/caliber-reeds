@@ -378,7 +378,7 @@
     const payload = {
       items:     buildOrderText(),
       shipping:  shipping,
-      total:     subtotal + parseInt(shipping),
+      total:     subtotal +parseFloat(shipping),
       name:      customerData.name,
       email:     customerData.email,
       address:   customerData.address,
@@ -396,7 +396,7 @@
       headers: { "Content-Type": "application/json" },
       body:    JSON.stringify(payload)
     });
-    localStorage.setItem("reedTotal", subtotal + parseInt(shipping));
+    localStorage.setItem("reedTotal", subtotal +parseFloat(shipping));
     localStorage.setItem("reedOrderText", buildOrderText());
     localStorage.setItem("reedCounts", JSON.stringify(counts));
     localStorage.removeItem("reedCart");
