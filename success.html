@@ -226,7 +226,7 @@
     const customerData = JSON.parse(localStorage.getItem("reedCustomer") || "{}");
     const cart = JSON.parse(localStorage.getItem("reedCart") || "[]");
     const savedCounts = JSON.parse(localStorage.getItem("reedCounts") || "{}");
-    const shipping     = localStorage.getItem("reedShipping") || "5";
+    const shipping = localStorage.getItem("reedShipping") || "5.50";
 
     // Build counts and subtotal
     const counts = Object.keys(savedCounts).length > 0 ? savedCounts : {};
@@ -236,7 +236,7 @@
     }
 
     const savedTotal = localStorage.getItem("reedTotal");
-    const total = savedTotal ? parseInt(savedTotal) : subtotal + parseInt(shipping);
+    const total = savedTotal ? parseFloat(savedTotal) : subtotal + parseFloat(shipping);
 
     // If coming from Stripe, submit order to sheets now
     if (sessionId) {

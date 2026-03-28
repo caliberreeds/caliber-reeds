@@ -15,10 +15,10 @@ exports.handler = async (event) => {
     // Build line items from cart
     const lineItems = [];
     const prices = {
-      "Student Oboe Reed":           2300,
-      "Advance Oboe Reed":           2700,
-      "Student English Horn Reed":   3100,
-      "Advanced English Horn Reed":  3500
+      "Student Oboe Reed":           23,
+      "Advance Oboe Reed":           27,
+      "Student English Horn Reed":   31,
+      "Advanced English Horn Reed":  35
     };
 
     const counts = {};
@@ -27,6 +27,7 @@ exports.handler = async (event) => {
     });
 
     console.log("Counts:", JSON.stringify(counts));
+    console.log("Price lookup:", JSON.stringify(Object.keys(counts).map(k => ({item: k, price: prices[k]}))));
 
     for (let item in counts) {
       lineItems.push({

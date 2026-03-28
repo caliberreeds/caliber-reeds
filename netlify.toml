@@ -2,6 +2,6 @@
   directory = "netlify/functions"
 
 [dev]
-  command = "echo 'ready'"
+  framework = "#static"
   publish = "."
   port = 8888

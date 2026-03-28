@@ -318,9 +318,9 @@
     summaryLines.appendChild(div);
   }
 
-  document.getElementById("subtotalAmt").textContent = subtotal;
-  document.getElementById("shippingAmt").textContent = shipping;
-  document.getElementById("totalAmt").textContent    = subtotal + parseInt(shipping);
+    document.getElementById("subtotalAmt").textContent = subtotal.toFixed(2);
+    document.getElementById("shippingAmt").textContent = parseFloat(shipping).toFixed(2);
+    document.getElementById("totalAmt").textContent    = (subtotal + parseFloat(shipping)).toFixed(2);
 
   function validate() {
     const name    = document.getElementById("custName").value.trim();
@@ -414,13 +414,18 @@
         localStorage.setItem("reedCustomer", JSON.stringify(customerData));
         localStorage.setItem("reedPayMethod", "card");
 
+        const grandTotal = subtotal + parseFloat(shipping);
+        localStorage.setItem("reedTotal", grandTotal.toFixed(2));
+        localStorage.setItem("reedCounts", JSON.stringify(counts));
+        localStorage.setItem("reedOrderText", buildOrderText());
+
         const response = await fetch("/.netlify/functions/create-checkout-session", {
           method:  "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             cart:       cart,
             shipping:   shipping,
-            total:      subtotal + parseInt(shipping),
+            total:      grandTotal.toFixed(2),
             email:      customerData.email,
             name:       customerData.name,
             address:   customerData.address,
