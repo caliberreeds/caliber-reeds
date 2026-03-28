@@ -15,10 +15,10 @@ exports.handler = async (event) => {
     // Build line items from cart
     const lineItems = [];
     const prices = {
-      "Student Oboe":  2300,
-      "Advanced Oboe": 2700,
-      "Student EH":    3100,
-      "Advanced EH":   3500
+      "Student Oboe Reed":           2300,
+      "Advance Oboe Reed":           2700,
+      "Student English Horn Reed":   3100,
+      "Advanced English Horn Reed":  3500
     };
 
     const counts = {};
