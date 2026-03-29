@@ -473,6 +473,10 @@
               <span>${order.items}</span>
             </div>
             <div class="order-field">
+              <label>Payment</label>
+              <span>${order.payMethod === "card" ? "💳 Credit/Debit Card" : order.payMethod === "venmo" ? "💙 Venmo" : order.payMethod === "zelle" ? "💚 Zelle" : "—"}</span>
+            </div>
+            <div class="order-field">
               <label>Ship To</label>
               <span>${order.address}</span>
             </div>
