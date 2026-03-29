@@ -14,7 +14,7 @@ exports.handler = async (event) => {
 
     const {
       orderNumber, name, email, items,
-      shipping, total, address, date, paymentIntentId
+      shipping, total, address, date, paymentIntentId, reference
     } = data;
 
     if (!email) {
@@ -28,6 +28,8 @@ exports.handler = async (event) => {
 
     const paymentLine = paymentIntentId
       ? `Payment of $${total} received via credit/debit card.\nReference: ${paymentIntentId}`
+      : reference
+      ? `Payment of $${total} received.\nTransaction Reference: ${reference}`
       : `Payment of $${total} received.`;
 
     const transporter = nodemailer.createTransport({

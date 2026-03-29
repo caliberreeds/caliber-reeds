@@ -362,18 +362,6 @@
     </div>
   </div>
 
-  <!-- Receipt Modal -->
-  <div id="receiptModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
-    <div style="background:white; border-radius:12px; padding:36px; max-width:440px; width:90%; box-shadow:0 8px 40px rgba(0,0,0,0.2);">
-      <h2 style="font-family:'Playfair Display',serif; color:#1e3d2a; margin-bottom:8px;">Send Receipt</h2>
-      <p id="receiptModalDesc" style="font-size:14px; color:#555; margin-bottom:24px;"></p>
-      <div style="display:flex; gap:10px; justify-content:flex-end;">
-        <button class="btn btn-gray" onclick="closeReceiptModal()">Cancel</button>
-        <button class="btn btn-green" onclick="confirmSendReceipt()">Send Receipt</button>
-      </div>
-    </div>
-  </div>
-
   <div id="authError" style="display:none; text-align:center; padding:60px 20px;">
     <p style="font-size:16px; color:#c00; margin-bottom:16px;">You need to log in first.</p>
     <a href="admin.html" style="color: #2f5e3f; font-weight:600;">← Go to Admin Login</a>
@@ -522,10 +510,20 @@
             ` : ""}
 
             ${order.status !== "Cancelled" ? `
-              <button class="btn btn-gray" onclick="openReceiptModal('${order.orderNumber}')">📧 Send Receipt</button>
+              <button class="btn btn-gray" onclick="toggleReceiptPanel('${order.orderNumber}')" id="receiptBtn-${order.orderNumber}">📧 Send Receipt</button>
               <button class="btn btn-red" onclick="openCancelModal('${order.orderNumber}')">✕ Cancel</button>
             ` : `<span style="font-size:13px; color:#999; font-style:italic;">Order cancelled</span>`}
           </div>
+          ${order.status !== "Cancelled" ? `
+          <div id="receiptPanel-${order.orderNumber}" style="display:none; margin:0 24px 24px; padding:14px 16px; background:#f7f4ee; border:1px solid #e8e4dc; border-radius:8px;">
+            <label style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#4a8c60; display:block; margin-bottom:6px;">Payment Reference <span style="font-weight:400; text-transform:none; letter-spacing:0;">(optional)</span></label>
+            <input type="text" id="receiptRef-${order.orderNumber}" placeholder="Venmo/Zelle transaction ID"
+              style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif; margin-bottom:10px;">
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-green" onclick="confirmSendReceipt('${order.orderNumber}')">Send Receipt</button>
+              <button class="btn btn-gray" onclick="toggleReceiptPanel('${order.orderNumber}')">Cancel</button>
+            </div>
+          </div>` : ""}
         </div>`;
     }).join("");
   }
@@ -564,46 +562,45 @@
   }
 
   // ── Receipt Modal ──
-  let receiptOrderNumber = null;
+  // ── Receipt Inline Panel ──
+  function toggleReceiptPanel(orderNumber) {
+    const panel = document.getElementById("receiptPanel-" + orderNumber);
+    const btn   = document.getElementById("receiptBtn-" + orderNumber);
+    const isOpen = panel.style.display === "block";
+    panel.style.display = isOpen ? "none" : "block";
+    btn.textContent = isOpen ? "📧 Send Receipt" : "✕ Close";
+    if (!isOpen) {
+      document.getElementById("receiptRef-" + orderNumber).focus();
+    }
+  }
 
-  function openReceiptModal(orderNumber) {
+  async function confirmSendReceipt(orderNumber) {
     const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
     if (!order) return;
-    receiptOrderNumber = orderNumber;
-    document.getElementById("receiptModalDesc").textContent =
-      `Send a receipt for Order #${orderNumber} to ${order.email}?`;
-    document.getElementById("receiptModal").style.display = "flex";
-  }
 
-  function closeReceiptModal() {
-    document.getElementById("receiptModal").style.display = "none";
-    receiptOrderNumber = null;
-  }
-
-  async function confirmSendReceipt() {
-    const order = allOrders.find(o => o.orderNumber.toString() === receiptOrderNumber.toString());
-    if (!order) return;
-    closeReceiptModal();
+    const reference = document.getElementById("receiptRef-" + orderNumber).value.trim();
 
     try {
       const res = await fetch("/.netlify/functions/send-receipt", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          password:    adminPassword,
-          orderNumber: order.orderNumber,
-          name:        order.name,
-          email:       order.email,
-          items:       order.items,
-          shipping:    order.shipping,
-          total:       order.total,
-          address:     order.address,
-          date:        order.date,
-          paymentIntentId: order.paymentIntentId || ""
+          password:        adminPassword,
+          orderNumber:     order.orderNumber,
+          name:            order.name,
+          email:           order.email,
+          items:           order.items,
+          shipping:        order.shipping,
+          total:           order.total,
+          address:         order.address,
+          date:            order.date,
+          paymentIntentId: order.paymentIntentId || "",
+          reference:       reference
         })
       });
       const data = await res.json();
       if (data.success) {
+        toggleReceiptPanel(orderNumber);
         alert("✅ Receipt sent to " + order.email);
       } else {
         alert("⚠️ Could not send receipt: " + (data.error || "Unknown error"));

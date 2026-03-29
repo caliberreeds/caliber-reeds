@@ -44,7 +44,7 @@ exports.handler = async (event) => {
     });
 
     const rows = response.data.values || [];
-    const rowIndex = rows.findIndex(row => row[0].toString() === data.orderNumber.toString());
+    const rowIndex = rows.findIndex(row => row[0] && row[0].toString() === data.orderNumber.toString());
 
     if (rowIndex === -1) {
       return {
@@ -73,6 +73,8 @@ exports.handler = async (event) => {
     };
 
   } catch (err) {
+    console.log("UPDATE-ORDER ERROR:", err.message);
+    console.log("UPDATE-ORDER STACK:", err.stack);
     return {
       statusCode: 500,
       headers,
