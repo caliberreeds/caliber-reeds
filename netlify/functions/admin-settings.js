@@ -24,7 +24,7 @@ exports.handler = async (event) => {
     if (event.httpMethod === 'GET') {
       const response = await sheets.spreadsheets.values.get({
         spreadsheetId,
-        range: 'Settings!A2:B10'
+        range: 'Settings!A2:B15'
       });
 
       const rows = response.data.values || [];
@@ -79,6 +79,30 @@ exports.handler = async (event) => {
           range: 'Settings!B4',
           values: [[data.processing_time]]
         });
+      }
+      if (data.admin_password !== undefined) {
+        updates.push({
+          range: 'Settings!B5',
+          values: [[data.admin_password]]
+        });
+      }
+      if (data.ship_from_name !== undefined) {
+        updates.push({ range: 'Settings!B10', values: [[data.ship_from_name]] });
+      }
+      if (data.ship_from_street !== undefined) {
+        updates.push({ range: 'Settings!B11', values: [[data.ship_from_street]] });
+      }
+      if (data.ship_from_city !== undefined) {
+        updates.push({ range: 'Settings!B12', values: [[data.ship_from_city]] });
+      }
+      if (data.ship_from_state !== undefined) {
+        updates.push({ range: 'Settings!B13', values: [[data.ship_from_state]] });
+      }
+      if (data.ship_from_zip !== undefined) {
+        updates.push({ range: 'Settings!B14', values: [[data.ship_from_zip]] });
+      }
+      if (data.ship_from_phone !== undefined) {
+        updates.push({ range: 'Settings!B15', values: [[data.ship_from_phone]] });
       }
 
       if (updates.length > 0) {

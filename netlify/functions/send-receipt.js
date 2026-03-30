@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { google } = require('googleapis');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -64,9 +65,72 @@ exports.handler = async (event) => {
         `caliberreeds@gmail.com`
     });
 
+    // Set up sheets auth once for reuse
+    const auth = new google.auth.GoogleAuth({
+      credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT),
+      scopes: ['https://www.googleapis.com/auth/spreadsheets']
+    });
+    const sheets = google.sheets({ version: 'v4', auth });
+    const spreadsheetId = process.env.SPREADSHEET_ID;
+
+    // Find the sheet row for this order
+    const ordersResponse = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: 'Orders!A2:A'
+    });
+    const rows = ordersResponse.data.values || [];
+    const rowIndex = rows.findIndex(row => row[0] && row[0].toString() === orderNumber.toString());
+    const sheetRow = rowIndex !== -1 ? rowIndex + 2 : null;
+
+    // Save reference to column N if provided
+    if (reference && sheetRow) {
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `Orders!N${sheetRow}`,
+        valueInputOption: 'RAW',
+        requestBody: { values: [[reference]] }
+      });
+    }
+
+    // Generate receipt PDF via Apps Script
+    const SCRIPT_URL = process.env.APPS_SCRIPT_URL;
+    let receiptUrl = "";
+    try {
+      const scriptRes = await fetch(SCRIPT_URL, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action:      "createReceipt",
+          orderNumber: orderNumber,
+          date:        date,
+          name:        name,
+          email:       email,
+          address:     address,
+          items:       items,
+          shipping:    shipping,
+          total:       total,
+          paymentRef:  reference || paymentIntentId || ""
+        })
+      });
+      const scriptData = await scriptRes.json();
+      receiptUrl = scriptData.docUrl || "";
+    } catch (err) {
+      console.warn("Could not generate receipt PDF:", err);
+    }
+
+    // Save receipt URL to column P if generated
+    if (receiptUrl && sheetRow) {
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `Orders!P${sheetRow}`,
+        valueInputOption: 'RAW',
+        requestBody: { values: [[receiptUrl]] }
+      });
+    }
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true })
+      body: JSON.stringify({ success: true, receiptUrl })
     };
 
   } catch (err) {

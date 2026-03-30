@@ -289,6 +289,27 @@
     @media (max-width: 580px) {
       body { padding: 32px 18px 48px; }
     }
+
+    .admin-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .admin-nav a {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      color: var(--green-dark);
+      transition: all 0.2s;
+    }
+    .admin-nav a:hover { background: var(--green-dark); color: white; }
+    .admin-nav a.active { background: var(--green-dark); color: white; }
+    
   </style>
 </head>
 <body>
@@ -320,6 +341,13 @@
         <p>Caliber Reeds by Ben</p>
       </div>
       <button class="logout-btn" onclick="logout()">Log Out</button>
+    </div>
+
+    <div class="admin-nav">
+      <a href="admin.html" class="active">Settings</a>
+      <a href="admin-orders.html">Orders</a>
+      <a href="admin-prices.html">Prices</a>
+      <a href="admin-insights.html">Insights</a>
     </div>
 
     <!-- Cart Status -->
@@ -369,9 +397,60 @@
       </div>
     </div>
 
-    <!-- More sections coming soon -->
-    <div class="card" style="text-align:center; padding: 40px; color: var(--gray-mid);">
-      <p style="font-size:15px;">More admin features coming soon —<br>order management, pricing, and more! 🎵</p>
+    <!-- Ship From Address -->
+    <div class="card">
+      <h2>Ship From Address</h2>
+      <div class="reason-row">
+        <label>Name</label>
+        <input type="text" id="shipFromName" placeholder="e.g. Ben - Caliber Reeds">
+      </div>
+      <div class="reason-row">
+        <label>Street Address</label>
+        <input type="text" id="shipFromStreet" placeholder="e.g. 2206 W Hickory Street #14">
+      </div>
+      <div class="reason-row" style="display:grid; grid-template-columns:2fr 1fr 1fr; gap:12px;">
+        <div>
+          <label>City</label>
+          <input type="text" id="shipFromCity" placeholder="e.g. Denton">
+        </div>
+        <div>
+          <label>State</label>
+          <input type="text" id="shipFromState" placeholder="TX" maxlength="2" style="text-transform:uppercase;">
+        </div>
+        <div>
+          <label>ZIP</label>
+          <input type="text" id="shipFromZip" placeholder="76201" maxlength="5">
+        </div>
+      </div>
+      <div class="reason-row">
+        <label>Phone</label>
+        <input type="text" id="shipFromPhone" placeholder="e.g. 5852980302">
+      </div>
+      <div class="save-row">
+        <button class="btn btn-green btn-small" onclick="saveShipFrom()">Save</button>
+        <span class="save-msg" id="shipFromMsg">✓ Saved!</span>
+      </div>
+    </div>
+
+    <!-- Change Password -->
+    <div class="card">
+      <h2>Change Admin Password</h2>
+      <div class="reason-row">
+        <label>Current Password</label>
+        <input type="password" id="currentPassword" placeholder="Enter current password">
+      </div>
+      <div class="reason-row">
+        <label>New Password</label>
+        <input type="password" id="newPassword" placeholder="Enter new password">
+      </div>
+      <div class="reason-row">
+        <label>Confirm New Password</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm new password">
+      </div>
+      <div class="save-row">
+        <button class="btn btn-green btn-small" onclick="changePassword()">Change Password</button>
+        <span class="save-msg" id="passwordMsg">✓ Password changed!</span>
+      </div>
     </div>
 
   </div>
@@ -436,6 +515,13 @@
     document.getElementById("pauseToggle").checked = paused;
     document.getElementById("pauseReason").value = currentSettings.pause_reason || "high_order_volume";
     document.getElementById("processingTime").value = currentSettings.processing_time || "1-2 weeks";
+
+    document.getElementById("shipFromName").value   = currentSettings.ship_from_name   || "";
+    document.getElementById("shipFromStreet").value = currentSettings.ship_from_street || "";
+    document.getElementById("shipFromCity").value   = currentSettings.ship_from_city   || "";
+    document.getElementById("shipFromState").value  = currentSettings.ship_from_state  || "";
+    document.getElementById("shipFromZip").value    = currentSettings.ship_from_zip    || "";
+    document.getElementById("shipFromPhone").value  = currentSettings.ship_from_phone  || "";
 
     updatePreview();
   }
@@ -508,6 +594,81 @@
     }
   }
 
+  async function saveShipFrom() {
+    try {
+      const response = await fetch(ADMIN_FUNCTION_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:         adminPassword,
+          ship_from_name:   document.getElementById("shipFromName").value,
+          ship_from_street: document.getElementById("shipFromStreet").value,
+          ship_from_city:   document.getElementById("shipFromCity").value,
+          ship_from_state:  document.getElementById("shipFromState").value.toUpperCase(),
+          ship_from_zip:    document.getElementById("shipFromZip").value,
+          ship_from_phone:  document.getElementById("shipFromPhone").value
+        })
+      });
+
+      if (response.ok) {
+        const msg = document.getElementById("shipFromMsg");
+        msg.style.display = "inline";
+        setTimeout(() => msg.style.display = "none", 2000);
+      }
+    } catch (err) {
+      alert("Could not save. Please try again.");
+    }
+  }
+  
+  async function changePassword() {
+    const current = document.getElementById("currentPassword").value;
+    const newPass  = document.getElementById("newPassword").value;
+    const confirm  = document.getElementById("confirmPassword").value;
+
+    if (!current || !newPass || !confirm) {
+      alert("Please fill in all fields.");
+      return;
+    }
+    if (newPass !== confirm) {
+      alert("New passwords don't match.");
+      return;
+    }
+    if (current !== adminPassword) {
+      alert("Current password is incorrect.");
+      return;
+    }
+    if (newPass.length < 6) {
+      alert("New password must be at least 6 characters.");
+      return;
+    }
+
+    try {
+      const response = await fetch(ADMIN_FUNCTION_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:     adminPassword,
+          admin_password: newPass
+        })
+      });
+
+      if (response.ok) {
+        adminPassword = newPass;
+        sessionStorage.setItem("adminPassword", newPass);
+        document.getElementById("currentPassword").value = "";
+        document.getElementById("newPassword").value = "";
+        document.getElementById("confirmPassword").value = "";
+        const msg = document.getElementById("passwordMsg");
+        msg.style.display = "inline";
+        setTimeout(() => msg.style.display = "none", 2000);
+      } else {
+        alert("Could not change password. Please try again.");
+      }
+    } catch (err) {
+      alert("Could not change password. Please try again.");
+    }
+  }
+  
   function logout() {
     adminPassword = "";
     currentSettings = {};

@@ -329,6 +329,21 @@
       <button class="filter-btn" onclick="filterOrders('shipped', this)">Shipped</button>
     </div>
 
+    <div style="display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; align-items:center;">
+      <input type="text" id="searchInput" placeholder="🔍 Search by name, email, address, items, order #..."
+        oninput="applyFilters()"
+        style="flex:1; min-width:200px; padding:10px 14px; border:1px solid var(--gray-light); border-radius:8px; font-size:14px; font-family:'Source Sans 3',sans-serif; background:var(--white);">
+      <select id="sortSelect" onchange="applyFilters()"
+        style="padding:10px 14px; border:1px solid var(--gray-light); border-radius:8px; font-size:14px; font-family:'Source Sans 3',sans-serif; background:var(--white); color:var(--text);">
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+        <option value="total-high">Total: High to Low</option>
+        <option value="total-low">Total: Low to High</option>
+        <option value="name">Name A-Z</option>
+        <option value="status">Status</option>
+      </select>
+    </div>
+
     <div id="ordersContainer">
       <div class="loading">Loading orders...</div>
     </div>
@@ -421,18 +436,55 @@
     document.getElementById("statRevenue").textContent = "$" + revenue.toFixed(0);
   }
 
+  let activeFilter = "all";
+
   function filterOrders(filter, btn) {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
+    activeFilter = filter;
+    applyFilters();
+  }
 
+  function applyFilters() {
+    const search = document.getElementById("searchInput").value.toLowerCase().trim();
+    const sort   = document.getElementById("sortSelect").value;
+
+    // Apply status filter
     let filtered = allOrders;
-    if (filter === "unpaid") {
+    if (activeFilter === "unpaid") {
       filtered = allOrders.filter(o => o.status && o.status.includes("Unpaid"));
-    } else if (filter === "paid") {
+    } else if (activeFilter === "paid") {
       filtered = allOrders.filter(o => o.status && o.status.includes("Paid"));
-    } else if (filter === "shipped") {
+    } else if (activeFilter === "shipped") {
       filtered = allOrders.filter(o => o.status === "Shipped");
     }
+
+    // Apply search
+    if (search) {
+      filtered = filtered.filter(o =>
+        (o.orderNumber && o.orderNumber.toString().includes(search)) ||
+        (o.name        && o.name.toLowerCase().includes(search)) ||
+        (o.email       && o.email.toLowerCase().includes(search)) ||
+        (o.address     && o.address.toLowerCase().includes(search)) ||
+        (o.items       && o.items.toLowerCase().includes(search)) ||
+        (o.status      && o.status.toLowerCase().includes(search)) ||
+        (o.payMethod   && o.payMethod.toLowerCase().includes(search)) ||
+        (o.tracking    && o.tracking.toLowerCase().includes(search)) ||
+        (o.notes       && o.notes.toLowerCase().includes(search))
+      );
+    }
+
+    // Apply sort
+    filtered = [...filtered].sort((a, b) => {
+      if (sort === "newest")     return new Date(b.date) - new Date(a.date);
+      if (sort === "oldest")     return new Date(a.date) - new Date(b.date);
+      if (sort === "total-high") return (parseFloat(b.total) || 0) - (parseFloat(a.total) || 0);
+      if (sort === "total-low")  return (parseFloat(a.total) || 0) - (parseFloat(b.total) || 0);
+      if (sort === "name")       return (a.name || "").localeCompare(b.name || "");
+      if (sort === "status")     return (a.status || "").localeCompare(b.status || "");
+      return 0;
+    });
+
     renderOrders(filtered);
   }
 
@@ -485,11 +537,24 @@
               <label>Notes</label>
               <span>${order.notes}</span>
             </div>` : ""}
-            ${order.tracking ? `
-            <div class="order-field">
-              <label>Tracking</label>
-              <span>${order.tracking}</span>
-            </div>` : ""}
+            <div class="order-field" style="grid-column: 1 / -1;">
+              <label>Tracking Number</label>
+              <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+                <span id="trackingDisplay-${order.orderNumber}" style="font-size:14px; color:var(--text); ${order.tracking ? '' : 'color:var(--gray-mid); font-style:italic;'}">${order.tracking || "Not yet added"}</span>
+                <button class="btn btn-gray" style="padding:4px 10px; font-size:12px;" onclick="toggleTrackingEdit('${order.orderNumber}')">✏️ ${order.tracking ? "Edit" : "Add"}</button>
+              </div>
+              <div id="trackingEdit-${order.orderNumber}" style="display:none; margin-top:8px;">
+                <div style="display:flex; gap:8px; align-items:center;">
+                  <input type="text" id="trackingInput-${order.orderNumber}" 
+                    value="${order.tracking || ""}"
+                    placeholder="Enter USPS tracking number"
+                    style="flex:1; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif;">
+                  <button class="btn btn-green" onclick="saveTracking('${order.orderNumber}')">Save</button>
+                  <button class="btn btn-gray" onclick="toggleTrackingEdit('${order.orderNumber}')">Cancel</button>
+                </div>
+                <p style="font-size:12px; color:var(--gray-mid); margin-top:6px;">💡 Saving will automatically send a tracking email to the customer via Google Sheets.</p>
+              </div>
+            </div>
           </div>
 
           <div class="order-actions">
@@ -508,15 +573,25 @@
             ${order.packingSlip ? `
               <a href="${order.packingSlip}" target="_blank" class="btn btn-gold">📄 Packing Slip</a>
             ` : ""}
+            
+            ${order.receiptUrl ? `
+              <a href="${order.receiptUrl}" target="_blank" class="btn btn-gold">🧾 Receipt</a>
+            ` : ""}
 
             ${order.labelUrl && !["ADDRESS_PARSE_FAILED","NO_RATE_FOUND","LABEL_FAILED",""].includes(order.labelUrl) ? `
               <a href="${order.labelUrl}" target="_blank" class="btn btn-blue">🏷️ Label</a>
-            ` : ""}
+              <button class="btn btn-gray" onclick="generateLabel('${order.orderNumber}', '${order.labelUrl}')">🔄 Regenerate</button>
+            ` : `
+              <button class="btn btn-gray" onclick="generateLabel('${order.orderNumber}', '')" id="labelBtn-${order.orderNumber}">🏷️ Generate Label</button>
+            `}
 
             ${order.status !== "Cancelled" ? `
               <button class="btn btn-gray" onclick="toggleReceiptPanel('${order.orderNumber}')" id="receiptBtn-${order.orderNumber}">📧 Send Receipt</button>
               <button class="btn btn-red" onclick="openCancelModal('${order.orderNumber}')">✕ Cancel</button>
             ` : `<span style="font-size:13px; color:#999; font-style:italic;">Order cancelled</span>`}
+            ${order.status === "Shipped" || order.status === "Cancelled" ? `
+              <button class="btn btn-gray" onclick="archiveOrder('${order.orderNumber}')">📦 Archive</button>
+            ` : ""}
           </div>
           ${order.status !== "Cancelled" ? `
           <div id="receiptPanel-${order.orderNumber}" style="display:none; margin:0 24px 24px; padding:14px 16px; background:#f7f4ee; border:1px solid #e8e4dc; border-radius:8px;">
@@ -734,6 +809,136 @@
       `Cancellation email sent to ${order.email}.`
     );
   }
+
+  async function generateLabel(orderNumber, existingLabel) {
+    const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+    if (!order) return;
+
+    if (existingLabel) {
+      const confirm = window.confirm(`Order #${orderNumber} already has a label. Generate a new one anyway?`);
+      if (!confirm) return;
+    }
+
+    const btn = document.getElementById("labelBtn-" + orderNumber);
+    if (btn) btn.textContent = "Generating...";
+
+    try {
+      const res = await fetch("/.netlify/functions/generate-label", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:    adminPassword,
+          orderNumber: order.orderNumber,
+          name:        order.name,
+          address:     order.address,
+          shipping:    order.shipping
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        // Update local order data
+        order.labelUrl = data.labelUrl;
+        // Re-render orders to show new label button
+        renderOrders(allOrders);
+        // Open label in new tab
+        window.open(data.labelUrl, "_blank");
+      } else {
+        alert("⚠️ " + (data.error || "Could not generate label. Please try again."));
+        if (btn) btn.textContent = "🏷️ Generate Label";
+      }
+
+    } catch (err) {
+      alert("⚠️ Could not generate label. Please try again.");
+      if (btn) btn.textContent = "🏷️ Generate Label";
+    }
+  }  
+  
+  // ── Tracking ──
+  function toggleTrackingEdit(orderNumber) {
+    const editDiv = document.getElementById("trackingEdit-" + orderNumber);
+    const isOpen  = editDiv.style.display === "block";
+    editDiv.style.display = isOpen ? "none" : "block";
+    if (!isOpen) {
+      document.getElementById("trackingInput-" + orderNumber).focus();
+    }
+  }
+
+  async function saveTracking(orderNumber) {
+    const tracking = document.getElementById("trackingInput-" + orderNumber).value.trim();
+    if (!tracking) {
+      alert("Please enter a tracking number.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/.netlify/functions/update-tracking", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:    adminPassword,
+          orderNumber: orderNumber,
+          tracking:    tracking
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        // Update display
+        const display = document.getElementById("trackingDisplay-" + orderNumber);
+        display.textContent = tracking;
+        display.style.color = "var(--text)";
+        display.style.fontStyle = "normal";
+
+        // Update local data
+        const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+        if (order) order.tracking = tracking;
+
+        // Update edit button text
+        toggleTrackingEdit(orderNumber);
+        alert("✅ Tracking number saved! Customer will receive a tracking email shortly.");
+      } else {
+        alert("⚠️ Could not save tracking number: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      alert("⚠️ Could not save tracking number. Please try again.");
+    }
+  }
+
+  async function archiveOrder(orderNumber) {
+    const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+    if (!order) return;
+
+    const confirm = window.confirm(
+      `Archive Order #${orderNumber} for ${order.name}?\n\nThis will move it to the Archive tab in Google Sheets and remove it from this view.`
+    );
+    if (!confirm) return;
+
+    try {
+      const res = await fetch("/.netlify/functions/archive-order", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:    adminPassword,
+          orderNumber: orderNumber
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        allOrders = allOrders.filter(o => o.orderNumber.toString() !== orderNumber.toString());
+        updateStats();
+        applyFilters();
+        alert(`✅ Order #${orderNumber} has been archived.`);
+      } else {
+        alert("⚠️ Could not archive order: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      alert("⚠️ Could not archive order. Please try again.");
+    }
+  }
+  
   function logout() {
     sessionStorage.removeItem("adminPassword");
     window.location.href = "admin.html";

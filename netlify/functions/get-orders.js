@@ -34,7 +34,7 @@ exports.handler = async (event) => {
     // Get orders
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'Orders!A2:O'
+      range: 'Orders!A2:P'
     });
     const rows = response.data.values || [];
     const orders = rows.map(row => ({
@@ -52,7 +52,8 @@ exports.handler = async (event) => {
       labelUrl:        row[11] || "",
       tracking:        row[12] || "",
       paymentIntentId: row[13] || "",
-      payMethod:       row[14] || ""
+      payMethod:       row[14] || "",
+      receiptUrl:      row[15] || ""
     }));
     // Return newest first
     orders.reverse();
