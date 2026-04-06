@@ -22,7 +22,7 @@ exports.handler = async (event) => {
       return { statusCode: 401, headers, body: JSON.stringify({ error: 'Incorrect password' }) };
     }
     const response = await sheets.spreadsheets.values.get({
-      spreadsheetId, range: 'Orders!A2:M'
+      spreadsheetId, range: 'Orders!A2:Q'
     });
     const rows = response.data.values || [];
     const orders = rows.map(row => ({
@@ -31,7 +31,10 @@ exports.handler = async (event) => {
       items:       row[2] || "",
       shipping:    parseFloat(row[3]) || 0,
       total:       parseFloat(row[4]) || 0,
-      status:      row[10] || ""
+      name:        row[5] || "",
+      payMethod:   row[14] || "",
+      status:      row[10] || "",
+      refundInfo:  row[16] || ""
     }));
     return { statusCode: 200, headers, body: JSON.stringify(orders) };
   } catch (err) {

@@ -23,7 +23,7 @@ exports.handler = async (event) => {
     // Get products
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'Products!A2:E'
+      range: 'Products!A2:F'
     });
 
     const rows = response.data.values || [];
@@ -35,7 +35,8 @@ exports.handler = async (event) => {
         price:       parseFloat(row[1]) || 0,
         category:    row[2] || "",
         description: row[3] || "",
-        active:      (row[4] || "").toString().toUpperCase() === "TRUE"
+        active:    (row[4] || "").toString().toUpperCase() === "TRUE",
+        imageUrl:  row[5] || ""
       }));
 
     // Get shipping options from Settings

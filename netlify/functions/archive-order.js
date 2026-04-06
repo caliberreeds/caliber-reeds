@@ -47,11 +47,22 @@ exports.handler = async (event) => {
     const sheetRow = rowIndex + 2;
     const orderRow = rows[rowIndex];
 
-    // Copy row to Archive tab
-    await sheets.spreadsheets.values.append({
+    // Pad row to 16 columns
+    while (orderRow.length < 16) orderRow.push("");
+
+    // Find next empty row in Archive tab
+    const archiveCheck = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'Archive!A:P',
-      valueInputOption: 'RAW',
+      range: 'Archive!A:A'
+    });
+    const archiveRows = archiveCheck.data.values || [];
+    const nextArchiveRow = archiveRows.length + 1;
+
+    // Copy row to Archive tab
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `Archive!A${nextArchiveRow}:P${nextArchiveRow}`,
+      valueInputOption: 'USER_ENTERED',
       requestBody: { values: [orderRow] }
     });
 

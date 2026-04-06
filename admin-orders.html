@@ -327,6 +327,7 @@
       <button class="filter-btn" onclick="filterOrders('unpaid', this)">Unpaid</button>
       <button class="filter-btn" onclick="filterOrders('paid', this)">Paid</button>
       <button class="filter-btn" onclick="filterOrders('shipped', this)">Shipped</button>
+      <button class="filter-btn" id="archivedToggle" onclick="toggleArchived(this)">📦 Show Archived</button>
     </div>
 
     <div style="display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; align-items:center;">
@@ -356,8 +357,14 @@
       <h2 style="font-family:'Playfair Display',serif; color:#c0392b; margin-bottom:8px;">Cancel Order</h2>
       <p id="cancelModalDesc" style="font-size:14px; color:#555; margin-bottom:20px;"></p>
 
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Reason for Cancellation</label>
+        <input type="text" id="cancelReason" placeholder="e.g. Customer requested, damaged reed..."
+          style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif; box-sizing:border-box;">
+      </div>
+
       <div id="refundSection" style="display:none; margin-bottom:20px;">
-        <p style="font-size:13px; font-weight:600; color:#1e3d2a; margin-bottom:10px;">Stripe Refund</p>
+        <p id="refundSectionLabel" style="font-size:13px; font-weight:600; color:#1e3d2a; margin-bottom:10px;">Refund</p>
         <div style="display:flex; gap:10px; margin-bottom:10px;">
           <button class="btn btn-green" onclick="setRefundType('full')" id="refundFullBtn">Full Refund</button>
           <button class="btn btn-gray" onclick="setRefundType('partial')" id="refundPartialBtn">Partial Refund</button>
@@ -366,6 +373,11 @@
         <div id="partialAmountRow" style="display:none; margin-top:8px;">
           <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Refund Amount ($)</label>
           <input type="number" id="partialAmount" min="0.01" step="0.01"
+            style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif;">
+        </div>
+        <div id="manualRefRow" style="display:none; margin-top:8px;">
+          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Manual Refund Reference</label>
+          <input type="text" id="manualRefInput" placeholder="e.g. Venmo transaction ID"
             style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif;">
         </div>
       </div>
@@ -417,7 +429,7 @@
       }
       allOrders = await response.json();
       updateStats();
-      renderOrders(allOrders);
+      applyFilters();
     } catch (err) {
       document.getElementById("ordersContainer").innerHTML =
         '<div class="empty-state">Could not load orders. Please try again.</div>';
@@ -437,6 +449,7 @@
   }
 
   let activeFilter = "all";
+  let showArchived = false;
 
   function filterOrders(filter, btn) {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -451,15 +464,37 @@
 
     // Apply status filter
     let filtered = allOrders;
-    if (activeFilter === "unpaid") {
-      filtered = allOrders.filter(o => o.status && o.status.includes("Unpaid"));
-    } else if (activeFilter === "paid") {
-      filtered = allOrders.filter(o => o.status && o.status.includes("Paid"));
-    } else if (activeFilter === "shipped") {
-      filtered = allOrders.filter(o => o.status === "Shipped");
+
+    // Always filter out archived unless showArchived is true or search matches
+    if (search) {
+      // Show archived orders if they match search
+      filtered = filtered.filter(o =>
+        !o.archived || (
+          (o.orderNumber && o.orderNumber.toString().includes(search)) ||
+          (o.name        && o.name.toLowerCase().includes(search)) ||
+          (o.email       && o.email.toLowerCase().includes(search)) ||
+          (o.address     && o.address.toLowerCase().includes(search)) ||
+          (o.items       && o.items.toLowerCase().includes(search)) ||
+          (o.status      && o.status.toLowerCase().includes(search)) ||
+          (o.payMethod   && o.payMethod.toLowerCase().includes(search)) ||
+          (o.tracking    && o.tracking.toLowerCase().includes(search)) ||
+          (o.notes       && o.notes.toLowerCase().includes(search))
+        )
+      );
+    } else {
+      filtered = filtered.filter(o => !o.archived || showArchived);
     }
 
-    // Apply search
+    // Apply status filter (skip for archived)
+    if (activeFilter === "unpaid") {
+      filtered = filtered.filter(o => o.archived || (o.status && o.status.includes("Unpaid")));
+    } else if (activeFilter === "paid") {
+      filtered = filtered.filter(o => o.archived || (o.status && o.status.includes("Paid")));
+    } else if (activeFilter === "shipped") {
+      filtered = filtered.filter(o => o.archived || o.status === "Shipped");
+    }
+
+    // Apply search filter
     if (search) {
       filtered = filtered.filter(o =>
         (o.orderNumber && o.orderNumber.toString().includes(search)) ||
@@ -488,6 +523,13 @@
     renderOrders(filtered);
   }
 
+  function toggleArchived(btn) {
+    showArchived = !showArchived;
+    btn.classList.toggle("active", showArchived);
+    btn.textContent = showArchived ? "📦 Hide Archived" : "📦 Show Archived";
+    applyFilters();
+  }
+
   function renderOrders(orders) {
     const container = document.getElementById("ordersContainer");
     if (orders.length === 0) {
@@ -502,7 +544,8 @@
       }) : "—";
 
       return `
-        <div class="order-card ${statusClass}" id="card-${order.orderNumber}">
+        <div class="order-card ${statusClass}" id="card-${order.orderNumber}" ${order.archived ? 'style="opacity:0.7; border-left-color:#999;"' : ''}>
+          ${order.archived ? '<div style="background:#f0f0f0; padding:4px 16px; font-size:12px; color:#999; font-weight:600; border-radius:4px; display:inline-block; margin-bottom:12px;">📦 ARCHIVED</div>' : ''}
           <div class="order-top">
             <div>
               <div class="order-number">Order #${order.orderNumber}</div>
@@ -537,6 +580,11 @@
               <label>Notes</label>
               <span>${order.notes}</span>
             </div>` : ""}
+            ${order.refundInfo ? `
+            <div class="order-field" style="grid-column: 1 / -1;">
+              <label>Refund</label>
+              <span style="color:#c0392b; font-weight:600;">${order.refundInfo}</span>
+            </div>` : ""}
             <div class="order-field" style="grid-column: 1 / -1;">
               <label>Tracking Number</label>
               <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
@@ -570,12 +618,10 @@
 
             <span class="save-status" id="save-${order.orderNumber}">✓ Saved!</span>
 
-            ${order.packingSlip ? `
-              <a href="${order.packingSlip}" target="_blank" class="btn btn-gold">📄 Packing Slip</a>
-            ` : ""}
-            
             ${order.receiptUrl ? `
               <a href="${order.receiptUrl}" target="_blank" class="btn btn-gold">🧾 Receipt</a>
+            ` : order.packingSlip ? `
+              <a href="${order.packingSlip}" target="_blank" class="btn btn-gold">📄 Old Packing Slip</a>
             ` : ""}
 
             ${order.labelUrl && !["ADDRESS_PARSE_FAILED","NO_RATE_FOUND","LABEL_FAILED",""].includes(order.labelUrl) ? `
@@ -681,6 +727,7 @@
       if (data.success) {
         toggleReceiptPanel(orderNumber);
         alert("✅ Receipt sent to " + order.email);
+        await loadOrders();
       } else {
         alert("⚠️ Could not send receipt: " + (data.error || "Unknown error"));
       }
@@ -702,14 +749,25 @@
     document.getElementById("cancelModalDesc").textContent =
       `Cancel Order #${orderNumber} for ${order.name} ($${order.total})?`;
 
+    document.getElementById("cancelReason").value = "";
+    document.getElementById("manualRefInput").value = "";
+    document.getElementById("partialAmount").value = "";
+
     const refundSection = document.getElementById("refundSection");
+    const refundLabel = document.getElementById("refundSectionLabel");
+    const isCard = order.paymentIntentId && !order.paymentIntentId.startsWith("pi_") === false;
+
     if (order.paymentIntentId) {
+      refundLabel.textContent = "Stripe Refund";
       refundSection.style.display = "block";
-      setRefundType("full");
+      document.getElementById("manualRefRow").style.display = "none";
     } else {
-      refundSection.style.display = "none";
+      refundLabel.textContent = "Manual Refund";
+      refundSection.style.display = "block";
+      document.getElementById("manualRefRow").style.display = "none";
     }
 
+    setRefundType("full");
     document.getElementById("cancelModal").style.display = "flex";
   }
 
@@ -720,15 +778,29 @@
 
   function setRefundType(type) {
     refundType = type;
+    const order = allOrders.find(o => o.orderNumber.toString() === cancelOrderNumber.toString());
+    const isCard = order && order.payMethod === "card";
+
     document.getElementById("refundFullBtn").className    = "btn " + (type === "full"    ? "btn-green" : "btn-gray");
     document.getElementById("refundPartialBtn").className = "btn " + (type === "partial" ? "btn-green" : "btn-gray");
     document.getElementById("refundNoneBtn").className    = "btn " + (type === "none"    ? "btn-green" : "btn-gray");
+
     document.getElementById("partialAmountRow").style.display = type === "partial" ? "block" : "none";
+
+    // Show manual reference field for Venmo/Zelle when refund is full or partial
+    document.getElementById("manualRefRow").style.display =
+      (!isCard && type !== "none") ? "block" : "none";
   }
 
   async function confirmCancel() {
     const order = allOrders.find(o => o.orderNumber.toString() === cancelOrderNumber.toString());
     if (!order) return;
+
+    const reason = document.getElementById("cancelReason").value.trim();
+    if (!reason) {
+      alert("Please enter a reason for cancellation.");
+      return;
+    }
 
     let refundAmount = null;
     if (refundType === "partial") {
@@ -739,32 +811,51 @@
       }
     }
 
-    closeCancelModal();
+    const manualReference = document.getElementById("manualRefInput").value.trim();
+    const isCard = order.payMethod === "card";
 
-    // Issue Stripe refund if applicable
-    let refundNote = "";
-    if (order.paymentIntentId && refundType !== "none") {
-      try {
-        const refundBody = { paymentIntentId: order.paymentIntentId };
-        if (refundType === "partial") refundBody.amount = refundAmount;
-
-        const refundRes = await fetch("/.netlify/functions/refund-order", {
-          method:  "POST",
-          headers: { "Content-Type": "application/json" },
-          body:    JSON.stringify(refundBody)
-        });
-        const refundData = await refundRes.json();
-        refundNote = refundData.success
-          ? (refundType === "full"
-              ? `Full refund of $${order.total} issued.`
-              : `Partial refund of $${refundAmount} issued.`)
-          : `Refund failed: ${refundData.error}`;
-      } catch (err) {
-        refundNote = "Refund request failed. Please refund manually in Stripe.";
-      }
+    if (!isCard && refundType !== "none" && !manualReference) {
+      alert("Please enter a manual refund reference.");
+      return;
     }
 
-    // Update status in sheet
+    closeCancelModal();
+
+    // Issue refund
+    let refundRef = "";
+    let refundRecord = "";
+    try {
+      const refundBody = {
+        password:        adminPassword,
+        orderNumber:     order.orderNumber,
+        reason:          reason,
+        paymentMethod:   isCard ? "card" : (order.paymentMethod || "Venmo/Zelle"),
+        manualReference: manualReference
+      };
+      if (isCard) refundBody.paymentIntentId = order.paymentIntentId;
+      if (refundType === "partial") refundBody.amount = refundAmount;
+      if (refundType === "none") refundBody.skipRefund = true;
+
+      const refundRes = await fetch("/.netlify/functions/refund-order", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(refundBody)
+      });
+      const refundData = await refundRes.json();
+      if (refundData.success) {
+        refundRef = refundData.refundId || manualReference || "";
+        refundRecord = refundData.refundRecord || "";
+      } else {
+        alert("⚠️ Refund failed: " + (refundData.error || "Unknown error"));
+        return;
+      }
+    } catch (err) {
+      alert("⚠️ Refund request failed. Please refund manually.");
+      return;
+    }
+
+    // Update status — partial refund keeps current status, full/none sets to Cancelled
+    const newStatus = refundType === "partial" ? order.status : "Cancelled";
     try {
       await fetch("/.netlify/functions/update-order", {
         method:  "POST",
@@ -772,7 +863,7 @@
         body: JSON.stringify({
           password:    adminPassword,
           orderNumber: order.orderNumber,
-          status:      "Cancelled"
+          status:      newStatus
         })
       });
     } catch (err) {
@@ -785,28 +876,32 @@
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          password:    adminPassword,
-          orderNumber: order.orderNumber,
-          name:        order.name,
-          email:       order.email,
-          total:       order.total,
-          refundNote:  refundNote
+          password:      adminPassword,
+          orderNumber:   order.orderNumber,
+          name:          order.name,
+          email:         order.email,
+          items:         order.items,
+          total:         order.total,
+          refundAmount:  refundAmount || order.total,
+          refundType:    refundType,
+          reason:        reason,
+          refundRef:     refundRef,
+          paymentMethod: isCard ? "card" : (order.paymentMethod || "Venmo/Zelle")
         })
       });
     } catch (err) {
       console.warn("Cancellation email failed:", err);
     }
 
-    // Update UI
+    // Update local data and UI
     const orderObj = allOrders.find(o => o.orderNumber.toString() === order.orderNumber.toString());
-    if (orderObj) orderObj.status = "Cancelled";
-    updateStats();
-    renderOrders(allOrders);
+    if (orderObj) orderObj.status = newStatus;
+    await loadOrders();
 
     alert(
-      `✅ Order #${order.orderNumber} cancelled.\n` +
-      (refundNote ? refundNote + "\n" : "") +
-      `Cancellation email sent to ${order.email}.`
+      `✅ Order #${order.orderNumber} ${refundType === "partial" ? "partially refunded" : "cancelled"}.\n` +
+      (refundRecord ? refundRecord + "\n" : "") +
+      `Email sent to ${order.email}.`
     );
   }
 
@@ -840,8 +935,8 @@
       if (data.success) {
         // Update local order data
         order.labelUrl = data.labelUrl;
-        // Re-render orders to show new label button
-        renderOrders(allOrders);
+        // Re-apply filters to maintain current view
+        applyFilters();
         // Open label in new tab
         window.open(data.labelUrl, "_blank");
       } else {
@@ -895,9 +990,8 @@
         const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
         if (order) order.tracking = tracking;
 
-        // Update edit button text
-        toggleTrackingEdit(orderNumber);
         alert("✅ Tracking number saved! Customer will receive a tracking email shortly.");
+        await loadOrders();
       } else {
         alert("⚠️ Could not save tracking number: " + (data.error || "Unknown error"));
       }

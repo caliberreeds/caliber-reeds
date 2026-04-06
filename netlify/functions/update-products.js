@@ -41,7 +41,7 @@ exports.handler = async (event) => {
     if (data.action === 'add') {
       await sheets.spreadsheets.values.append({
         spreadsheetId,
-        range: 'Products!A:E',
+        range: 'Products!A:F',
         valueInputOption: 'RAW',
         requestBody: {
           values: [[
@@ -49,7 +49,8 @@ exports.handler = async (event) => {
             data.price,
             data.category,
             data.description,
-            'TRUE'
+            'TRUE',
+            data.imageUrl || ""
           ]]
         }
       });
@@ -59,7 +60,7 @@ exports.handler = async (event) => {
     if (data.action === 'update') {
       await sheets.spreadsheets.values.update({
         spreadsheetId,
-        range: `Products!A${data.index}:E${data.index}`,
+        range: `Products!A${data.index}:F${data.index}`,
         valueInputOption: 'RAW',
         requestBody: {
           values: [[
@@ -67,7 +68,8 @@ exports.handler = async (event) => {
             data.price,
             data.category,
             data.description,
-            data.active ? 'TRUE' : 'FALSE'
+            data.active ? 'TRUE' : 'FALSE',
+            data.imageUrl || ""
           ]]
         }
       });

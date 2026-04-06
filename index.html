@@ -14,12 +14,12 @@
       --amber:       #c49a3c;
       --cane:        #d4b896;
       --cork:        #8b6f4e;
-      --bg:          #f5f1ea;
-      --bg-warm:     #ede5d8;
-      --bg-tan:      #e8dece;
+      --bg:          #f7f0e3;
+      --bg-warm:     #ede0c8;
+      --bg-tan:      #e4d5b8;
       --bg-cork:     #3d2b1f;
       --white:       #ffffff;
-      --gray-light:  #ddd8ce;
+      --gray-light:  #d9cbb8;
       --gray-mid:    #999;
       --text:        #1a1a1a;
       --text-light:  #5a4a3a;
@@ -234,9 +234,9 @@
       flex-shrink: 0;
     }
 
-    #row-response     .word-column { background: var(--bg-tan); }
-    #row-intonation   .word-column { background: #e8e0d0; }
-    #row-articulation .word-column { background: var(--bg-warm); }
+    #row-response     .word-column { background: #f7f0e3; }
+    #row-intonation   .word-column { background: #eddfc5; }
+    #row-articulation .word-column { background: #f0e6d0; }
 
     .word-letter {
       font-family: 'Caveat', cursive;
@@ -286,7 +286,7 @@
     .craft-section {
       padding: 80px;
       text-align: center;
-      background: var(--bg);
+      background: #f7f0e3;
       border-top: 1px solid var(--gray-light);
     }
     .craft-section h2 {
@@ -308,7 +308,7 @@
 
     /* ── YouTube ── */
     .youtube-section {
-      background: var(--bg-tan);
+      background: #e4d5b8;
       border-top: 1px solid var(--gray-light);
       padding: 80px;
       display: grid;
@@ -361,6 +361,15 @@
     footer a:hover { color: var(--cane); }
     .footer-links { display: flex; gap: 24px; }
 
+    .nav-contact-btn {
+      background: var(--amber) !important;
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 5px;
+      transition: background 0.2s !important;
+    }
+    .nav-contact-btn:hover { background: var(--cork) !important; }
+
     /* ── Animation ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(18px); }
@@ -411,6 +420,7 @@
     <ul class="nav-links">
       <li><a href="about.html">About Ben</a></li>
       <li><a href="behind-the-reed.html">Behind the Reed</a></li>
+      <li><a href="contact.html">Contact Ben</a></li>
       <li><a href="shop.html" class="nav-shop-btn">Shop Now</a></li>
     </ul>
   </nav>
@@ -532,6 +542,7 @@
       <a href="shop.html">Shop</a>
       <a href="about.html">About</a>
       <a href="behind-the-reed.html">Behind the Reed</a>
+      <a href="contact.html">Contact Ben</a>
       <a href="https://www.youtube.com/@byoder5912" target="_blank">YouTube</a>
       <a href="admin.html" style="opacity:0.3; font-size:14px;" title="Admin">🔒</a>
     </div>

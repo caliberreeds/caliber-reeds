@@ -1,33 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Behind the Reed — Caliber Reeds by Ben</title>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Source+Sans+3:wght@300;400;600&display=swap"
+    rel="stylesheet">
   <style>
     :root {
-      --green-dark:  #1e3d2a;
-      --green-mid:   #2f5e3f;
+      --green-dark: #1e3d2a;
+      --green-mid: #2f5e3f;
       --green-light: #4a8c60;
-      --gold:        #c9a84c;
-      --amber:       #c49a3c;
-      --cane:        #d4b896;
-      --cork:        #8b6f4e;
-      --bg:          #f5f1ea;
-      --bg-warm:     #ede5d8;
-      --bg-tan:      #e8dece;
-      --bg-cork:     #3d2b1f;
-      --white:       #ffffff;
-      --gray-light:  #ddd8ce;
-      --gray-mid:    #999;
-      --text:        #1a1a1a;
-      --text-light:  #5a4a3a;
-      --shadow:      0 4px 20px rgba(0,0,0,0.10);
+      --gold: #c9a84c;
+      --amber: #c49a3c;
+      --cane: #d4b896;
+      --cork: #8b6f4e;
+      --bg: #1a1208;
+      --bg-warm: #241a0e;
+      --bg-tan: #2e2010;
+      --bg-cork: #0f0a04;
+      --white: #ffffff;
+      --gray-light: #3a2e20;
+      --gray-mid: #999;
+      --text: #e8d8c0;
+      --text-light: #c4a882;
+      --bg-rose: #f2e4dc;
+      --bg-blush: #ead5c8;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       font-family: 'Source Sans 3', sans-serif;
@@ -46,15 +60,20 @@
       justify-content: space-between;
       padding: 4px 48px;
       background: var(--bg);
-      border-bottom: 1px solid var(--gray-light);
+      border-bottom: 1px solid #3a2e20;
     }
-    .nav-logo { text-decoration: none; }
+
+    .nav-logo {
+      text-decoration: none;
+    }
+
     .nav-links {
       display: flex;
       align-items: center;
       gap: 36px;
       list-style: none;
     }
+
     .nav-links a {
       font-size: 13px;
       font-weight: 600;
@@ -64,7 +83,11 @@
       text-decoration: none;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--green-mid); }
+
+    .nav-links a:hover {
+      color: var(--green-mid);
+    }
+
     .nav-shop-btn {
       background: var(--cork) !important;
       color: white !important;
@@ -72,7 +95,10 @@
       border-radius: 5px;
       transition: background 0.2s !important;
     }
-    .nav-shop-btn:hover { background: var(--bg-cork) !important; }
+
+    .nav-shop-btn:hover {
+      background: var(--bg-cork) !important;
+    }
 
     /* ── Page Header ── */
     .page-header {
@@ -80,22 +106,25 @@
       padding: 72px 48px 60px;
       border-bottom: 1px solid var(--gray-light);
     }
+
     .page-header .eyebrow {
       font-size: 11px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--green-light);
+      color: var(--sage);
       font-weight: 600;
       margin-bottom: 16px;
     }
+
     .page-header h1 {
       font-family: 'Caveat', cursive;
       font-size: 72px;
       font-weight: 700;
-      color: var(--green-dark);
+      color: var(--cane);
       line-height: 1.0;
       margin-bottom: 20px;
     }
+
     .page-header p {
       font-family: 'Cormorant Garamond', serif;
       font-size: 20px;
@@ -113,6 +142,7 @@
       overflow: hidden;
       border-bottom: 1px solid var(--gray-light);
     }
+
     .tools-section img {
       width: 100%;
       height: 100%;
@@ -121,18 +151,21 @@
       transform: scale(0.85);
       transform-origin: center center;
     }
+
     .tools-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to right, rgba(245,241,234,0.7) 0%, rgba(245,241,234,0) 40%, rgba(245,241,234,0) 60%, rgba(245,241,234,0.7) 100%);
+      background: linear-gradient(to right, rgba(26,18,8,0.85) 0%, rgba(26,18,8,0) 40%, rgba(26,18,8,0) 60%, rgba(26,18,8,0.85) 100%);
       display: flex;
       align-items: center;
       justify-content: flex-start;
       padding: 0 72px;
     }
+
     .tools-caption {
       max-width: 280px;
     }
+
     .tools-caption h2 {
       font-family: 'Caveat', cursive;
       font-size: 42px;
@@ -141,6 +174,7 @@
       line-height: 1.1;
       margin-bottom: 12px;
     }
+
     .tools-caption p {
       font-size: 15px;
       color: var(--text-light);
@@ -158,13 +192,15 @@
       text-align: center;
       margin-bottom: 72px;
     }
+
     .steps-intro h2 {
       font-family: 'Caveat', cursive;
       font-size: 52px;
       font-weight: 700;
-      color: var(--green-dark);
+      color: var(--cane);
       margin-bottom: 12px;
     }
+
     .steps-intro p {
       font-family: 'Cormorant Garamond', serif;
       font-size: 19px;
@@ -183,14 +219,21 @@
       align-items: center;
       margin-bottom: 80px;
       padding-bottom: 80px;
-      border-bottom: 1px solid var(--gray-light);
+      border-bottom: 1px solid #3a2e20;
     }
+
     .step:last-child {
       border-bottom: none;
       margin-bottom: 0;
     }
-    .step.reverse { direction: rtl; }
-    .step.reverse > * { direction: ltr; }
+
+    .step.reverse {
+      direction: rtl;
+    }
+
+    .step.reverse>* {
+      direction: ltr;
+    }
 
     .step-photo {
       border-radius: 10px;
@@ -198,6 +241,7 @@
       box-shadow: var(--shadow);
       aspect-ratio: 4/3;
     }
+
     .step-photo img {
       width: 100%;
       height: 100%;
@@ -205,15 +249,16 @@
       display: block;
       transition: transform 0.5s ease;
     }
-    .step-photo:hover img { transform: scale(1.03); }
 
-    .step-content { }
+    .step-photo:hover img {
+      transform: scale(1.03);
+    }
 
     .step-number {
       font-family: 'Caveat', cursive;
       font-size: 72px;
       font-weight: 700;
-      color: var(--gray-light);
+      color: #3a2e20;
       line-height: 1;
       margin-bottom: 4px;
     }
@@ -222,7 +267,7 @@
       font-family: 'Caveat', cursive;
       font-size: 36px;
       font-weight: 700;
-      color: var(--green-dark);
+      color: var(--cane);
       margin-bottom: 16px;
       line-height: 1.2;
     }
@@ -238,19 +283,20 @@
       font-size: 11px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--green-light);
+      color: var(--sage);
       font-weight: 600;
       margin-bottom: 8px;
-      border-bottom: 1px solid var(--green-light);
+      border-bottom-color: var(--sage);
       padding-bottom: 2px;
     }
 
     /* ── Closing Section ── */
     .closing {
-      background: var(--bg-cork);
+      background: #0f0a04;
       padding: 80px;
       text-align: center;
     }
+
     .closing h2 {
       font-family: 'Caveat', cursive;
       font-size: 52px;
@@ -258,13 +304,15 @@
       color: var(--cane);
       margin-bottom: 16px;
     }
+
     .closing p {
       font-size: 17px;
-      color: rgba(255,255,255,0.68);
+      color: rgba(255, 255, 255, 0.68);
       max-width: 580px;
       margin: 0 auto 36px;
       line-height: 1.85;
     }
+
     .btn-shop {
       display: inline-block;
       padding: 13px 32px;
@@ -277,46 +325,120 @@
       letter-spacing: 0.04em;
       transition: background 0.2s, transform 0.15s;
     }
-    .btn-shop:hover { background: #6a5038; transform: translateY(-1px); }
+
+    .btn-shop:hover {
+      background: #6a5038;
+      transform: translateY(-1px);
+    }
 
     /* ── Footer ── */
     footer {
-      background: #111;
-      color: rgba(255,255,255,0.4);
+      background: #2a1f12;
+      color: rgba(255, 255, 255, 0.4);
       padding: 32px 72px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: 13px;
     }
+
     footer a {
-      color: rgba(255,255,255,0.4);
+      color: rgba(255, 255, 255, 0.4);
       text-decoration: none;
       transition: color 0.2s;
     }
-    footer a:hover { color: var(--cane); }
-    .footer-links { display: flex; gap: 24px; }
+
+    footer a:hover {
+      color: var(--cane);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav-contact-btn {
+      background: var(--amber) !important;
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 5px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-contact-btn:hover {
+      background: var(--cork) !important;
+    }
 
     /* ── Mobile ── */
     @media (max-width: 768px) {
-      nav { padding: 12px 20px; }
-      .nav-links { gap: 14px; }
-      .nav-links li:not(:last-child) { display: none; }
-      .page-header { padding: 48px 24px 40px; }
-      .page-header h1 { font-size: 52px; }
-      .tools-section { height: 320px; }
-      .tools-overlay { padding: 0 24px; }
-      .tools-caption h2 { font-size: 32px; }
-      .steps-section { padding: 56px 24px; }
-      .step { grid-template-columns: 1fr; gap: 32px; }
-      .step.reverse { direction: ltr; }
-      .closing { padding: 56px 24px; }
-      .closing h2 { font-size: 40px; }
-      footer { flex-direction: column; gap: 14px; padding: 28px 20px; text-align: center; }
-      .footer-links { flex-wrap: wrap; justify-content: center; }
+      nav {
+        padding: 12px 20px;
+      }
+
+      .nav-links {
+        gap: 14px;
+      }
+
+      .nav-links li:not(:last-child) {
+        display: none;
+      }
+
+      .page-header {
+        padding: 48px 24px 40px;
+      }
+
+      .page-header h1 {
+        font-size: 52px;
+      }
+
+      .tools-section {
+        height: 320px;
+      }
+
+      .tools-overlay {
+        padding: 0 24px;
+      }
+
+      .tools-caption h2 {
+        font-size: 32px;
+      }
+
+      .steps-section {
+        padding: 56px 24px;
+      }
+
+      .step {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .step.reverse {
+        direction: ltr;
+      }
+
+      .closing {
+        padding: 56px 24px;
+      }
+
+      .closing h2 {
+        font-size: 40px;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 14px;
+        padding: 28px 20px;
+        text-align: center;
+      }
+
+      .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- Navigation -->
@@ -327,6 +449,7 @@
     <ul class="nav-links">
       <li><a href="about.html">About Ben</a></li>
       <li><a href="behind-the-reed.html">Behind the Reed</a></li>
+      <li><a href="contact.html">Contact Ben</a></li>
       <li><a href="shop.html" class="nav-shop-btn">Shop Now</a></li>
     </ul>
   </nav>
@@ -335,7 +458,8 @@
   <div class="page-header">
     <div class="eyebrow">The Process</div>
     <h1>Behind the Reed</h1>
-    <p>Every reed begins as a hollow piece of cane and ends as a precisely crafted instrument — the result of days of careful, skilled work by hand.</p>
+    <p>Every reed begins as a hollow piece of cane and ends as a precisely crafted instrument — the result of days of
+      careful, skilled work by hand.</p>
   </div>
 
   <!-- Tools Spread -->
@@ -344,7 +468,8 @@
     <div class="tools-overlay">
       <div class="tools-caption">
         <h2>The tools of the craft</h2>
-        <p>Years of experience go into knowing not just how to use these tools, but when — and why each adjustment matters.</p>
+        <p>Years of experience go into knowing not just how to use these tools, but when — and why each adjustment
+          matters.</p>
       </div>
     </div>
   </div>
@@ -366,7 +491,11 @@
         <div class="step-number">01</div>
         <div class="step-tag">The Raw Material</div>
         <h3>Selecting the Cane</h3>
-        <p>It all starts with tube cane — hollow cylindrical sections of Arundo donax, a reed grass grown primarily in southern France and other Mediterranean regions. Not all cane is usable. Each piece is carefully measured for the correct diameter and inspected for straightness and density. Many pieces get discarded before the work even begins. The quality of the finished reed depends entirely on the quality of the cane selected at this stage.</p>
+        <p>It all starts with tube cane — hollow cylindrical sections of Arundo donax, a reed grass grown primarily in
+          southern France and other Mediterranean regions. Not all cane is usable. Each piece is carefully measured for
+          the correct diameter and inspected for straightness and density. Many pieces get discarded before the work
+          even begins. The quality of the finished reed depends entirely on the quality of the cane selected at this
+          stage.</p>
       </div>
     </div>
 
@@ -379,7 +508,10 @@
         <div class="step-number">02</div>
         <div class="step-tag">Preparation</div>
         <h3>Planing the Cane</h3>
-        <p>Once selected, the tube cane is split lengthwise into pieces and run through a planer — a precision tool that shaves the inner surface of the cane down to a consistent thickness. This step prepares the cane for gouging by removing excess material and creating a flat, even surface. The planer has to be set with great accuracy — too much material removed and the cane becomes too thin before gouging even begins.</p>
+        <p>Once selected, the tube cane is split lengthwise into pieces and run through a planer — a precision tool that
+          shaves the inner surface of the cane down to a consistent thickness. This step prepares the cane for gouging
+          by removing excess material and creating a flat, even surface. The planer has to be set with great accuracy —
+          too much material removed and the cane becomes too thin before gouging even begins.</p>
       </div>
     </div>
 
@@ -392,7 +524,11 @@
         <div class="step-number">03</div>
         <div class="step-tag">Precision</div>
         <h3>Gouging</h3>
-        <p>The gouger is one of the most important and expensive tools in reed making. It removes material from the inside of the cane with great precision, thinning it to a specific profile that determines how the finished reed will respond and vibrate. The exact thickness at the center and edges of the gouge affects everything from intonation to flexibility to tone color. Getting this right is essential — and it takes years of experience to know what to look for.</p>
+        <p>The gouger is one of the most important and expensive tools in reed making. It removes material from the
+          inside of the cane with great precision, thinning it to a specific profile that determines how the finished
+          reed will respond and vibrate. The exact thickness at the center and edges of the gouge affects everything
+          from intonation to flexibility to tone color. Getting this right is essential — and it takes years of
+          experience to know what to look for.</p>
       </div>
     </div>
 
@@ -405,7 +541,11 @@
         <div class="step-number">04</div>
         <div class="step-tag">Taking Shape</div>
         <h3>Shaping the Cane</h3>
-        <p>The gouged cane is now shaped into the distinctive tapered form of the reed blade using a shaper tip — a steel template that defines the exact outline — and a razor blade. The shape determines the width and taper of the finished blade, which directly affects how the reed responds across different registers and dynamic levels. Different shaper tips produce subtly different results, and the choice of shape is part of what gives each reed maker's reeds their distinctive character.</p>
+        <p>The gouged cane is now shaped into the distinctive tapered form of the reed blade using a shaper tip — a
+          steel template that defines the exact outline — and a razor blade. The shape determines the width and taper of
+          the finished blade, which directly affects how the reed responds across different registers and dynamic
+          levels. Different shaper tips produce subtly different results, and the choice of shape is part of what gives
+          each reed maker's reeds their distinctive character.</p>
       </div>
     </div>
 
@@ -418,7 +558,11 @@
         <div class="step-number">05</div>
         <div class="step-tag">Assembly</div>
         <h3>Tying onto the Staple</h3>
-        <p>The shaped cane is soaked in water to make it pliable, then folded and carefully tied onto a staple — the small metal tube with a cork base that connects the reed to the oboe. The tying process requires precision: the cane must be centered, the thread wrapped at exactly the right tension, and the reed must be straight. Any misalignment at this stage affects the reed's playability and can't easily be corrected later. Once tied, the reed is ready to be scraped.</p>
+        <p>The shaped cane is soaked in water to make it pliable, then folded and carefully tied onto a staple — the
+          small metal tube with a cork base that connects the reed to the oboe. The tying process requires precision:
+          the cane must be centered, the thread wrapped at exactly the right tension, and the reed must be straight. Any
+          misalignment at this stage affects the reed's playability and can't easily be corrected later. Once tied, the
+          reed is ready to be scraped.</p>
       </div>
     </div>
 
@@ -431,7 +575,12 @@
         <div class="step-number">06</div>
         <div class="step-tag">The Long Game</div>
         <h3>Scraping & Finishing</h3>
-        <p>The final step is scraping — and it's the most time-consuming of all. Over a minimum of three days, the reed is scraped with a reed knife in careful, deliberate strokes, gradually removing tiny amounts of cane from specific areas of the blade. Each scrape changes how the reed responds: the heart, the tip, the sides, the back — each area affects a different quality of the reed's sound and feel. The reed is tested constantly throughout, and adjustments are made based on how it plays. This is where experience and intuition matter most, and where a good reed maker's craft truly shows.</p>
+        <p>The final step is scraping — and it's the most time-consuming of all. Over a minimum of three days, the reed
+          is scraped with a reed knife in careful, deliberate strokes, gradually removing tiny amounts of cane from
+          specific areas of the blade. Each scrape changes how the reed responds: the heart, the tip, the sides, the
+          back — each area affects a different quality of the reed's sound and feel. The reed is tested constantly
+          throughout, and adjustments are made based on how it plays. This is where experience and intuition matter
+          most, and where a good reed maker's craft truly shows.</p>
       </div>
     </div>
 
@@ -440,7 +589,8 @@
   <!-- Closing -->
   <div class="closing">
     <h2>Every reed, worth the wait</h2>
-    <p>Each reed that leaves here has been through all six of these steps — carefully, patiently, by hand. That's what makes the difference between a reed that fights you and one that lets you play.</p>
+    <p>Each reed that leaves here has been through all six of these steps — carefully, patiently, by hand. That's what
+      makes the difference between a reed that fights you and one that lets you play.</p>
     <a href="shop.html" class="btn-shop">Shop Reeds</a>
   </div>
 
@@ -451,10 +601,12 @@
       <a href="shop.html">Shop</a>
       <a href="about.html">About</a>
       <a href="behind-the-reed.html">Behind the Reed</a>
+      <a href="contact.html">Contact Ben</a>
       <a href="https://www.youtube.com/@byoder5912" target="_blank">YouTube</a>
       <a href="admin.html" style="opacity:0.3; font-size:14px;" title="Admin">🔒</a>
     </div>
   </footer>
 
 </body>
+
 </html>

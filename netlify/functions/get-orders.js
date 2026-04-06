@@ -31,37 +31,70 @@ exports.handler = async (event) => {
         body: JSON.stringify({ error: 'Incorrect password' })
       };
     }
-    // Get orders
+    // Get active orders
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'Orders!A2:P'
+      range: 'Orders!A2:Q'
     });
     const rows = response.data.values || [];
     const orders = rows.map(row => ({
-      orderNumber:     row[0]  || "",
-      date:            row[1]  || "",
-      items:           row[2]  || "",
-      shipping:        row[3]  || "",
-      total:           row[4]  || "",
-      name:            row[5]  || "",
-      email:           row[6]  || "",
-      address:         row[7]  || "",
-      notes:           row[8]  || "",
-      packingSlip:     row[9]  || "",
-      status:          row[10] || "",
-      labelUrl:        row[11] || "",
-      tracking:        row[12] || "",
+      orderNumber: row[0] || "",
+      date: row[1] || "",
+      items: row[2] || "",
+      shipping: row[3] || "",
+      total: row[4] || "",
+      name: row[5] || "",
+      email: row[6] || "",
+      address: row[7] || "",
+      notes: row[8] || "",
+      packingSlip: row[9] || "",
+      status: row[10] || "",
+      labelUrl: row[11] || "",
+      tracking: row[12] || "",
       paymentIntentId: row[13] || "",
-      payMethod:       row[14] || "",
-      receiptUrl:      row[15] || ""
+      payMethod: row[14] || "",
+      receiptUrl: row[15] || "",
+      refundInfo: row[16] || "",
+      archived: false
     }));
-    // Return newest first
-    orders.reverse();
+
+    // Get archived orders
+    const archiveResponse = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: 'Archive!A2:Q'
+    });
+    const archiveRows = archiveResponse.data.values || [];
+    const archivedOrders = archiveRows.map(row => ({
+      orderNumber: row[0] || "",
+      date: row[1] || "",
+      items: row[2] || "",
+      shipping: row[3] || "",
+      total: row[4] || "",
+      name: row[5] || "",
+      email: row[6] || "",
+      address: row[7] || "",
+      notes: row[8] || "",
+      packingSlip: row[9] || "",
+      status: row[10] || "",
+      labelUrl: row[11] || "",
+      tracking: row[12] || "",
+      paymentIntentId: row[13] || "",
+      payMethod: row[14] || "",
+      receiptUrl: row[15] || "",
+      refundInfo: row[16] || "",
+      archived: false
+    }));
+
+    // Combine, newest first
+    const allOrdersCombined = [...orders, ...archivedOrders];
+    allOrdersCombined.reverse();
+
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify(orders)
+      body: JSON.stringify(allOrdersCombined)
     };
+
   } catch (err) {
     return {
       statusCode: 500,

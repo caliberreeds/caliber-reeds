@@ -388,7 +388,7 @@
       zip:       customerData.zip,
       notes:     customerData.notes,
       payMethod: payMethod,
-      delayAcknowledged: localStorage.getItem("reedDelayAcknowledged") || "false"
+      delayAcknowledged: localStorage.getItem("reedDelayAcknowledged") === "true" ? "true" : "false"
     };
     await fetch(SCRIPT_URL, {
       method:  "POST",

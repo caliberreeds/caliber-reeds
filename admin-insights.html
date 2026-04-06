@@ -64,9 +64,53 @@
       <a href="admin-prices.html">Prices</a>
       <a href="admin-insights.html" class="active">Insights</a>
     </div>
+    <div class="card" style="margin-bottom:24px;">
+      <h2 style="margin-bottom:16px;">Filters</h2>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div>
+          <label style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#4a8c60; display:block; margin-bottom:4px;">From Date</label>
+          <input type="date" id="filterFrom" style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif;">
+        </div>
+        <div>
+          <label style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#4a8c60; display:block; margin-bottom:4px;">To Date</label>
+          <input type="date" id="filterTo" style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif;">
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div>
+          <label style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#4a8c60; display:block; margin-bottom:4px;">Customer</label>
+          <input type="text" id="filterCustomer" placeholder="Search by name..." style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif;">
+        </div>
+        <div>
+          <label style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#4a8c60; display:block; margin-bottom:4px;">Product</label>
+          <select id="filterProduct" style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif;">
+            <option value="">All Products</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#4a8c60; display:block; margin-bottom:4px;">Payment</label>
+          <select id="filterPayment" style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif;">
+            <option value="">All Methods</option>
+            <option value="card">Card</option>
+            <option value="venmo">Venmo</option>
+            <option value="zelle">Zelle</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <button class="btn btn-gray" onclick="clearFilters()">Clear Filters</button>
+        <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer;">
+          <input type="checkbox" id="includeShipping" onchange="applyFilters()" style="width:16px; height:16px;">
+          Include shipping in revenue
+        </label>
+      </div>
+    </div>
+
     <div class="stats-grid">
       <div class="stat"><div class="stat-number" id="statOrders">—</div><div class="stat-label">Total Orders</div></div>
-      <div class="stat"><div class="stat-number" id="statRevenue">—</div><div class="stat-label">Total Revenue</div></div>
+      <div class="stat"><div class="stat-number" id="statRevenue">—</div><div class="stat-label">Revenue</div></div>
+      <div class="stat"><div class="stat-number" id="statShipping">—</div><div class="stat-label">Shipping Collected</div></div>
+      <div class="stat"><div class="stat-number" id="statRefunds">—</div><div class="stat-label">Total Refunded</div></div>
       <div class="stat"><div class="stat-number" id="statAvg">—</div><div class="stat-label">Avg Order Value</div></div>
     </div>
     <div class="card">
@@ -82,55 +126,121 @@
     <p style="font-size:16px;color:#c00;margin-bottom:16px;">You need to log in first.</p>
     <a href="admin.html" style="color:#2f5e3f;font-weight:600;">← Go to Admin Login</a>
   </div>
-<script>
-  const GET_INSIGHTS_URL = "/.netlify/functions/get-insights";
-  let adminPassword = sessionStorage.getItem("adminPassword") || "";
-
-  async function init() {
-    if (!adminPassword) {
-      document.getElementById("authError").style.display = "block";
-      return;
-    }
-    document.getElementById("mainContent").style.display = "block";
-    await loadInsights();
-  }
-
-  async function loadInsights() {
-    try {
-      const response = await fetch(GET_INSIGHTS_URL + "?password=" + encodeURIComponent(adminPassword));
-      if (response.status === 401) {
-        sessionStorage.removeItem("adminPassword");
-        document.getElementById("mainContent").style.display = "none";
+  <script>
+    const GET_INSIGHTS_URL = "/.netlify/functions/get-insights";
+    let adminPassword = sessionStorage.getItem("adminPassword") || "";
+    let allOrders = [];
+  
+    async function init() {
+      if (!adminPassword) {
         document.getElementById("authError").style.display = "block";
         return;
       }
-      const orders = await response.json();
-
+      document.getElementById("mainContent").style.display = "block";
+      await loadInsights();
+  
+      // Attach filter listeners
+      document.getElementById("filterFrom").addEventListener("change", applyFilters);
+      document.getElementById("filterTo").addEventListener("change", applyFilters);
+      document.getElementById("filterCustomer").addEventListener("input", applyFilters);
+      document.getElementById("filterProduct").addEventListener("change", applyFilters);
+      document.getElementById("filterPayment").addEventListener("change", applyFilters);
+    }
+  
+    async function loadInsights() {
+      try {
+        const response = await fetch(GET_INSIGHTS_URL + "?password=" + encodeURIComponent(adminPassword));
+        if (response.status === 401) {
+          sessionStorage.removeItem("adminPassword");
+          document.getElementById("mainContent").style.display = "none";
+          document.getElementById("authError").style.display = "block";
+          return;
+        }
+        allOrders = await response.json();
+  
+        // Populate product filter dropdown
+        const productNames = new Set();
+        allOrders.forEach(o => {
+          if (!o.items) return;
+          o.items.split(",").forEach(part => {
+            const match = part.trim().match(/^(.+?)\s+x(\d+)$/);
+            if (match) productNames.add(match[1].trim());
+          });
+        });
+        const productSelect = document.getElementById("filterProduct");
+        productNames.forEach(name => {
+          const opt = document.createElement("option");
+          opt.value = name;
+          opt.textContent = name;
+          productSelect.appendChild(opt);
+        });
+  
+        applyFilters();
+  
+      } catch (err) {
+        document.getElementById("productBreakdown").innerHTML = '<div class="loading">Could not load data.</div>';
+      }
+    }
+  
+    function parseRefundAmount(refundInfo) {
+      if (!refundInfo) return 0;
+      const match = refundInfo.match(/Refunded \$([0-9.]+)/);
+      return match ? parseFloat(match[1]) : 0;
+    }
+  
+    function applyFilters() {
+      const from        = document.getElementById("filterFrom").value;
+      const to          = document.getElementById("filterTo").value;
+      const customer    = document.getElementById("filterCustomer").value.trim().toLowerCase();
+      const product     = document.getElementById("filterProduct").value;
+      const payment     = document.getElementById("filterPayment").value;
+      const inclShip    = document.getElementById("includeShipping").checked;
+  
+      let filtered = allOrders.filter(o => {
+        // Exclude cancelled orders from revenue but keep for count if needed
+        if (o.status === "Cancelled") return false;
+  
+        if (from && new Date(o.date) < new Date(from)) return false;
+        if (to   && new Date(o.date) > new Date(to + "T23:59:59")) return false;
+        if (customer && !o.name.toLowerCase().includes(customer)) return false;
+        if (payment  && o.payMethod !== payment) return false;
+        if (product) {
+          if (!o.items || !o.items.toLowerCase().includes(product.toLowerCase())) return false;
+        }
+  
+        return true;
+      });
+  
       // Stats
-      const totalOrders  = orders.length;
-      const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
-      const avgOrder     = totalOrders > 0 ? totalRevenue / totalOrders : 0;
-
-      document.getElementById("statOrders").textContent  = totalOrders;
-      document.getElementById("statRevenue").textContent = "$" + totalRevenue.toFixed(0);
-      document.getElementById("statAvg").textContent     = "$" + avgOrder.toFixed(0);
-
+      const totalOrders   = filtered.length;
+      const totalShipping = filtered.reduce((s, o) => s + o.shipping, 0);
+      const totalRefunds  = filtered.reduce((s, o) => s + parseRefundAmount(o.refundInfo), 0);
+      const productRevenue = filtered.reduce((s, o) => s + (o.total - o.shipping), 0);
+      const revenue       = inclShip
+        ? filtered.reduce((s, o) => s + o.total, 0) - totalRefunds
+        : productRevenue - totalRefunds;
+      const avgOrder      = totalOrders > 0 ? filtered.reduce((s, o) => s + o.total, 0) / totalOrders : 0;
+  
+      document.getElementById("statOrders").textContent   = totalOrders;
+      document.getElementById("statRevenue").textContent  = "$" + revenue.toFixed(0);
+      document.getElementById("statShipping").textContent = "$" + totalShipping.toFixed(0);
+      document.getElementById("statRefunds").textContent  = "$" + totalRefunds.toFixed(0);
+      document.getElementById("statAvg").textContent      = "$" + avgOrder.toFixed(0);
+  
       // Product breakdown
       const productCounts = {};
-      const productRevenue = {};
-      orders.forEach(o => {
+      filtered.forEach(o => {
         if (!o.items) return;
-        const parts = o.items.split(",");
-        parts.forEach(part => {
+        o.items.split(",").forEach(part => {
           const match = part.trim().match(/^(.+?)\s+x(\d+)$/);
           if (match) {
             const name = match[1].trim();
             const qty  = parseInt(match[2]);
-            productCounts[name]   = (productCounts[name]   || 0) + qty;
+            productCounts[name] = (productCounts[name] || 0) + qty;
           }
         });
       });
-
+  
       const maxCount = Math.max(...Object.values(productCounts), 1);
       const productHtml = Object.entries(productCounts)
         .sort((a, b) => b[1] - a[1])
@@ -141,18 +251,19 @@
             <span class="product-row-count">${count} sold</span>
           </div>`).join("");
       document.getElementById("productBreakdown").innerHTML = productHtml || '<div class="loading">No data yet.</div>';
-
+  
       // Monthly breakdown
       const monthly = {};
-      orders.forEach(o => {
+      filtered.forEach(o => {
         if (!o.date) return;
         const d = new Date(o.date);
         const key = d.toLocaleDateString("en-US", { year: "numeric", month: "long" });
-        if (!monthly[key]) monthly[key] = { count: 0, revenue: 0 };
+        if (!monthly[key]) monthly[key] = { count: 0, revenue: 0, shipping: 0 };
         monthly[key].count++;
-        monthly[key].revenue += o.total;
+        monthly[key].revenue += inclShip ? o.total : (o.total - o.shipping);
+        monthly[key].shipping += o.shipping;
       });
-
+  
       const monthHtml = Object.entries(monthly)
         .reverse()
         .map(([month, data]) => `
@@ -160,20 +271,26 @@
             <span style="font-weight:600;color:var(--green-dark);">${month}</span>
             <span style="color:var(--gray-mid);">${data.count} order${data.count !== 1 ? "s" : ""}</span>
             <span style="font-weight:600;color:var(--green-mid);">$${data.revenue.toFixed(0)}</span>
+            ${inclShip ? `<span style="font-size:12px;color:var(--gray-mid);">(incl. $${data.shipping.toFixed(0)} shipping)</span>` : ""}
           </div>`).join("");
       document.getElementById("monthBreakdown").innerHTML = monthHtml || '<div class="loading">No data yet.</div>';
-
-    } catch (err) {
-      document.getElementById("productBreakdown").innerHTML = '<div class="loading">Could not load data.</div>';
     }
-  }
-
-  function logout() {
-    sessionStorage.removeItem("adminPassword");
-    window.location.href = "admin.html";
-  }
-
-  init();
-</script>
+  
+    function clearFilters() {
+      document.getElementById("filterFrom").value      = "";
+      document.getElementById("filterTo").value        = "";
+      document.getElementById("filterCustomer").value  = "";
+      document.getElementById("filterProduct").value   = "";
+      document.getElementById("filterPayment").value   = "";
+      applyFilters();
+    }
+  
+    function logout() {
+      sessionStorage.removeItem("adminPassword");
+      window.location.href = "admin.html";
+    }
+  
+    init();
+  </script>
 </body>
 </html>

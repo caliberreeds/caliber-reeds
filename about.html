@@ -11,19 +11,26 @@
       --green-mid:   #2f5e3f;
       --green-light: #4a8c60;
       --gold:        #c9a84c;
-      --cream:       #f7f4ee;
+      --cream:       #eef2e8;
       --white:       #ffffff;
-      --gray-light:  #e8e4dc;
+      --gray-light:  #d8e0d0;
       --gray-mid:    #999;
       --text:        #1a1a1a;
       --shadow:      0 4px 20px rgba(0,0,0,0.10);
+      --amber:       #c49a3c;
+      --cane:        #d4b896;
+      --cork:        #8b6f4e;
+      --bg-cork:     #3d2b1f;
+      --text-light:  #5a4a3a;
+      --bg-sage:     #94ad73;
+      --bg-moss:     #d8e6cc;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Source Sans 3', sans-serif;
-      background: var(--cream);
+      background: var(--bg-sage);
       color: var(--text);
       max-width: 860px;
       margin: 0 auto;
@@ -74,7 +81,7 @@
 
     /* ── Cards ── */
     .card {
-      background: var(--white);
+      background: #f4f8ee;
       border: 1px solid var(--gray-light);
       border-radius: 12px;
       padding: 36px;
@@ -108,7 +115,7 @@
       margin-top: 20px;
     }
     .highlight {
-      background: var(--cream);
+      background: var(--bg-moss);
       border: 1px solid var(--gray-light);
       border-radius: 10px;
       padding: 20px;
@@ -132,8 +139,8 @@
     }
 
     /* ── YouTube section ── */
-    .youtube-box {
-      background: var(--cream);
+    .highlight {
+      background: var(--bg-moss);
       border: 1px solid var(--gray-light);
       border-radius: 10px;
       padding: 24px;
@@ -203,12 +210,32 @@
     }
     .btn-shop:hover { background: var(--green-dark); }
 
-    .footer-note {
-      text-align: center;
-      margin-top: 48px;
+    footer {
+      background: var(--bg-cork);
+      color: rgba(255,255,255,0.4);
+      padding: 32px 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       font-size: 13px;
-      color: var(--gray-mid);
+      border-top: 1px solid rgba(255,255,255,0.1);
     }
+    footer a {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--cane); }
+    .footer-links { display: flex; gap: 24px; }
+
+    .nav-contact-btn {
+      background: var(--amber) !important;
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 5px;
+      transition: background 0.2s !important;
+    }
+    .nav-contact-btn:hover { background: var(--cork) !important; }
 
     @media (max-width: 580px) {
       body { padding: 32px 18px 48px; }
@@ -266,6 +293,7 @@
     <ul class="nav-links">
       <li><a href="about.html">About Ben</a></li>
       <li><a href="behind-the-reed.html">Behind the Reed</a></li>
+      <li><a href="contact.html">Contact Ben</a></li>
       <li><a href="shop.html" class="nav-shop-btn">Shop Now</a></li>
     </ul>
   </nav>
@@ -372,7 +400,17 @@
     <a href="index.html" class="btn-shop">Shop Reeds</a>
   </div>
 
-  <p class="footer-note">© Caliber Reeds by Ben · All reeds handmade to order · <a href="admin.html" style="opacity:0.3; font-size:14px; text-decoration:none;" title="Admin">🔒</a></p>
+  <footer>
+    <span>© Caliber Reeds by Ben · All reeds handmade to order</span>
+    <div class="footer-links">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="behind-the-reed.html">Behind the Reed</a>
+      <a href="contact.html">Contact Ben</a>
+      <a href="https://www.youtube.com/@byoder5912" target="_blank">YouTube</a>
+      <a href="admin.html" style="opacity:0.3; font-size:14px;" title="Admin">🔒</a>
+    </div>
+  </footer>
 
 </body>
 </html>
