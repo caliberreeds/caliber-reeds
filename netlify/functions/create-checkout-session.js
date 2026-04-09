@@ -1,4 +1,5 @@
 const Stripe = require('stripe');
+const { google } = require('googleapis');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -14,12 +15,24 @@ exports.handler = async (event) => {
 
     // Build line items from cart
     const lineItems = [];
-    const prices = {
-      "Student Oboe Reed":           23,
-      "Advance Oboe Reed":           27,
-      "Student English Horn Reed":   31,
-      "Advanced English Horn Reed":  35
-    };
+
+    // Fetch prices from Products sheet
+    const auth = new google.auth.GoogleAuth({
+      credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT),
+      scopes: ['https://www.googleapis.com/auth/spreadsheets']
+    });
+    const sheets = google.sheets({ version: 'v4', auth });
+    const spreadsheetId = process.env.SPREADSHEET_ID;
+
+    const productsResponse = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: 'Products!A2:E'
+    });
+    const productRows = productsResponse.data.values || [];
+    const prices = {};
+    productRows.forEach(row => {
+      if (row[0] && row[1]) prices[row[0]] = parseFloat(row[1]);
+    });
 
     const counts = {};
     (data.cart || []).forEach(item => {

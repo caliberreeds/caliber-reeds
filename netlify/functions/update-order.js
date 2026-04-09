@@ -64,6 +64,48 @@ exports.handler = async (event) => {
         valueInputOption: 'RAW',
         requestBody: { values: [[data.status]] }
       });
+
+      // Color code the cell
+      const colorMap = {
+        "New - Unpaid":          { red: 0.745, green: 0.059, blue: 0.020 },
+        "New - Paid":            { red: 0.000, green: 0.486, blue: 0.286 },
+        "In Progress - Unpaid":  { red: 0.745, green: 0.059, blue: 0.020 },
+        "In Progress - Paid":    { red: 0.000, green: 0.486, blue: 0.286 },
+        "Shipped":               { red: 0.027, green: 0.298, blue: 0.671 },
+        "Cancelled":             { red: 0.239, green: 0.239, blue: 0.239 }
+      };
+
+      const bgColor = colorMap[data.status] || { red: 1, green: 1, blue: 1 };
+      const fontColor = { red: 1, green: 1, blue: 1 };
+
+      // Get the sheet ID first
+      const spreadsheetMeta = await sheets.spreadsheets.get({ spreadsheetId });
+      const ordersSheet = spreadsheetMeta.data.sheets.find(s => s.properties.title === "Orders");
+      const sheetId = ordersSheet.properties.sheetId;
+
+      await sheets.spreadsheets.batchUpdate({
+        spreadsheetId,
+        requestBody: {
+          requests: [{
+            repeatCell: {
+              range: {
+                sheetId:          sheetId,
+                startRowIndex:    sheetRow - 1,
+                endRowIndex:      sheetRow,
+                startColumnIndex: 10,
+                endColumnIndex:   11
+              },
+              cell: {
+                userEnteredFormat: {
+                  backgroundColor: bgColor,
+                  textFormat: { foregroundColor: fontColor }
+                }
+              },
+              fields: "userEnteredFormat(backgroundColor,textFormat)"
+            }
+          }]
+        }
+      });
     }
 
     return {

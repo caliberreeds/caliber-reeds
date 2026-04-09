@@ -145,6 +145,7 @@
     .order-card.status-progress-unpaid { border-left-color: #c0392b; }
     .order-card.status-progress-paid { border-left-color: #27ae60; }
     .order-card.status-shipped       { border-left-color: #2980b9; }
+    .order-card.status-cancelled     { border-left-color: #7f8c8d; }
 
     .order-top {
       display: flex;
@@ -406,7 +407,8 @@
     "New - Paid":            "status-new-paid",
     "In Progress - Unpaid":  "status-progress-unpaid",
     "In Progress - Paid":    "status-progress-paid",
-    "Shipped":               "status-shipped"
+    "Shipped":               "status-shipped",
+    "Cancelled":             "status-cancelled"
   };
 
   async function init() {
