@@ -499,14 +499,23 @@
   <!-- Pause Banner -->
   <div id="pauseBanner"></div>
 
+  <!-- Custom Banner -->
+  <div id="customBanner" style="display:none; background:#fdf3e3; border:1px solid #f0c070; border-radius:10px; padding:20px 24px; margin-bottom:32px; font-size:15px; color:#5d4037; line-height:1.7;">
+    <strong id="customBannerText" style="color:#b7640a; font-size:16px;"></strong>
+  </div>
+
   <!-- Disclaimer Modal -->
   <div class="modal-overlay" id="disclaimerModal">
     <div class="modal-box">
       <h2>Please Note</h2>
       <p id="modalMessage"></p>
-      <div class="modal-checkbox">
+      <div class="modal-checkbox" id="processingAckRow">
         <input type="checkbox" id="disclaimerCheck">
         <label for="disclaimerCheck">I understand that my order may take longer than usual to arrive and I would still like to proceed.</label>
+      </div>
+      <div class="modal-checkbox" id="bannerAckRow" style="display:none;">
+        <input type="checkbox" id="bannerAckCheck">
+        <label for="bannerAckCheck" id="bannerAckLabel">I have read and understood the above notice and would like to proceed.</label>
       </div>
       <div class="modal-buttons">
         <button class="btn-modal-cancel" onclick="closeModal()">Cancel</button>
@@ -594,24 +603,44 @@
 
   async function checkPauseStatus() {
     try {
-      const response = await fetch("/.netlify/functions/admin-settings");
-      const settings = await response.json();
-      cartPaused = settings.cart_paused === "true" || settings.cart_paused === "TRUE";
+      const response = await fetch("/.netlify/functions/get-products");
+      const data = await response.json();
+      const settings = data.banner || {};
 
-      if (cartPaused) {
-        const reason = settings.pause_reason || "high_order_volume";
-        const banner = document.getElementById("pauseBanner");
-        banner.style.display = "block";
-        banner.innerHTML = "<strong>⚠️ Cart Currently Paused</strong><br><br>" + pauseMessages[reason];
-        document.getElementById("modalMessage").textContent = pauseMessages[reason];
+      cartPaused = false;
+      try {
+        const settingsRes = await fetch("/.netlify/functions/admin-settings");
+        const adminSettings = await settingsRes.json();
+        cartPaused = adminSettings.cart_paused === "true" || adminSettings.cart_paused === "TRUE";
+
+        if (cartPaused) {
+          const reason = adminSettings.pause_reason || "high_order_volume";
+          const banner = document.getElementById("pauseBanner");
+          banner.style.display = "block";
+          banner.innerHTML = "<strong>⚠️ Cart Currently Paused</strong><br><br>" + pauseMessages[reason];
+          document.getElementById("modalMessage").textContent = pauseMessages[reason];
+        }
+
+        if (adminSettings.processing_time) {
+          const notices = document.querySelectorAll(".processing-notice div");
+          notices.forEach(el => {
+            el.innerHTML = "<strong>Processing Time:</strong> All reeds are handmade to order and typically ship within " + adminSettings.processing_time + ". You'll receive a tracking number by email as soon as your order is on its way.";
+          });
+        }
+      } catch (err) {
+        console.log("Could not load admin settings:", err);
       }
 
-      if (settings.processing_time) {
-        const notices = document.querySelectorAll(".processing-notice div");
-        notices.forEach(el => {
-          el.innerHTML = "<strong>Processing Time:</strong> All reeds are handmade to order and typically ship within " + settings.processing_time + ". You'll receive a tracking number by email as soon as your order is on its way.";
-        });
+      // Custom banner
+      if (settings.active && settings.text) {
+        const customBanner = document.getElementById("customBanner");
+        customBanner.style.display = "block";
+        document.getElementById("customBannerText").textContent = "📢 " + settings.text;
       }
+
+      // Store banner ack requirement globally
+      window.bannerRequiresAck = settings.active && settings.requireAck && settings.text;
+      window.bannerText = settings.text || "";
 
     } catch (err) {
       console.log("Could not load settings:", err);
@@ -771,7 +800,7 @@
     if (cart.length === 0) { alert("Your cart is empty."); return; }
     localStorage.setItem("reedCart", JSON.stringify(cart));
     localStorage.setItem("reedShipping", getShipping());
-    if (cartPaused) {
+    if (cartPaused || window.bannerRequiresAck) {
       showDisclaimer();
     } else {
       window.location = "checkout.html";
@@ -779,22 +808,51 @@
   }
 
   function showDisclaimer() {
+    const processingAckRow = document.getElementById("processingAckRow");
+    const bannerAckRow = document.getElementById("bannerAckRow");
+    
+    // Show processing ack only if cart is paused
+    processingAckRow.style.display = cartPaused ? "flex" : "none";
+    document.getElementById("disclaimerCheck").checked = false;
+
+    // Show banner ack only if banner requires acknowledgement
+    if (window.bannerRequiresAck) {
+      bannerAckRow.style.display = "flex";
+      document.getElementById("bannerAckLabel").textContent = 
+        "I have read and understood the following notice: \"" + window.bannerText + "\"";
+      document.getElementById("bannerAckCheck").checked = false;
+    } else {
+      bannerAckRow.style.display = "none";
+    }
+
+    // Update modal message
+    if (cartPaused) {
+      document.getElementById("modalMessage").textContent = pauseMessages[document.getElementById("pauseReason") ? document.getElementById("pauseReason").value : "high_order_volume"];
+    } else {
+      document.getElementById("modalMessage").textContent = "";
+    }
+
     document.getElementById("disclaimerModal").classList.add("active");
   }
 
-  function closeModal() {
-    document.getElementById("disclaimerModal").classList.remove("active");
-    document.getElementById("disclaimerCheck").checked = false;
-  }
-
   function confirmCheckout() {
-    if (!document.getElementById("disclaimerCheck").checked) {
-      alert("Please check the box to confirm you understand before proceeding.");
+    if (cartPaused && !document.getElementById("disclaimerCheck").checked) {
+      alert("Please check the box to confirm you understand the delay before proceeding.");
+      return;
+    }
+    if (window.bannerRequiresAck && !document.getElementById("bannerAckCheck").checked) {
+      alert("Please check the box to confirm you have read the notice before proceeding.");
       return;
     }
     closeModal();
     localStorage.setItem("reedDelayAcknowledged", "true");
     window.location = "checkout.html";
+  }
+
+  function closeModal() {
+    document.getElementById("disclaimerModal").classList.remove("active");
+    document.getElementById("disclaimerCheck").checked = false;
+    document.getElementById("bannerAckCheck").checked = false;
   }
 
   // Start

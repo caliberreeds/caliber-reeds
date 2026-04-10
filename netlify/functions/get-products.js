@@ -42,7 +42,7 @@ exports.handler = async (event) => {
     // Get shipping options from Settings
     const settingsResponse = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'Settings!A2:B10'
+      range: 'Settings!A2:B19'
     });
 
     const settingsRows = settingsResponse.data.values || [];
@@ -65,7 +65,12 @@ exports.handler = async (event) => {
             label: settings.shipping_2_label || "USPS Priority Mail",
             price: parseFloat(settings.shipping_2_price) || 12
           }
-        ]
+        ],
+        banner: {
+          active:     settings.custom_banner_active === "TRUE",
+          text:       settings.custom_banner_text || "",
+          requireAck: settings.custom_banner_require_ack === "TRUE"
+        }
       })
     };
 

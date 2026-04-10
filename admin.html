@@ -397,6 +397,49 @@
       </div>
     </div>
 
+    <!-- Custom Banner -->
+    <div class="card">
+      <h2>Custom Shop Banner</h2>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">
+            Banner is
+            <span id="bannerStatusBadge" class="status-badge badge-open">Inactive</span>
+          </div>
+          <div class="toggle-sublabel">Show a custom message on the shop page</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="bannerToggle" onchange="updateBannerPreview()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="reason-row" style="margin-top:16px;">
+        <label>Banner Message</label>
+        <textarea id="bannerText" rows="3" placeholder="e.g. Due to a family emergency, orders may be delayed by 2-3 weeks. Thank you for your patience."
+          style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif; resize:vertical;" onchange="updateBannerPreview()"></textarea>
+      </div>
+
+      <div class="toggle-row" style="margin-top:16px;">
+        <div>
+          <div class="toggle-label">Require Acknowledgement</div>
+          <div class="toggle-sublabel">Customer must check a box at checkout confirming they've read the banner</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="bannerAckToggle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="preview-box" id="bannerPreviewBox" style="display:none; margin-top:16px;"></div>
+
+      <div class="save-row" style="margin-top:20px;">
+        <button class="btn btn-green btn-small" onclick="saveBannerSettings()">Save Banner</button>
+        <span class="save-msg" id="bannerMsg">✓ Saved!</span>
+      </div>
+    </div>
+
     <!-- Ship From Address -->
     <div class="card">
       <h2>Ship From Address</h2>
@@ -524,6 +567,11 @@
     document.getElementById("shipFromPhone").value  = currentSettings.ship_from_phone  || "";
 
     updatePreview();
+
+    document.getElementById("bannerToggle").checked = currentSettings.custom_banner_active === "TRUE";
+    document.getElementById("bannerText").value = currentSettings.custom_banner_text || "";
+    document.getElementById("bannerAckToggle").checked = currentSettings.custom_banner_require_ack === "TRUE";
+    updateBannerPreview();
   }
 
   function updatePreview() {
@@ -569,6 +617,51 @@
     } catch (err) {
       alert("Could not save. Please try again.");
     }
+  }
+
+  async function saveBannerSettings() {
+    const active  = document.getElementById("bannerToggle").checked;
+    const text    = document.getElementById("bannerText").value.trim();
+    const requireAck = document.getElementById("bannerAckToggle").checked;
+
+    try {
+      await fetch(ADMIN_FUNCTION_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:                adminPassword,
+          custom_banner_active:    active ? "TRUE" : "FALSE",
+          custom_banner_text:      text,
+          custom_banner_require_ack: requireAck ? "TRUE" : "FALSE"
+        })
+      });
+
+      const msg = document.getElementById("bannerMsg");
+      msg.style.display = "inline";
+      setTimeout(() => msg.style.display = "none", 2000);
+
+      updateBannerPreview();
+
+    } catch (err) {
+      alert("Could not save. Please try again.");
+    }
+  }
+
+  function updateBannerPreview() {
+    const active = document.getElementById("bannerToggle").checked;
+    const text   = document.getElementById("bannerText").value.trim();
+    const previewBox = document.getElementById("bannerPreviewBox");
+
+    if (active && text) {
+      previewBox.style.display = "block";
+      previewBox.innerHTML = `<strong>Banner Preview:</strong><br>${text}`;
+    } else {
+      previewBox.style.display = "none";
+    }
+
+    const badge = document.getElementById("bannerStatusBadge");
+    badge.textContent = active ? "Active" : "Inactive";
+    badge.className = "status-badge " + (active ? "badge-paused" : "badge-open");
   }
 
   async function saveProcessingTime() {
