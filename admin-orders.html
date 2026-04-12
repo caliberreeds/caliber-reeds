@@ -635,6 +635,7 @@
 
             ${order.status !== "Cancelled" ? `
               <button class="btn btn-gray" onclick="toggleReceiptPanel('${order.orderNumber}')" id="receiptBtn-${order.orderNumber}">📧 Send Receipt</button>
+              <button class="btn btn-gray" onclick="toggleMessagePanel('${order.orderNumber}')">✉️ Message</button>
               <button class="btn btn-red" onclick="openCancelModal('${order.orderNumber}')">✕ Cancel</button>
             ` : `<span style="font-size:13px; color:#999; font-style:italic;">Order cancelled</span>`}
             ${order.status === "Shipped" || order.status === "Cancelled" ? `
@@ -649,6 +650,16 @@
             <div style="display:flex; gap:8px;">
               <button class="btn btn-green" onclick="confirmSendReceipt('${order.orderNumber}')">Send Receipt</button>
               <button class="btn btn-gray" onclick="toggleReceiptPanel('${order.orderNumber}')">Cancel</button>
+            </div>
+          </div>` : ""}
+          ${order.status !== "Cancelled" ? `
+          <div id="messagePanel-${order.orderNumber}" style="display:none; margin:0 24px 24px; padding:14px 16px; background:#f7f4ee; border:1px solid #e8e4dc; border-radius:8px;">
+            <label style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#4a8c60; display:block; margin-bottom:6px;">Message to ${order.name.split(" ")[0]}</label>
+            <textarea id="messageBody-${order.orderNumber}" rows="5" placeholder="Type your message here..."
+              style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif; margin-bottom:10px; resize:vertical;"></textarea>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-green" onclick="sendMessage('${order.orderNumber}')">Send Message</button>
+              <button class="btn btn-gray" onclick="toggleMessagePanel('${order.orderNumber}')">Cancel</button>
             </div>
           </div>` : ""}
         </div>`;
@@ -1032,6 +1043,48 @@
       }
     } catch (err) {
       alert("⚠️ Could not archive order. Please try again.");
+    }
+  }
+
+  function toggleMessagePanel(orderNumber) {
+    const panel = document.getElementById("messagePanel-" + orderNumber);
+    panel.style.display = panel.style.display === "none" ? "block" : "none";
+    if (panel.style.display === "block") {
+      document.getElementById("messageBody-" + orderNumber).value = "";
+    }
+  }
+
+  async function sendMessage(orderNumber) {
+    const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+    if (!order) return;
+
+    const message = document.getElementById("messageBody-" + orderNumber).value.trim();
+    if (!message) {
+      alert("Please enter a message.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/.netlify/functions/send-message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password:    adminPassword,
+          orderNumber: order.orderNumber,
+          name:        order.name,
+          email:       order.email,
+          message:     message
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toggleMessagePanel(orderNumber);
+        alert("✅ Message sent to " + order.email);
+      } else {
+        alert("⚠️ Could not send message: " + (data.error || "Unknown error"));
+      }
+    } catch (err) {
+      alert("⚠️ Could not send message. Please try again.");
     }
   }
   
