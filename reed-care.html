@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How to care for your oboe reeds — soaking, storage, lifespan, and tips from reed maker Ben at Caliber Reeds.">
+  <meta name="keywords" content="oboe reed care, how to soak oboe reed, oboe reed storage, oboe reed lifespan">
+  <meta name="author" content="Caliber Reeds by Ben">
+  <title>Reed Care — Caliber Reeds by Ben</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1e3d2a;
+      --green-mid:   #2f5e3f;
+      --gold:        #c9a84c;
+      --amber:       #c49a3c;
+      --cane:        #d4b896;
+      --cork:        #8b6f4e;
+      --bg-cork:     #3d2b1f;
+      --terra:       #c4775a;
+      --terra-light: #e8c4b0;
+      --terra-bg:    #f2e0d4;
+      --terra-dark:  #8b4a30;
+      --white:       #ffffff;
+      --cream:       #f7f4ee;
+      --gray-light:  #e8e4dc;
+      --gray-mid:    #999;
+      --text:        #1a1a1a;
+      --shadow:      0 4px 20px rgba(0,0,0,0.10);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--terra-bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 48px;
+      background: var(--terra-bg);
+      border-bottom: 1px solid var(--terra-light);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--terra-dark);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--bg-cork); }
+    .nav-shop-btn {
+      background: var(--bg-cork) !important;
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 5px;
+      transition: background 0.2s !important;
+    }
+    .nav-shop-btn:hover { background: var(--cork) !important; }
+
+    /* ── Page Header ── */
+    .page-header {
+      background: var(--bg-cork);
+      padding: 72px 48px 60px;
+      text-align: center;
+      border-bottom: 3px solid var(--terra);
+    }
+    .page-header .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--terra-light);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .page-header h1 {
+      font-family: 'Caveat', cursive;
+      font-size: 80px;
+      font-weight: 700;
+      color: var(--cane);
+      line-height: 1.0;
+      margin-bottom: 20px;
+    }
+    .page-header p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-style: italic;
+      color: rgba(255,255,255,0.65);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── Content ── */
+    .care-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    /* ── Care Cards ── */
+    .care-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 36px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      border-left: 5px solid var(--terra);
+    }
+
+    .care-card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .care-number {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--terra);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Caveat', cursive;
+      font-size: 24px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .care-card h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--bg-cork);
+      line-height: 1.1;
+    }
+
+    .care-card p {
+      font-size: 15px;
+      color: #444;
+      line-height: 1.85;
+      margin-bottom: 14px;
+    }
+    .care-card p:last-child { margin-bottom: 0; }
+    .care-card strong { color: var(--terra-dark); }
+
+    /* ── Tip boxes ── */
+    .tip-box {
+      background: var(--terra-bg);
+      border: 1px solid var(--terra-light);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      font-size: 14px;
+      color: var(--terra-dark);
+      line-height: 1.7;
+    }
+    .tip-box strong {
+      color: var(--terra-dark);
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Warning boxes ── */
+    .warn-box {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      font-size: 14px;
+      color: #5d4037;
+      line-height: 1.7;
+    }
+    .warn-box strong {
+      color: #e65100;
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Quote ── */
+    .reed-quote {
+      background: var(--bg-cork);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    .reed-quote p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-style: italic;
+      color: var(--cane);
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── CTA ── */
+    .care-cta {
+      background: var(--bg-cork);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      margin-top: 48px;
+    }
+    .care-cta h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 40px;
+      color: var(--cane);
+      margin-bottom: 12px;
+    }
+    .care-cta p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+    .btn-terra {
+      display: inline-block;
+      padding: 12px 28px;
+      background: var(--terra);
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: background 0.2s, transform 0.15s;
+      margin: 0 6px;
+    }
+    .btn-terra:hover { background: var(--terra-dark); transform: translateY(-1px); }
+    .btn-outline-cane {
+      display: inline-block;
+      padding: 12px 28px;
+      background: transparent;
+      color: var(--cane);
+      border: 2px solid var(--cane);
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.2s;
+      margin: 0 6px;
+    }
+    .btn-outline-cane:hover { background: var(--cane); color: var(--bg-cork); transform: translateY(-1px); }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--bg-cork);
+      color: rgba(255,255,255,0.4);
+      padding: 32px 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    footer a {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--cane); }
+    .footer-links { display: flex; gap: 24px; }
+
+    @media (max-width: 768px) {
+      nav { padding: 4px 20px; }
+      .nav-links { gap: 14px; }
+      .nav-links li:not(:last-child) { display: none; }
+      .page-header { padding: 48px 24px 40px; }
+      .page-header h1 { font-size: 56px; }
+      .care-wrap { padding: 40px 16px 60px; }
+      .care-card { padding: 24px 20px; }
+      footer { flex-direction: column; gap: 14px; padding: 28px 20px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html"><img src="images/logo.png" alt="Caliber Reeds by Ben" style="height:140px;width:auto;display:block;"></a>
+    <ul class="nav-links">
+      <li><a href="about.html">About Ben</a></li>
+      <li><a href="behind-the-reed.html">Behind the Reed</a></li>
+      <li><a href="contact.html">Contact Ben</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="reed-care.html">Reed Care</a></li>
+      <li><a href="shop.html" class="nav-shop-btn">Shop Now</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <div class="eyebrow">Getting the Most From Your Reeds</div>
+    <h1>Reed Care</h1>
+    <p>A well-made reed deserves to be treated well. Here's everything you need to know to get the most out of yours.</p>
+  </div>
+
+  <div class="care-wrap">
+
+    <!-- Soaking -->
+    <div class="care-card">
+      <div class="care-card-header">
+        <div class="care-number">1</div>
+        <h2>Soaking Your Reed</h2>
+      </div>
+      <p>Before playing, soak your reed by placing it gently — <strong>cane end down</strong> — in a small container of water. The string can get wet, but <strong>keep the cork dry</strong>. Water causes cork to break down over time, and a waterlogged cork may not seal properly in the reed well of your oboe.</p>
+      <p>One to two minutes of soaking is plenty for most reeds. Be careful about soaking too long — if a reed absorbs too much moisture, it can swell and feel stiff or unresponsive. If that happens, set it aside and let it air out completely before trying again.</p>
+      <div class="warn-box">
+        <strong>Watch out</strong>
+        If your reeds are needing more and more soaking time to open up and respond, that's a sign they're aging out. It's not you — it's the reed telling you it's time for a replacement.
+      </div>
+    </div>
+
+    <!-- Storage -->
+    <div class="care-card">
+      <div class="care-card-header">
+        <div class="care-number">2</div>
+        <h2>Storing Your Reeds</h2>
+      </div>
+      <p>After playing, blow the reed out from the <strong>cork end</strong> to remove excess moisture, give it a gentle shake — being careful not to hit it against anything — and then put it away to dry in a protected place.</p>
+      <p>Store your reeds in a <strong>non-airtight container</strong>. Reeds need to breathe. A damp reed sealed in an airtight case can develop mold, which will ruin it. At the same time, the case should protect the reeds from being knocked around — a reed that's free to roll or bounce inside its container will almost certainly get damaged.</p>
+      <p>There are many reed cases available at a wide range of prices. The cost isn't the issue — what matters is whether the case protects your reeds while still allowing airflow.</p>
+      <div class="tip-box">
+        <strong>Tip</strong>
+        A reed that goes away damp and comes out the next day with a slight musty smell has been sealed in too tightly. Switch to a case with better ventilation.
+      </div>
+    </div>
+
+    <!-- Fit -->
+    <div class="care-card">
+      <div class="care-card-header">
+        <div class="care-number">3</div>
+        <h2>Reed Fit & Cork Grease</h2>
+      </div>
+      <p>Your reed should slide all the way into the reed well on your oboe. If it feels snug, apply a small amount of <strong>cork grease</strong> to the cork and try again. Never force a reed — you risk cracking the cork or damaging the instrument.</p>
+      <p>If a reed is slightly loose in the well, you can add a thin layer or two of cigarette paper around the cork to build up the diameter and improve the seal. If the well is too small even with cork grease, have your instrument looked at by a repair technician.</p>
+    </div>
+
+    <!-- Lifespan -->
+    <div class="care-card">
+      <div class="care-card-header">
+        <div class="care-number">4</div>
+        <h2>How Long Will a Reed Last?</h2>
+      </div>
+      <p>This depends entirely on how it's played. A reed that gets three hours of practice every day for a week is probably already on its way out. A reed that gets rotated with two or three others can last significantly longer — sharing the workload and giving each reed time to recover between sessions makes a real difference.</p>
+      <p>The other factor is simply time. Reeds are made from an organic material — cane — and it slowly breaks down no matter what you do. Eventually, even your most beloved reed is going to have to have a figurative funeral. Yes, it can be genuinely heartbreaking when you really loved that one. Every oboist has been there.</p>
+      <div class="tip-box">
+        <strong>Tip</strong>
+        Avoid biting down on the reed. This causes the blades to close and lose their spring — and once that happens, there's no getting it back.
+      </div>
+    </div>
+
+    <!-- Mindset -->
+    <div class="care-card">
+      <div class="care-card-header">
+        <div class="care-number">5</div>
+        <h2>When the Reed Is the Problem</h2>
+      </div>
+      <p>This one isn't about care — it's about mindset. If a reed is fighting you and you start having thoughts like <em>"I should quit"</em> or <em>"I'm terrible at the oboe"</em> — stop and consider that the reed might simply be the wrong reed for you right now.</p>
+      <p>We can all learn to work with a range of reeds. Some will feel better than others, and that's normal. But when a reed is <strong>really</strong> resisting you, that's not always a reflection of your playing. Sometimes you just need a new reed — and there's no shame in that. Every oboist, at every level, knows this feeling.</p>
+      <div class="warn-box">
+        <strong>Remember</strong>
+        Don't let a bad reed convince you that you're a bad player. They are not the same thing.
+      </div>
+    </div>
+
+    <!-- Quote -->
+    <div class="reed-quote">
+      <p>"Eventually, even your most favorite reed is going to have to have a figurative funeral — and yes, it can be heartbreaking when you really loved that reed."</p>
+    </div>
+
+    <!-- CTA -->
+    <div class="care-cta">
+      <h2>Ready for a fresh reed?</h2>
+      <p>Handmade with care, every one. When it's time to replace that beloved old reed, I've got you covered.</p>
+      <a href="shop.html" class="btn-terra">Shop Reeds</a>
+      <a href="faq.html" class="btn-outline-cane">Read the FAQ</a>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© Caliber Reeds by Ben · All reeds handmade to order</span>
+    <div class="footer-links">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="behind-the-reed.html">Behind the Reed</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+      <a href="reed-care.html">Reed Care</a>
+      <a href="https://www.youtube.com/@byoder5912" target="_blank">YouTube</a>
+      <a href="admin.html">🔒</a>
+    </div>
+  </footer>
+
+</body>
+</html>
