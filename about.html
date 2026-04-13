@@ -35,9 +35,8 @@
       font-family: 'Source Sans 3', sans-serif;
       background: var(--bg-sage);
       color: var(--text);
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 48px 32px 60px;
+      padding: 0;
+      margin: 0;
     }
 
     .back-link {
@@ -255,8 +254,11 @@
       align-items: center;
       justify-content: space-between;
       padding: 4px 48px;
-      background: #f5f1ea;
-      border-bottom: 1px solid #ddd8ce;
+      background: #e8d5c8;
+      border-bottom: 1px solid var(--gray-light);
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      width: 100vw;
     }
     .nav-logo {
       font-family: 'Caveat', cursive;
@@ -293,7 +295,9 @@
 </head>
 <body>
   <nav>
-    <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Caliber Reeds by Ben" style="height:140px; width:auto; display:block;"></a>
+    <a href="index.html" class="nav-logo" style="display:flex;align-items:center;gap:16px;text-decoration:none;">
+      <img src="images/logo.png" alt="Caliber Reeds by Ben" style="height:140px;width:auto;display:block;">
+    </a>
     <ul class="nav-links">
       <li><a href="about.html">About Ben</a></li>
       <li><a href="behind-the-reed.html">Behind the Reed</a></li>
@@ -304,106 +308,110 @@
     </ul>
   </nav>
 
-  <a href="index.html" class="back-link">← Back to Shop</a>
+  <div style="max-width:860px; margin:0 auto; padding:48px 32px 60px;">
 
-  <div class="header">
-    <div class="header-label">The Maker Behind the Reeds</div>
-    <h1>About Ben</h1>
-    <p>Oboe performer, reed maker, and lifelong student of the instrument</p>
-  </div>
+    <a href="index.html" class="back-link">← Back to Shop</a>
 
-  <!-- Story -->
-  <div class="card">
-    <h2>My Story</h2>
-    <p>
-      I grew up in upstate New York, surrounded by open land and a deep love of the outdoors — 
-      the kind of unhurried, country life that gives you time to really commit to something. 
-      For me, that something was the oboe. I started making my own reeds in high school around 2001, 
-      and what began as a necessity quickly became a craft I was genuinely passionate about.
-    </p>
-    <p>
-      Over two decades later, reed making is still one of my favorite parts of being a musician. 
-      I'm currently completing my Master of Music in Oboe Performance at the 
-      University of North Texas, graduating in May 2026 — a milestone that represents years 
-      of dedication to this instrument and everything it demands.
-    </p>
-    <p>
-      I know firsthand how much a reed affects every aspect of playing — your tone, your confidence, 
-      your stamina, even your enjoyment of music. That's why I take every reed seriously, 
-      whether it's going to a student just finding their footing or an advanced player preparing 
-      for a big performance.
-    </p>
-  </div>
+    <div class="header">
+      <div class="header-label">The Maker Behind the Reeds</div>
+      <h1>About Ben</h1>
+      <p>Oboe performer, reed maker, and lifelong student of the instrument</p>
+    </div>
 
-  <!-- Philosophy -->
-  <div class="card">
-    <h2>My Philosophy</h2>
-    <p>
-      A great reed shouldn't fight you. It should respond when you ask it to, stay in tune 
-      without constant adjustment, and help you produce the dark, rich tone that makes the 
-      oboe so special. When a reed does its job, you can stop thinking about the reed and 
-      start thinking about the music.
-    </p>
-    <p>
-      That's what I aim for with every reed I make — responsive, in tune, and easy to articulate, 
-      so that playing feels easier, more confident, and more enjoyable.
-    </p>
-    <div class="highlights">
-      <div class="highlight">
-        <div class="icon">🎵</div>
-        <h3>Responsive</h3>
-        <p>Reacts immediately to your air and articulation without resistance</p>
-      </div>
-      <div class="highlight">
-        <div class="icon">🎯</div>
-        <h3>In Tune</h3>
-        <p>Carefully balanced so you're not constantly fighting pitch</p>
-      </div>
-      <div class="highlight">
-        <div class="icon">🌑</div>
-        <h3>Dark Tone</h3>
-        <p>Crafted to facilitate the rich, dark sound the oboe is known for</p>
-      </div>
-      <div class="highlight">
-        <div class="icon">😊</div>
-        <h3>Confidence</h3>
-        <p>When your reed works, you can focus on enjoying the music</p>
+    <!-- Story -->
+    <div class="card">
+      <h2>My Story</h2>
+      <p>
+        I grew up in upstate New York, surrounded by open land and a deep love of the outdoors — 
+        the kind of unhurried, country life that gives you time to really commit to something. 
+        For me, that something was the oboe. I started making my own reeds in high school around 2001, 
+        and what began as a necessity quickly became a craft I was genuinely passionate about.
+      </p>
+      <p>
+        Over two decades later, reed making is still one of my favorite parts of being a musician. 
+        I'm currently completing my Master of Music in Oboe Performance at the 
+        University of North Texas, graduating in May 2026 — a milestone that represents years 
+        of dedication to this instrument and everything it demands.
+      </p>
+      <p>
+        I know firsthand how much a reed affects every aspect of playing — your tone, your confidence, 
+        your stamina, even your enjoyment of music. That's why I take every reed seriously, 
+        whether it's going to a student just finding their footing or an advanced player preparing 
+        for a big performance.
+      </p>
+    </div>
+
+    <!-- Philosophy -->
+    <div class="card">
+      <h2>My Philosophy</h2>
+      <p>
+        A great reed shouldn't fight you. It should respond when you ask it to, stay in tune 
+        without constant adjustment, and help you produce the dark, rich tone that makes the 
+        oboe so special. When a reed does its job, you can stop thinking about the reed and 
+        start thinking about the music.
+      </p>
+      <p>
+        That's what I aim for with every reed I make — responsive, in tune, and easy to articulate, 
+        so that playing feels easier, more confident, and more enjoyable.
+      </p>
+      <div class="highlights">
+        <div class="highlight">
+          <div class="icon">🎵</div>
+          <h3>Responsive</h3>
+          <p>Reacts immediately to your air and articulation without resistance</p>
+        </div>
+        <div class="highlight">
+          <div class="icon">🎯</div>
+          <h3>In Tune</h3>
+          <p>Carefully balanced so you're not constantly fighting pitch</p>
+        </div>
+        <div class="highlight">
+          <div class="icon">🌑</div>
+          <h3>Dark Tone</h3>
+          <p>Crafted to facilitate the rich, dark sound the oboe is known for</p>
+        </div>
+        <div class="highlight">
+          <div class="icon">😊</div>
+          <h3>Confidence</h3>
+          <p>When your reed works, you can focus on enjoying the music</p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- YouTube -->
-  <div class="card">
-    <h2>Hear Me Play</h2>
-    <p>
-      If you'd like to get a sense of my playing before ordering, I invite you to check out 
-      my YouTube channel. You'll find a mix of newer and older recordings there — and I've 
-      intentionally kept all of them, including the ones where I'm still finding my way or 
-      make a mistake here and there.
-    </p>
-    <p>
-      The oboe is a journey, and progress takes time. I think it's important for students 
-      especially to see that even experienced players are always growing. Nobody starts out 
-      playing perfectly — and that's completely okay.
-    </p>
-    <div class="youtube-box">
-      <div class="youtube-icon">▶️</div>
-      <div>
-        <h3>Caliber Reeds by Ben on YouTube</h3>
-        <p>Oboe performances, recordings, and a honest look at a musician's journey over the years.</p>
-        <a href="https://www.youtube.com/@byoder5912" target="_blank" class="btn-youtube">
-          ▶ Watch on YouTube
-        </a>
+    <!-- YouTube -->
+    <div class="card">
+      <h2>Hear Me Play</h2>
+      <p>
+        If you'd like to get a sense of my playing before ordering, I invite you to check out 
+        my YouTube channel. You'll find a mix of newer and older recordings there — and I've 
+        intentionally kept all of them, including the ones where I'm still finding my way or 
+        make a mistake here and there.
+      </p>
+      <p>
+        The oboe is a journey, and progress takes time. I think it's important for students 
+        especially to see that even experienced players are always growing. Nobody starts out 
+        playing perfectly — and that's completely okay.
+      </p>
+      <div class="youtube-box">
+        <div class="youtube-icon">▶️</div>
+        <div>
+          <h3>Caliber Reeds by Ben on YouTube</h3>
+          <p>Oboe performances, recordings, and a honest look at a musician's journey over the years.</p>
+          <a href="https://www.youtube.com/@byoder5912" target="_blank" class="btn-youtube">
+            ▶ Watch on YouTube
+          </a>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- CTA -->
-  <div class="cta">
-    <h2>Ready to Try a Reed?</h2>
-    <p>Handmade with care and decades of experience behind every one.<br>
-    Student or advanced — there's a reed made for where you are right now.</p>
-    <a href="shop.html" class="btn-shop">Shop Reeds</a>
+    <!-- CTA -->
+    <div class="cta">
+      <h2>Ready to Try a Reed?</h2>
+      <p>Handmade with care and decades of experience behind every one.<br>
+      Student or advanced — there's a reed made for where you are right now.</p>
+      <a href="shop.html" class="btn-shop">Shop Reeds</a>
+    </div>
+
   </div>
 
   <footer>
