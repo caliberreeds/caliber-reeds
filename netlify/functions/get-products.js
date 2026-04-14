@@ -70,7 +70,8 @@ exports.handler = async (event) => {
           active:     settings.custom_banner_active === "TRUE",
           text:       settings.custom_banner_text || "",
           requireAck: settings.custom_banner_require_ack === "TRUE"
-        }
+        },
+        processingTime: settings.processing_time || ""  // ← add this line
       })
     };
 

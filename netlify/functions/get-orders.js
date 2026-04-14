@@ -82,7 +82,7 @@ exports.handler = async (event) => {
       payMethod: row[14] || "",
       receiptUrl: row[15] || "",
       refundInfo: row[16] || "",
-      archived: false
+      archived: true
     }));
 
     // Combine, newest first

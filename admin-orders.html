@@ -302,6 +302,7 @@
       <a href="admin-orders.html" class="active">Orders</a>
       <a href="admin-prices.html">Prices</a>
       <a href="admin-insights.html">Insights</a>
+      <a href="admin-reviews.html">Reviews</a>
     </div>
 
     <div class="stats-bar">
@@ -634,8 +635,9 @@
             `}
 
             ${order.status !== "Cancelled" ? `
-              <button class="btn btn-gray" onclick="toggleReceiptPanel('${order.orderNumber}')" id="receiptBtn-${order.orderNumber}">📧 Send Receipt</button>
+              <button class="btn btn-gray" onclick="toggleReceiptPanel('${order.orderNumber}')">📧 Send Receipt</button>
               <button class="btn btn-gray" onclick="toggleMessagePanel('${order.orderNumber}')">✉️ Message</button>
+              <button class="btn btn-gray" onclick="sendReviewRequest('${order.orderNumber}')">⭐ Request Review</button>
               <button class="btn btn-red" onclick="openCancelModal('${order.orderNumber}')">✕ Cancel</button>
             ` : `<span style="font-size:13px; color:#999; font-style:italic;">Order cancelled</span>`}
             ${order.status === "Shipped" || order.status === "Cancelled" ? `
@@ -1088,6 +1090,35 @@
     }
   }
   
+  async function sendReviewRequest(orderNumber) {
+  const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+  if (!order) return;
+
+  if (!confirm(`Send a review request email to ${order.name}?`)) return;
+
+  try {
+    const res = await fetch("/.netlify/functions/send-review-request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        password: adminPassword,
+        orderNumber: order.orderNumber,
+        name: order.name,
+        email: order.email,
+        items: order.items
+      })
+    });
+    const result = await res.json();
+    if (result.success) {
+      alert(`Review request sent to ${order.name}!`);
+    } else {
+      alert("Could not send email: " + (result.error || "Unknown error"));
+    }
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+}
+
   function logout() {
     sessionStorage.removeItem("adminPassword");
     window.location.href = "admin.html";

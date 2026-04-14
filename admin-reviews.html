@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reviews - Caliber Reeds Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1e3d2a;
+      --green-mid:   #2f5e3f;
+      --green-light: #4a8c60;
+      --gold:        #c9a84c;
+      --cream:       #f7f4ee;
+      --white:       #ffffff;
+      --gray-light:  #e8e4dc;
+      --gray-mid:    #999;
+      --text:        #1a1a1a;
+      --shadow:      0 4px 20px rgba(0,0,0,0.10);
+      --red:         #c0392b;
+      --red-light:   #fadbd8;
+      --green-light2: #d4edda;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 48px 32px 60px;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    .admin-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--green-dark);
+    }
+    .admin-header p {
+      font-size: 14px;
+      color: var(--gray-mid);
+      margin-top: 4px;
+    }
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .admin-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .admin-nav a {
+      padding: 8px 20px;
+      border-radius: 20px;
+      border: 1px solid var(--gray-light);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      background: var(--white);
+      transition: all 0.2s;
+    }
+    .admin-nav a:hover { background: var(--gray-light); }
+    .admin-nav a.active {
+      background: var(--green-dark);
+      color: var(--white);
+      border-color: var(--green-dark);
+    }
+
+    .btn {
+      padding: 9px 18px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Source Sans 3', sans-serif;
+      cursor: pointer;
+      border: 1px solid var(--gray-light);
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      background: var(--white);
+      color: var(--text);
+    }
+    .btn:hover { background: var(--gray-light); }
+    .btn-green  { background: var(--green-mid); color: #fff; border-color: var(--green-mid); }
+    .btn-green:hover { background: var(--green-dark); border-color: var(--green-dark); }
+    .btn-gray   { background: var(--gray-light); color: var(--text); }
+    .btn-gray:hover { background: #d8d4cc; }
+    .btn-red    { background: var(--red-light); color: var(--red); border-color: #f5c6cb; }
+    .btn-red:hover { background: #f5c0bc; }
+    .btn-gold   { background: var(--gold); color: #fff; border-color: var(--gold); }
+    .btn-gold:hover { background: #b8943c; }
+
+    .save-status {
+      font-size: 13px;
+      color: var(--green-light);
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .save-status.show { opacity: 1; }
+
+    #authError {
+      display: none;
+      background: var(--red-light);
+      border: 1px solid #f5c6cb;
+      border-radius: 8px;
+      padding: 20px 24px;
+      text-align: center;
+      color: var(--red);
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+    }
+    .card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--green-dark);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--green-light);
+    }
+    .form-group input,
+    .form-group textarea {
+      padding: 10px 14px;
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Source Sans 3', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--green-light);
+    }
+    .form-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--green-dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .count-badge {
+      background: var(--green-light);
+      color: #fff;
+      font-size: 12px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 12px;
+    }
+
+    .review-card {
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      border-left: 4px solid var(--green-light);
+      border-radius: 10px;
+      padding: 20px 22px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .review-card.inactive {
+      opacity: 0.55;
+      border-left-color: var(--gray-mid);
+    }
+    .review-body { flex: 1; }
+    .review-quote {
+      font-style: italic;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+    .review-meta { font-size: 13px; color: var(--gray-mid); }
+    .review-meta strong { color: var(--green-dark); font-weight: 600; }
+
+    .review-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 116px;
+      align-items: flex-end;
+    }
+    .status-pill {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+    .status-pill.visible { background: var(--green-light2); color: #1e6b3a; }
+    .status-pill.hidden  { background: var(--gray-light); color: #666; }
+
+    .edit-panel {
+      display: none;
+      background: var(--cream);
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-top: 14px;
+    }
+    .edit-panel .form-row { margin-bottom: 12px; }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px;
+      color: var(--gray-mid);
+      font-style: italic;
+      font-size: 15px;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 24px 16px 48px; }
+      .form-row { grid-template-columns: 1fr; }
+      .review-card { flex-direction: column; }
+      .review-actions { flex-direction: row; flex-wrap: wrap; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-header">
+    <div>
+      <h1>Reviews</h1>
+      <p>Caliber Reeds by Ben</p>
+    </div>
+    <div class="header-actions">
+      <a href="reviews.html" target="_blank" class="btn">👁 View Public Page</a>
+      <a href="admin.html" class="btn">← Settings</a>
+      <button onclick="logout()" class="btn">Log Out</button>
+    </div>
+  </div>
+
+  <nav class="admin-nav">
+    <a href="admin.html">Settings</a>
+    <a href="admin-orders.html">Orders</a>
+    <a href="admin-prices.html">Prices</a>
+    <a href="admin-insights.html">Insights</a>
+    <a href="admin-reviews.html" class="active">Reviews</a>
+  </nav>
+
+  <div id="authError">
+    <strong>Not authorized.</strong> Please <a href="admin.html">log in</a> first.
+  </div>
+
+  <div id="mainContent" style="display:none;">
+
+    <div class="card">
+      <h2>Add New Review</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Customer Name</label>
+          <input type="text" id="newName" placeholder="e.g. Sarah M.">
+        </div>
+        <div class="form-group">
+          <label>Role / Instrument <span style="font-weight:400; text-transform:none; letter-spacing:0;">(optional)</span></label>
+          <input type="text" id="newRole" placeholder="e.g. Oboe, orchestral player">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group full">
+          <label>Review Quote</label>
+          <textarea id="newQuote" rows="3" placeholder="Paste the customer's words here — no need to add quotation marks."></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-green" onclick="addReview()">Add Review</button>
+        <span class="save-status" id="addStatus">✓ Added!</span>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">
+        All Reviews
+        <span class="count-badge" id="reviewCount">0</span>
+      </div>
+    </div>
+    <div id="reviewsList">
+      <div class="empty-state">Loading reviews...</div>
+    </div>
+
+  </div>
+
+  <script>
+    const GET_REVIEWS_URL    = "/.netlify/functions/get-reviews";
+    const UPDATE_REVIEWS_URL = "/.netlify/functions/update-reviews";
+
+    let allReviews = [];
+    let adminPassword = sessionStorage.getItem("adminPassword") || "";
+
+    function logout() {
+      sessionStorage.removeItem("adminPassword");
+      window.location.href = "admin.html";
+    }
+
+    async function init() {
+      if (!adminPassword) {
+        document.getElementById("authError").style.display = "block";
+        return;
+      }
+      document.getElementById("mainContent").style.display = "block";
+      await loadReviews();
+    }
+
+    async function loadReviews() {
+      try {
+        const res = await fetch(GET_REVIEWS_URL + "?all=true&password=" + encodeURIComponent(adminPassword));
+        if (res.status === 401) {
+          sessionStorage.removeItem("adminPassword");
+          document.getElementById("mainContent").style.display = "none";
+          document.getElementById("authError").style.display = "block";
+          return;
+        }
+        const data = await res.json();
+        allReviews = data.reviews || [];
+        renderReviews();
+      } catch (err) {
+        document.getElementById("reviewsList").innerHTML =
+          '<div class="empty-state">Could not load reviews. Please try again.</div>';
+      }
+    }
+
+    function renderReviews() {
+      const container = document.getElementById("reviewsList");
+      document.getElementById("reviewCount").textContent = allReviews.length;
+
+      if (allReviews.length === 0) {
+        container.innerHTML = '<div class="empty-state">No reviews yet — add your first one above!</div>';
+        return;
+      }
+
+      container.innerHTML = allReviews.map(r => `
+        <div class="review-card ${r.active ? '' : 'inactive'}" id="rcard-${r.index}">
+          <div class="review-body">
+            <p class="review-quote">"${r.quote}"</p>
+            <p class="review-meta"><strong>${r.name}</strong>${r.role ? ' — ' + r.role : ''}</p>
+            <div class="edit-panel" id="editPanel-${r.index}">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Name</label>
+                  <input type="text" id="editName-${r.index}" value="${r.name.replace(/"/g, '&quot;')}">
+                </div>
+                <div class="form-group">
+                  <label>Role</label>
+                  <input type="text" id="editRole-${r.index}" value="${r.role.replace(/"/g, '&quot;')}">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group full">
+                  <label>Quote</label>
+                  <textarea id="editQuote-${r.index}" rows="3">${r.quote}</textarea>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-green" onclick="saveEdit(${r.index}, ${r.active})">Save Changes</button>
+                <button class="btn btn-gray" onclick="toggleEditPanel(${r.index})">Cancel</button>
+                <span class="save-status" id="editStatus-${r.index}">✓ Saved!</span>
+              </div>
+            </div>
+          </div>
+          <div class="review-actions">
+            <span class="status-pill ${r.active ? 'visible' : 'hidden'}">${r.active ? 'Visible' : 'Hidden'}</span>
+            <button class="btn btn-gray" style="font-size:12px; padding:6px 12px;" onclick="toggleEditPanel(${r.index})">✏️ Edit</button>
+            <button class="btn ${r.active ? 'btn-gray' : 'btn-gold'}" style="font-size:12px; padding:6px 12px;" onclick="toggleActive(${r.index}, ${!r.active})">
+              ${r.active ? '🙈 Hide' : '👁 Show'}
+            </button>
+            <button class="btn btn-red" style="font-size:12px; padding:6px 12px;" onclick="deleteReview(${r.index})">🗑 Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleEditPanel(index) {
+      const panel = document.getElementById("editPanel-" + index);
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    }
+
+    async function addReview() {
+      const name  = document.getElementById("newName").value.trim();
+      const role  = document.getElementById("newRole").value.trim();
+      const quote = document.getElementById("newQuote").value.trim();
+      if (!name || !quote) {
+        alert("Please fill in at least the customer name and review quote.");
+        return;
+      }
+      try {
+        const res = await fetch(UPDATE_REVIEWS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: adminPassword, action: "add", name, role, quote })
+        });
+        const result = await res.json();
+        if (result.success) {
+          document.getElementById("newName").value = "";
+          document.getElementById("newRole").value = "";
+          document.getElementById("newQuote").value = "";
+          const status = document.getElementById("addStatus");
+          status.classList.add("show");
+          setTimeout(() => status.classList.remove("show"), 2500);
+          await loadReviews();
+        } else {
+          alert("Error: " + (result.error || "Could not add review."));
+        }
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    async function saveEdit(index, currentActive) {
+      const name  = document.getElementById("editName-"  + index).value.trim();
+      const role  = document.getElementById("editRole-"  + index).value.trim();
+      const quote = document.getElementById("editQuote-" + index).value.trim();
+      if (!name || !quote) {
+        alert("Name and quote are required.");
+        return;
+      }
+      try {
+        const res = await fetch(UPDATE_REVIEWS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: adminPassword, action: "update", index, name, role, quote, active: currentActive })
+        });
+        const result = await res.json();
+        if (result.success) {
+          const status = document.getElementById("editStatus-" + index);
+          status.classList.add("show");
+          setTimeout(() => status.classList.remove("show"), 2500);
+          await loadReviews();
+        } else {
+          alert("Error: " + (result.error || "Could not save."));
+        }
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    async function toggleActive(index, newActive) {
+      try {
+        const res = await fetch(UPDATE_REVIEWS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: adminPassword, action: "toggle", index, active: newActive })
+        });
+        const result = await res.json();
+        if (result.success) {
+          await loadReviews();
+        } else {
+          alert("Error: " + (result.error || "Could not update."));
+        }
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    async function deleteReview(index) {
+      if (!confirm("Delete this review? This cannot be undone.")) return;
+      try {
+        const res = await fetch(UPDATE_REVIEWS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: adminPassword, action: "delete", index })
+        });
+        const result = await res.json();
+        if (result.success) {
+          await loadReviews();
+        } else {
+          alert("Error: " + (result.error || "Could not delete."));
+        }
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    init();
+  </script>
+
+</body>
+</html>

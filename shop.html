@@ -553,6 +553,58 @@
       transition: background 0.2s;
     ">About Ben →</a>
   </div>
+
+  <!-- Order Timeline -->
+  <div id="timelineSection" style="margin: 0 0 40px; text-align:center;">
+    <svg width="100%" viewBox="0 0 680 180" role="img" xmlns="http://www.w3.org/2000/svg">
+      <title>Order timeline</title>
+      <desc>Five hand-sketched steps from order placed to delivered</desc>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+        .sk-label { font-family:'Caveat',cursive; font-size:15px; fill:#3d2b1f; }
+        .sk-sub   { font-family:'Caveat',cursive; font-size:12px; fill:#7a6a5a; }
+        .sk-num   { font-family:'Caveat',cursive; font-size:13px; fill:#c9a84c; font-weight:700; }
+      </style>
+      <defs>
+        <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.2" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+      <!-- Wobbly connecting line -->
+      <path d="M72 82 C105 78,118 86,138 82 C158 78,172 84,210 82 C248 80,258 86,278 82 C298 78,312 84,350 82 C388 80,398 86,418 82 C438 78,452 84,490 82 C528 80,538 86,558 82 C578 78,596 84,610 82"
+            fill="none" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round" filter="url(#rough)" opacity="0.7"/>
+      <!-- Step 1 -->
+      <circle cx="72" cy="82" r="18" fill="none" stroke="#3d2b1f" stroke-width="1.6" filter="url(#rough)" opacity="0.85"/>
+      <text class="sk-num" x="72" y="87" text-anchor="middle">1</text>
+      <text class="sk-label" x="72" y="116" text-anchor="middle">Order</text>
+      <text class="sk-label" x="72" y="132" text-anchor="middle">Placed</text>
+      <!-- Step 2 -->
+      <circle cx="210" cy="82" r="18" fill="none" stroke="#3d2b1f" stroke-width="1.6" filter="url(#rough)" opacity="0.85"/>
+      <text class="sk-num" x="210" y="87" text-anchor="middle">2</text>
+      <text class="sk-label" x="210" y="116" text-anchor="middle">Reeds</text>
+      <text class="sk-label" x="210" y="132" text-anchor="middle">Handcrafted</text>
+      <!-- Step 3 -->
+      <circle cx="350" cy="82" r="18" fill="none" stroke="#3d2b1f" stroke-width="1.6" filter="url(#rough)" opacity="0.85"/>
+      <text class="sk-num" x="350" y="87" text-anchor="middle">3</text>
+      <text class="sk-label" x="350" y="116" text-anchor="middle">Quality</text>
+      <text class="sk-label" x="350" y="132" text-anchor="middle">Checked</text>
+      <!-- Step 4 -->
+      <circle cx="490" cy="82" r="18" fill="none" stroke="#3d2b1f" stroke-width="1.6" filter="url(#rough)" opacity="0.85"/>
+      <text class="sk-num" x="490" y="87" text-anchor="middle">4</text>
+      <text class="sk-label" x="490" y="116" text-anchor="middle">Packed</text>
+      <text class="sk-label" x="490" y="132" text-anchor="middle">&amp; Shipped</text>
+      <!-- Step 5 (gold fill) -->
+      <circle cx="610" cy="82" r="18" fill="#c9a84c" stroke="#3d2b1f" stroke-width="1.6" filter="url(#rough)" opacity="0.92"/>
+      <text class="sk-num" x="610" y="87" text-anchor="middle" style="fill:#3d2b1f;">5</text>
+      <text class="sk-label" x="610" y="116" text-anchor="middle">In Your</text>
+      <text class="sk-label" x="610" y="132" text-anchor="middle">Hands ✓</text>
+      <!-- Caption -->
+      <text class="sk-sub" x="340" y="30" text-anchor="middle" style="font-size:13px; letter-spacing:0.05em;">— every reed, made just for you —</text>
+    </svg>
+    <!-- Processing time line, populated by JS -->
+    <p id="processingTimeNote" style="display:none; font-family:'Source Sans 3',sans-serif; font-size:14px; color:#7a6a5a; font-style:italic; margin-top:4px;"></p>
+  </div>
   
   <div class="products">
     <h2 class="section-title">Shop</h2>
@@ -665,6 +717,13 @@
 
       // Save prices to localStorage for checkout and success pages
       localStorage.setItem("reedPrices", JSON.stringify(prices));
+
+      // Show processing time under timeline
+      if (data.processingTime) {
+        const note = document.getElementById("processingTimeNote");
+        note.textContent = "Current processing time: " + data.processingTime;
+        note.style.display = "block";
+      }
 
       // Build shipping options
       const shipping = data.shipping || [];

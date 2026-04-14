@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order Confirmed - Caliber Reeds</title>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap"
+    rel="stylesheet">
   <style>
     :root {
-      --green-dark:  #1e3d2a;
-      --green-mid:   #2f5e3f;
+      --green-dark: #1e3d2a;
+      --green-mid: #2f5e3f;
       --green-light: #4a8c60;
-      --gold:        #c9a84c;
-      --cream:       #f7f4ee;
-      --white:       #ffffff;
-      --gray-light:  #e8e4dc;
-      --gray-mid:    #999;
-      --text:        #1a1a1a;
-      --shadow:      0 4px 20px rgba(0,0,0,0.10);
+      --gold: #c9a84c;
+      --cream: #f7f4ee;
+      --white: #ffffff;
+      --gray-light: #e8e4dc;
+      --gray-mid: #999;
+      --text: #1a1a1a;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: 'Source Sans 3', sans-serif;
@@ -102,9 +111,22 @@
       border-bottom: 1px solid var(--gray-light);
       text-align: left;
     }
-    .detail-row:last-of-type { border-bottom: none; }
-    .detail-label { color: var(--gray-mid); font-weight: 600; }
-    .detail-value { color: var(--green-dark); font-weight: 600; text-align: right; max-width: 60%; }
+
+    .detail-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      color: var(--gray-mid);
+      font-weight: 600;
+    }
+
+    .detail-value {
+      color: var(--green-dark);
+      font-weight: 600;
+      text-align: right;
+      max-width: 60%;
+    }
 
     .btn-back {
       display: inline-block;
@@ -118,7 +140,10 @@
       font-size: 15px;
       transition: background 0.2s;
     }
-    .btn-back:hover { background: var(--green-dark); }
+
+    .btn-back:hover {
+      background: var(--green-dark);
+    }
 
     .loading {
       color: var(--gray-mid);
@@ -127,10 +152,19 @@
     }
 
     @media (max-width: 580px) {
-      body  { padding: 32px 18px 48px; }
-      h1    { font-size: 28px; }
-      .card { padding: 32px 20px; }
+      body {
+        padding: 32px 18px 48px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .card {
+        padding: 32px 20px;
+      }
     }
+
     nav {
       position: sticky;
       top: 0;
@@ -142,6 +176,7 @@
       background: #f5f1ea;
       border-bottom: 1px solid #ddd8ce;
     }
+
     .nav-logo {
       font-family: 'Caveat', cursive;
       font-size: 26px;
@@ -149,12 +184,14 @@
       color: #1e3d2a;
       text-decoration: none;
     }
+
     .nav-links {
       display: flex;
       align-items: center;
       gap: 36px;
       list-style: none;
     }
+
     .nav-links a {
       font-size: 13px;
       font-weight: 600;
@@ -164,7 +201,11 @@
       text-decoration: none;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: #2f5e3f; }
+
+    .nav-links a:hover {
+      color: #2f5e3f;
+    }
+
     .nav-shop-btn {
       background: #8b6f4e !important;
       color: white !important;
@@ -172,12 +213,17 @@
       border-radius: 5px;
       white-space: nowrap;
     }
-    .nav-shop-btn:hover { background: #3d2b1f !important; }
+
+    .nav-shop-btn:hover {
+      background: #3d2b1f !important;
+    }
   </style>
 </head>
+
 <body>
   <nav>
-    <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Caliber Reeds by Ben" style="height:140px; width:auto; display:block;"></a>
+    <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Caliber Reeds by Ben"
+        style="height:140px; width:auto; display:block;"></a>
     <ul class="nav-links">
       <li><a href="about.html">About Ben</a></li>
       <li><a href="behind-the-reed.html">Behind the Reed</a></li>
@@ -186,7 +232,7 @@
       <li><a href="shop.html" class="nav-shop-btn">Shop Now</a></li>
     </ul>
   </nav>
-  
+
   <div class="card" id="loadingCard">
     <div class="loading">Processing your order...</div>
   </div>
@@ -195,7 +241,7 @@
     <div class="check">✅</div>
     <h1>Order Confirmed!</h1>
     <p class="subtitle">Thank you, <strong id="confirmName"></strong>!<br>
-    A confirmation has been sent to <strong id="confirmEmail"></strong>.</p>
+      A confirmation has been sent to <strong id="confirmEmail"></strong>.</p>
 
     <div class="venmo-box" id="venmoBox">
       💙 Please send payment to <strong>@CaliberReeds</strong> on Venmo<br>
@@ -218,127 +264,142 @@
     <a href="shop.html" class="btn-back">← Back to Shop</a>
   </div>
 
-<script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzerDX-cX31WB9oLJ7430QAc-6TRLhjWAIyIUBI39APdaV0dresQSl478M5bhocJJhL/exec";
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzerDX-cX31WB9oLJ7430QAc-6TRLhjWAIyIUBI39APdaV0dresQSl478M5bhocJJhL/exec";
 
-  const prices = JSON.parse(localStorage.getItem("reedPrices") || "{}");
+    const prices = JSON.parse(localStorage.getItem("reedPrices") || "{}");
 
-  async function init() {
-    const params    = new URLSearchParams(window.location.search);
-    const sessionId = params.get("session_id");
-    const method    = params.get("method");
+    async function init() {
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get("session_id");
+      const method = params.get("method");
 
-    const customerData = JSON.parse(localStorage.getItem("reedCustomer") || "{}");
-    const cart = JSON.parse(localStorage.getItem("reedCart") || "[]");
-    const savedCounts = JSON.parse(localStorage.getItem("reedCounts") || "{}");
-    const shipping = localStorage.getItem("reedShipping") || "5.50";
+      const customerData = JSON.parse(localStorage.getItem("reedCustomer") || "{}");
+      const cart = JSON.parse(localStorage.getItem("reedCart") || "[]");
+      const savedCounts = JSON.parse(localStorage.getItem("reedCounts") || "{}");
+      const shipping = localStorage.getItem("reedShipping") || "5.50";
 
-    // Build counts and subtotal
-    const counts = Object.keys(savedCounts).length > 0 ? savedCounts : {};
-    let subtotal = 0;
-    for (let item in counts) {
-      subtotal += prices[item] * counts[item];
-    }
-
-    const savedTotal = localStorage.getItem("reedTotal");
-    const total = savedTotal ? parseFloat(savedTotal) : subtotal + parseFloat(shipping);
-
-    // If coming from Stripe, submit order to sheets now
-    if (sessionId && !localStorage.getItem("orderSubmitted_" + sessionId)) {
-      localStorage.setItem("orderSubmitted_" + sessionId, "true");
-      let orderText = "";
+      // Build counts and subtotal
+      const counts = Object.keys(savedCounts).length > 0 ? savedCounts : {};
+      let subtotal = 0;
       for (let item in counts) {
-        orderText += `${item} x${counts[item]}, `;
+        subtotal += prices[item] * counts[item];
       }
-      orderText = orderText.replace(/, $/, "");
 
-      // Fetch Payment Intent ID securely from Netlify function
-      let paymentIntentId = "";
-      try {
-        const sessionRes = await fetch("/.netlify/functions/get-session", {
-          method:  "POST",
+      const savedTotal = localStorage.getItem("reedTotal");
+      const total = savedTotal ? parseFloat(savedTotal) : subtotal + parseFloat(shipping);
+
+      // If coming from Stripe, submit order to sheets now
+      if (sessionId && !localStorage.getItem("orderSubmitted_" + sessionId)) {
+        localStorage.setItem("orderSubmitted_" + sessionId, "true");
+        let orderText = "";
+        for (let item in counts) {
+          orderText += `${item} x${counts[item]}, `;
+        }
+        orderText = orderText.replace(/, $/, "");
+
+        // Fetch Payment Intent ID securely from Netlify function
+        let paymentIntentId = "";
+        try {
+          const sessionRes = await fetch("/.netlify/functions/get-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sessionId })
+          });
+          const sessionData = await sessionRes.json();
+          paymentIntentId = sessionData.paymentIntentId || "";
+        } catch (err) {
+          console.warn("Could not retrieve payment intent ID:", err);
+        }
+
+        const orderRes = await fetch(SCRIPT_URL, {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
-          body:    JSON.stringify({ sessionId })
+          body: JSON.stringify({
+            items: orderText,
+            shipping: shipping,
+            total: total,
+            name: customerData.name || "",
+            email: customerData.email || "",
+            address: customerData.address || "",
+            notes: customerData.notes || "",
+            payMethod: "card",
+            paymentIntentId: paymentIntentId
+          })
         });
-        const sessionData = await sessionRes.json();
-        paymentIntentId = sessionData.paymentIntentId || "";
-      } catch (err) {
-        console.warn("Could not retrieve payment intent ID:", err);
+
+        let confirmedOrderNumber = "";
+        try {
+          const orderData = await orderRes.json();
+          confirmedOrderNumber = orderData.orderNumber || "";
+        } catch (err) {
+          console.warn("Could not read order number from response:", err);
+        }
+        if (confirmedOrderNumber) {
+          document.title = "Order #" + confirmedOrderNumber + " Confirmed — Caliber Reeds";
+        }
       }
 
-      await fetch(SCRIPT_URL, {
-        method:  "POST",
-        mode:    "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items:           orderText,
-          shipping:        shipping,
-          total:           total,
-          name:            customerData.name    || "",
-          email:           customerData.email   || "",
-          address:         customerData.address || "",
-          notes:           customerData.notes   || "",
-          payMethod:       "card",
-          paymentIntentId: paymentIntentId
-        })
-      });
-    }
+      // Clear cart
+      localStorage.removeItem("reedCart");
+      localStorage.removeItem("reedCustomer");
+      localStorage.removeItem("reedPayMethod");
+      localStorage.removeItem("reedCounts");
+      localStorage.removeItem("reedOrderText");
 
-    // Clear cart
-    localStorage.removeItem("reedCart");
-    localStorage.removeItem("reedCustomer");
-    localStorage.removeItem("reedPayMethod");
-    localStorage.removeItem("reedCounts");
-    localStorage.removeItem("reedOrderText");
+      // Show confirmation
+      document.getElementById("loadingCard").style.display = "none";
+      document.getElementById("confirmCard").style.display = "block";
 
-    // Show confirmation
-    document.getElementById("loadingCard").style.display = "none";
-    document.getElementById("confirmCard").style.display = "block";
+      if (confirmedOrderNumber) {
+        document.title = "Order #" + confirmedOrderNumber + " Confirmed — Caliber Reeds";
+      }
 
-    document.getElementById("confirmName").textContent  = customerData.name  || "there";
-    document.getElementById("confirmEmail").textContent = customerData.email || "";
+      document.getElementById("confirmName").textContent = customerData.name || "there";
+      document.getElementById("confirmEmail").textContent = customerData.email || "";
 
-    // Show payment specific message
-    if (sessionId) {
-      // card payment — no extra box needed
-    } else if (method === "venmo") {
-      const venmoBox = document.getElementById("venmoBox");
-      venmoBox.style.display = "block";
-      document.getElementById("venmoAmount").textContent = "$" + parseFloat(total).toFixed(2);
-    } else if (method === "zelle") {
-      const zelleBox = document.getElementById("zelleBox");
-      zelleBox.style.display = "block";
-      document.getElementById("zelleAmount").textContent = "$" + parseFloat(total).toFixed(2);
-    }
+      // Show payment specific message
+      if (sessionId) {
+        // card payment — no extra box needed
+      } else if (method === "venmo") {
+        const venmoBox = document.getElementById("venmoBox");
+        venmoBox.style.display = "block";
+        document.getElementById("venmoAmount").textContent = "$" + parseFloat(total).toFixed(2);
+      } else if (method === "zelle") {
+        const zelleBox = document.getElementById("zelleBox");
+        zelleBox.style.display = "block";
+        document.getElementById("zelleAmount").textContent = "$" + parseFloat(total).toFixed(2);
+      }
 
-    // Render order details
-    const detailsDiv = document.getElementById("orderDetails");
+      // Render order details
+      const detailsDiv = document.getElementById("orderDetails");
 
-    for (let item in counts) {
-      const row = document.createElement("div");
-      row.className = "detail-row";
-      row.innerHTML = `
+      for (let item in counts) {
+        const row = document.createElement("div");
+        row.className = "detail-row";
+        row.innerHTML = `
         <span class="detail-label">${item} x${counts[item]}</span>
         <span class="detail-value">$${prices[item] * counts[item]}</span>`;
-      detailsDiv.appendChild(row);
-    }
+        detailsDiv.appendChild(row);
+      }
 
-    const shippingRow = document.createElement("div");
-    shippingRow.className = "detail-row";
-    shippingRow.innerHTML = `
+      const shippingRow = document.createElement("div");
+      shippingRow.className = "detail-row";
+      shippingRow.innerHTML = `
       <span class="detail-label">Shipping</span>
       <span class="detail-value">$${parseFloat(shipping).toFixed(2)}</span>`;
-    detailsDiv.appendChild(shippingRow);
+      detailsDiv.appendChild(shippingRow);
 
-    const totalRow = document.createElement("div");
-    totalRow.className = "detail-row";
-    totalRow.innerHTML = `
+      const totalRow = document.createElement("div");
+      totalRow.className = "detail-row";
+      totalRow.innerHTML = `
       <span class="detail-label" style="color:var(--green-dark);font-size:16px;">Total</span>
       <span class="detail-value" style="color:var(--green-dark);font-size:16px;">$${parseFloat(total).toFixed(2)}</span>`;
-    detailsDiv.appendChild(totalRow);
-  }
+      detailsDiv.appendChild(totalRow);
+    }
 
-  init();
-</script>
+    init();
+  </script>
 </body>
+
 </html>
