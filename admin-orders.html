@@ -635,7 +635,7 @@
             `}
 
             ${order.status !== "Cancelled" ? `
-              <button class="btn btn-gray" onclick="toggleReceiptPanel('${order.orderNumber}')">📧 Send Receipt</button>
+              <button class="btn btn-gray" id="receiptBtn-${order.orderNumber}" onclick="toggleReceiptPanel('${order.orderNumber}')">📧 Send Receipt</button>
               <button class="btn btn-gray" onclick="toggleMessagePanel('${order.orderNumber}')">✉️ Message</button>
               <button class="btn btn-gray" onclick="sendReviewRequest('${order.orderNumber}')">⭐ Request Review</button>
               <button class="btn btn-red" onclick="openCancelModal('${order.orderNumber}')">✕ Cancel</button>

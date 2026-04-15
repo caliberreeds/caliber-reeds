@@ -281,7 +281,7 @@
   <div class="processing-notice">
       <span class="notice-icon">🕐</span>
       <div>
-        <strong>Processing Time:</strong> All reeds are handmade to order and typically ship within 1–2 weeks.
+        <strong>Processing Time:</strong> All reeds are handmade to order and typically ship within <span id="processingTimeSpan">1–2 weeks</span>.
         You'll receive a tracking number by email as soon as your order is on its way.
       </div>
     </div>
@@ -353,6 +353,15 @@
     subtotal += prices[item];
   });
 
+  fetch("/.netlify/functions/get-products")
+    .then(r => r.json())
+    .then(data => {
+      if (data.processingTime) {
+        document.getElementById("processingTimeSpan").textContent = data.processingTime;
+      }
+    })
+    .catch(() => {});
+    
   const summaryLines = document.getElementById("summaryLines");
   for (let item in counts) {
     const qty       = counts[item];
@@ -428,7 +437,7 @@
     const payload = {
       items:     buildOrderText(),
       shipping:  shipping,
-      total:     subtotal +parseFloat(shipping),
+      total:     subtotal + parseFloat(shipping),
       name:      customerData.name,
       email:     customerData.email,
       address:   customerData.address,
@@ -440,13 +449,14 @@
       payMethod: payMethod,
       delayAcknowledged: localStorage.getItem("reedDelayAcknowledged") === "true" ? "true" : "false"
     };
-    await fetch(SCRIPT_URL, {
+    const orderRes = await fetch(SCRIPT_URL, {
       method:  "POST",
-      mode:    "no-cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/plain" },
       body:    JSON.stringify(payload)
     });
-    localStorage.setItem("reedTotal", subtotal +parseFloat(shipping));
+    const orderData = await orderRes.json();
+    localStorage.setItem("reedOrderNumber", orderData.orderNumber || "");
+    localStorage.setItem("reedTotal", subtotal + parseFloat(shipping));
     localStorage.setItem("reedOrderText", buildOrderText());
     localStorage.setItem("reedCounts", JSON.stringify(counts));
     localStorage.removeItem("reedCart");

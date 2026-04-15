@@ -236,9 +236,6 @@
     <h1>Order Confirmed!</h1>
     <p class="subtitle">Thank you, <strong id="confirmName"></strong>!<br>
       A confirmation has been sent to <strong id="confirmEmail"></strong>.</p>
-    <p class="subtitle" id="orderNumberDisplay" style="display:none; margin-top:8px;">
-      Your order number is <strong id="confirmedOrderNum"></strong> — 
-      you'll also find it in your confirmation email.
     </p>
 
     <div class="venmo-box" id="venmoBox">
@@ -340,43 +337,12 @@
 
       // If Venmo or Zelle, submit order to Apps Script now
       console.log("reached venmo/zelle check, method:", method, "email:", customerData.email);
-      if ((method === "venmo" || method === "zelle") && !localStorage.getItem("orderSubmitted_venmo_" + customerData.email)) {
-        localStorage.setItem("orderSubmitted_venmo_" + customerData.email, "true");
-        let orderText = "";
-        for (let item in counts) {
-         orderText += `${item} x${counts[item]}, `;
-        }
-        orderText = orderText.replace(/, $/, "");
-
-        try {
-          console.log("Attempting Venmo/Zelle fetch to:", SCRIPT_URL);
-          const orderRes = await fetch(SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              items: orderText,
-              shipping: shipping,
-              total: total,
-              name: customerData.name || "",
-              email: customerData.email || "",
-              address: customerData.address || "",
-              notes: customerData.notes || "",
-              payMethod: method
-            })
-          });
-          const orderData = await orderRes.json();
-          console.log("Apps Script response:", JSON.stringify(orderData));
-          confirmedOrderNumber = orderData.orderNumber || "";
-          if (confirmedOrderNumber) {
-            document.title = "Order #" + confirmedOrderNumber + " Confirmed — Caliber Reeds";
-            document.getElementById("confirmedOrderNum").textContent = "#" + confirmedOrderNumber;
-            document.getElementById("orderNumberDisplay").style.display = "block";
-            document.getElementById("venmoOrderNum").textContent = "#" + confirmedOrderNumber;
-            document.getElementById("zelleOrderNum").textContent = "#" + confirmedOrderNumber;
-          }
-        } catch (err) {
-          console.warn("Could not submit Venmo/Zelle order:", err);
-          console.log("Error details:", JSON.stringify(err.message));
+      if (method === "venmo" || method === "zelle") {
+        confirmedOrderNumber = localStorage.getItem("reedOrderNumber") || "";
+        if (confirmedOrderNumber) {
+          document.title = "Order #" + confirmedOrderNumber + " Confirmed — Caliber Reeds";
+          document.getElementById("venmoOrderNum").textContent = "#" + confirmedOrderNumber;
+          document.getElementById("zelleOrderNum").textContent = "#" + confirmedOrderNumber;
         }
       }
 
@@ -386,6 +352,7 @@
       localStorage.removeItem("reedPayMethod");
       localStorage.removeItem("reedCounts");
       localStorage.removeItem("reedOrderText");
+      localStorage.removeItem("reedOrderNumber");
 
       // Show confirmation
       document.getElementById("loadingCard").style.display = "none";
