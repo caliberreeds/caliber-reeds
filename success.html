@@ -175,8 +175,10 @@
       padding: 4px 48px;
       background: #f5f1ea;
       border-bottom: 1px solid #ddd8ce;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      width: 100vw;
     }
-
     .nav-logo {
       font-family: 'Caveat', cursive;
       font-size: 26px;
@@ -184,14 +186,12 @@
       color: #1e3d2a;
       text-decoration: none;
     }
-
     .nav-links {
       display: flex;
       align-items: center;
       gap: 36px;
       list-style: none;
     }
-
     .nav-links a {
       font-size: 13px;
       font-weight: 600;
@@ -201,11 +201,7 @@
       text-decoration: none;
       transition: color 0.2s;
     }
-
-    .nav-links a:hover {
-      color: #2f5e3f;
-    }
-
+    .nav-links a:hover { color: #d4b896; }
     .nav-shop-btn {
       background: #8b6f4e !important;
       color: white !important;
@@ -213,10 +209,7 @@
       border-radius: 5px;
       white-space: nowrap;
     }
-
-    .nav-shop-btn:hover {
-      background: #3d2b1f !important;
-    }
+    .nav-shop-btn:hover { background: #3d2b1f !important; }
   </style>
 </head>
 
@@ -229,6 +222,7 @@
       <li><a href="behind-the-reed.html">Behind the Reed</a></li>
       <li><a href="faq.html">FAQ</a></li>
       <li><a href="reed-care.html">Reed Care</a></li>
+      <!-- <li><a href="reviews.html">Reviews</a></li> -->
       <li><a href="shop.html" class="nav-shop-btn">Shop Now</a></li>
     </ul>
   </nav>
@@ -242,19 +236,23 @@
     <h1>Order Confirmed!</h1>
     <p class="subtitle">Thank you, <strong id="confirmName"></strong>!<br>
       A confirmation has been sent to <strong id="confirmEmail"></strong>.</p>
+    <p class="subtitle" id="orderNumberDisplay" style="display:none; margin-top:8px;">
+      Your order number is <strong id="confirmedOrderNum"></strong> — 
+      you'll also find it in your confirmation email.
+    </p>
 
     <div class="venmo-box" id="venmoBox">
       💙 Please send payment to <strong>@CaliberReeds</strong> on Venmo<br>
       Amount: <strong id="venmoAmount"></strong><br>
-      Please include your <strong>order number</strong> in the payment note —
-      you'll find it in your confirmation email.
+      Your order number is <strong id="venmoOrderNum"></strong><br>
+      Please include your <strong>order number</strong> in the payment note (you'll also find it in your confirmation email)
     </div>
 
     <div class="later-box" id="zelleBox">
       💚 Please send payment via Zelle to <strong>caliberreeds@gmail.com</strong><br>
       Amount: <strong id="zelleAmount"></strong><br>
-      Please include your <strong>order number</strong> in the payment note —
-      you'll find it in your confirmation email.
+      Your order number is <strong id="zelleOrderNum"></strong><br>
+      Please include your <strong>order number</strong> in the payment note (you'll also find it in your confirmation email)
     </div>
 
     <hr class="divider">
@@ -273,6 +271,7 @@
       const params = new URLSearchParams(window.location.search);
       const sessionId = params.get("session_id");
       const method = params.get("method");
+      console.log("init started, method:", method, "sessionId:", sessionId);
 
       const customerData = JSON.parse(localStorage.getItem("reedCustomer") || "{}");
       const cart = JSON.parse(localStorage.getItem("reedCart") || "[]");
@@ -288,6 +287,7 @@
 
       const savedTotal = localStorage.getItem("reedTotal");
       const total = savedTotal ? parseFloat(savedTotal) : subtotal + parseFloat(shipping);
+      let confirmedOrderNumber = "";
 
       // If coming from Stripe, submit order to sheets now
       if (sessionId && !localStorage.getItem("orderSubmitted_" + sessionId)) {
@@ -312,31 +312,71 @@
           console.warn("Could not retrieve payment intent ID:", err);
         }
 
-        const orderRes = await fetch(SCRIPT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            items: orderText,
-            shipping: shipping,
-            total: total,
-            name: customerData.name || "",
-            email: customerData.email || "",
-            address: customerData.address || "",
-            notes: customerData.notes || "",
-            payMethod: "card",
-            paymentIntentId: paymentIntentId
-          })
-        });
-
-        let confirmedOrderNumber = "";
         try {
-          const orderData = await orderRes.json();
-          confirmedOrderNumber = orderData.orderNumber || "";
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 10000);
+          const orderRes = await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            signal: controller.signal,
+            body: JSON.stringify({
+              items: orderText,
+              shipping: shipping,
+              total: total,
+              name: customerData.name || "",
+              email: customerData.email || "",
+              address: customerData.address || "",
+              notes: customerData.notes || "",
+              payMethod: "card",
+              paymentIntentId: paymentIntentId
+            })
+          });
+          clearTimeout(timeout);
         } catch (err) {
-          console.warn("Could not read order number from response:", err);
+          console.warn("Apps Script submission error:", err);
         }
-        if (confirmedOrderNumber) {
-          document.title = "Order #" + confirmedOrderNumber + " Confirmed — Caliber Reeds";
+      }
+
+      // If Venmo or Zelle, submit order to Apps Script now
+      console.log("reached venmo/zelle check, method:", method, "email:", customerData.email);
+      if ((method === "venmo" || method === "zelle") && !localStorage.getItem("orderSubmitted_venmo_" + customerData.email)) {
+        localStorage.setItem("orderSubmitted_venmo_" + customerData.email, "true");
+        let orderText = "";
+        for (let item in counts) {
+         orderText += `${item} x${counts[item]}, `;
+        }
+        orderText = orderText.replace(/, $/, "");
+
+        try {
+          console.log("Attempting Venmo/Zelle fetch to:", SCRIPT_URL);
+          const orderRes = await fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              items: orderText,
+              shipping: shipping,
+              total: total,
+              name: customerData.name || "",
+              email: customerData.email || "",
+              address: customerData.address || "",
+              notes: customerData.notes || "",
+              payMethod: method
+            })
+          });
+          const orderData = await orderRes.json();
+          console.log("Apps Script response:", JSON.stringify(orderData));
+          confirmedOrderNumber = orderData.orderNumber || "";
+          if (confirmedOrderNumber) {
+            document.title = "Order #" + confirmedOrderNumber + " Confirmed — Caliber Reeds";
+            document.getElementById("confirmedOrderNum").textContent = "#" + confirmedOrderNumber;
+            document.getElementById("orderNumberDisplay").style.display = "block";
+            document.getElementById("venmoOrderNum").textContent = "#" + confirmedOrderNumber;
+            document.getElementById("zelleOrderNum").textContent = "#" + confirmedOrderNumber;
+          }
+        } catch (err) {
+          console.warn("Could not submit Venmo/Zelle order:", err);
+          console.log("Error details:", JSON.stringify(err.message));
         }
       }
 

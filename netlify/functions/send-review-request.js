@@ -35,8 +35,8 @@ exports.handler = async (event) => {
       text:
         `Hi ${firstName},\n\n` +
         `I hope you've had a chance to play on your reeds from order #${orderNumber} ` +
-        `(${items}) and that they're feeling great!\n\n` +
-        `I'd love to hear how they're working out for you. If you have a moment, ` +
+        `(${items}) and that they're playing great!\n\n` +
+        `I'd love to hear how they're working out for you. If you have a moment and if you would agree to possibly have your review featured on the site, ` +
         `would you mind sending me a sentence or two about your experience? ` +
         `Your words mean a lot and help other musicians find the right reed.\n\n` +
         `Just reply directly to this email — it only takes a minute!\n\n` +

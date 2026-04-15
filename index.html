@@ -97,7 +97,16 @@
       font-weight: 700;
       color: var(--green-dark);
       line-height: 0.92;
+      white-space: nowrap;
       animation: fadeUp 0.6s ease both;
+    }
+    .page-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-style: italic;
+      color: var(--text-light);
+      margin-top: 12px;
+      animation: fadeUp 0.6s ease 0.1s both;
     }
     .page-header-right {
       text-align: right;
@@ -418,7 +427,6 @@
   <nav>
     <a href="index.html" class="nav-logo" style="display:flex;align-items:center;gap:16px;text-decoration:none;">
       <img src="images/logo.png" alt="Caliber Reeds by Ben" style="height:140px;width:auto;display:block;">
-      <span style="font-family:'Caveat',cursive;font-size:44px;font-weight:700;color:#1e3d2a;letter-spacing:0.02em;">Caliber Reeds by Ben</span>
     </a>
     <ul class="nav-links">
       <li><a href="about.html">About Ben</a></li>
@@ -426,13 +434,17 @@
       <li><a href="contact.html">Contact Ben</a></li>
       <li><a href="faq.html">FAQ</a></li>
       <li><a href="reed-care.html">Reed Care</a></li>
+      <!-- <li><a href="reviews.html">Reviews</a></li> -->
       <li><a href="shop.html" class="nav-shop-btn">Shop Now</a></li>
     </ul>
   </nav>
 
   <!-- Page Header -->
   <div class="page-header">
-    <h1 class="page-title">Handmade<br>Oboe<br>Reeds</h1>
+    <div>
+      <h1 class="page-title">Caliber Reeds by Ben</h1>
+      <p class="page-subtitle">Handmade Oboe Reeds</p>
+    </div>
     <div class="page-header-right">
       <p class="page-tagline">Responsive, in tune, and easy to articulate —<br>reeds that let you focus on the music.</p>
       <div class="header-buttons">
@@ -550,6 +562,7 @@
       <a href="contact.html">Contact Ben</a>
       <a href="faq.html">FAQ</a>
       <a href="reed-care.html">Reed Care</a>
+      <!-- <a href="reviews.html">Reviews</a> -->
       <a href="https://www.youtube.com/@byoder5912" target="_blank">YouTube</a>
       <a href="admin.html" style="opacity:0.3; font-size:14px;" title="Admin">🔒</a>
     </div>

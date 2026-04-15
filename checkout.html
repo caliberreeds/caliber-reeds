@@ -212,19 +212,67 @@
     }
     .notice-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
     
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 48px;
+      background:#f5f1ea;
+      border-bottom:1px solid #ddd8ce;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      width: 100vw;
+    }
+    .nav-logo {
+      font-family: 'Caveat', cursive;
+      font-size: 26px;
+      font-weight: 700;
+      color: #1e3d2a;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #5a4a3a;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #2f5e3f; }
+    .nav-shop-btn {
+      background: #8b6f4e !important;
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+    .nav-shop-btn:hover { background: #3d2b1f !important; }
   </style>
 </head>
 <body>
 
-  <nav style="position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:4px 48px;background:#f5f1ea;border-bottom:1px solid #ddd8ce;">
-  <a href="index.html"><img src="images/logo.png" alt="Caliber Reeds by Ben" style="height:140px;width:auto;display:block;"></a>
-  <ul style="display:flex;align-items:center;gap:36px;list-style:none;">
-    <li><a href="about.html" style="font-size:13px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#5a4a3a;text-decoration:none;">About Ben</a></li>
-    <li><a href="behind-the-reed.html" style="font-size:13px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#5a4a3a;text-decoration:none;">Behind the Reed</a></li>
-    <li><a href="faq.html" style="font-size:13px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#5a4a3a;text-decoration:none;">FAQ</a></li>
-    <li><a href="reed-care.html" style="font-size:13px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#5a4a3a;text-decoration:none;">Reed Care</a></li>
-    <li><a href="shop.html" style="font-size:13px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:white;background:#8b6f4e;padding:8px 20px;border-radius:5px;text-decoration:none;white-space: nowrap;">Shop Now</a></li>
-  </ul>
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="images/logo.png" alt="Caliber Reeds by Ben" style="height:140px; width:auto; display:block;">
+    </a>
+    <ul class="nav-links">
+      <li><a href="about.html">About Ben</a></li>
+      <li><a href="behind-the-reed.html">Behind the Reed</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="reed-care.html">Reed Care</a></li>
+      <!-- <li><a href="reviews.html">Reviews</a></li> -->
+      <li><a href="shop.html" class="nav-shop-btn">Shop Now</a></li>
+    </ul>
   </nav>
   
   <a href="shop.html" class="back-link">← Back to Shop</a>
