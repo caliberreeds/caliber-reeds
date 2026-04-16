@@ -291,6 +291,14 @@
       white-space: nowrap;
     }
     .nav-shop-btn:hover { background: #3d2b1f !important; }
+
+    @media (max-width: 768px) {
+      nav { padding: 12px 20px; }
+      .nav-links { gap: 14px; }
+      .nav-links li:not(:last-child) { display: none; }
+      footer { flex-direction: column; gap: 14px; padding: 28px 20px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
   </style>
 </head>
 <body>
@@ -310,8 +318,6 @@
   </nav>
 
   <div style="max-width:860px; margin:0 auto; padding:48px 32px 60px;">
-
-    <a href="index.html" class="back-link">← Back to Shop</a>
 
     <div class="header">
       <div class="header-label">The Maker Behind the Reeds</div>

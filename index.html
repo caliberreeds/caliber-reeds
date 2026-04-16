@@ -395,17 +395,19 @@
       .nav-links li:not(:last-child) { display: none; }
 
       .page-header { flex-direction: column; text-align: center; padding: 40px 24px 32px; gap: 20px; }
-      .page-title { font-size: 64px; }
+      .page-title { font-size: 52px; white-space: normal; }
       .page-header-right { text-align: center; }
       .header-buttons { justify-content: center; }
 
-      .photo-word-row.left-narrow,
-      .photo-word-row.right-narrow { grid-template-columns: 1fr 60px 1fr; }
-      #row-response     .word-column { margin-right: 12px; margin-left: 0; }
-      #row-intonation   .word-column { margin-left: 8px; margin-right: 0; }
-      #row-articulation .word-column { margin-left: 16px; margin-right: 0; }
-      .word-column { min-height: 260px; gap: 4px; padding: 24px 0; }
-      .word-letter { font-size: 22px; }
+      .photo-word-row.left-narrow { grid-template-columns: 60px 1fr; }
+      .photo-word-row.right-narrow { grid-template-columns: 1fr 60px; }
+      .photo-word-row.left-narrow .row-photo:first-child { display: none; }
+      .photo-word-row.right-narrow .row-photo:last-child { display: none; }
+      .word-column { width: 60px; padding: 12px 0; gap: 4px; min-height: 260px; }
+      .word-letter { font-size: 20px; }
+      #row-response .word-column,
+      #row-intonation .word-column,
+      #row-articulation .word-column { margin: 0; }
 
       .about-section { grid-template-columns: 1fr; padding: 56px 24px; gap: 36px; }
       .about-text h2 { font-size: 42px; }
