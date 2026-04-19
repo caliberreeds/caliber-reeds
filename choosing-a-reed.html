@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choosing a Reed — Caliber Reeds by Ben</title>
+  <meta name="description" content="Learn how to choose student or advanced oboe and English horn reeds before ordering. Includes reed break-in guidance, fit expectations, and return policy details.">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment:     #f5f0e8;
+      --parchment-mid: #ede5d8;
+      --parchment-dark:#ddd5c8;
+      --burgundy:      #6b2737;
+      --burgundy-dark: #4e1c28;
+      --burgundy-light:#f7edef;
+      --gold:          #c9a84c;
+      --ink:           #2a1a0e;
+      --ink-mid:       #4a3a2a;
+      --ink-light:     #5a4a3a;
+      --cork:          #3d2b1f;
+      --cream-card:    #fff8f0;
+      --green-dark:    #1e3d2a;
+      --green-mid:     #2f5e3f;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--parchment);
+      color: var(--ink-mid);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 48px;
+      background: var(--cork);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      width: 100%;
+    }
+    .nav-logo {
+      font-family: 'Caveat', cursive;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); }
+    .nav-shop-btn {
+      background: #8b6f4e !important;
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+    .nav-shop-btn:hover { background: var(--cork) !important; color: var(--gold) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 64px 32px 48px;
+      border-bottom: 2px solid var(--burgundy);
+    }
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--burgundy);
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--burgundy);
+    }
+    .hero-sub {
+      font-size: 16px;
+      color: var(--ink-light);
+      line-height: 1.75;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px 32px 0;
+      text-align: center;
+    }
+    .pull-quote blockquote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 20px;
+      color: var(--ink);
+      line-height: 1.7;
+      border-left: 3px solid var(--burgundy);
+      padding: 4px 0 4px 24px;
+      text-align: left;
+      margin: 0;
+    }
+    .pull-quote cite {
+      display: block;
+      margin-top: 12px;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--burgundy);
+      padding-left: 27px;
+    }
+
+    /* ── BODY ── */
+    .body-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      padding: 48px 0 40px;
+      border-bottom: 1px solid var(--parchment-dark);
+    }
+    .section:last-of-type { border-bottom: none; }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--burgundy);
+      margin-bottom: 10px;
+    }
+    .section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+    .section p {
+      font-size: 15px;
+      color: var(--ink-mid);
+      line-height: 1.85;
+      margin-bottom: 14px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+    .section p strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    /* ── REED TYPE CARDS ── */
+    .reed-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .reed-card {
+      background: var(--cream-card);
+      border: 1px solid var(--parchment-dark);
+      border-top: 3px solid var(--burgundy);
+      border-radius: 0 0 10px 10px;
+      padding: 24px 22px;
+    }
+    .reed-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .reed-card p {
+      font-size: 14px;
+      color: var(--ink-light);
+      line-height: 1.75;
+      margin: 0;
+    }
+    .reed-card .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--burgundy-light);
+      color: var(--burgundy-dark);
+      padding: 3px 10px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    /* ── TIP BOX ── */
+    .tip-box {
+      background: var(--cream-card);
+      border: 1px solid var(--parchment-dark);
+      border-left: 4px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 18px 20px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--ink-mid);
+      line-height: 1.75;
+    }
+    .tip-box strong {
+      color: var(--ink);
+    }
+
+    /* ── NOT SURE SECTION ── */
+    .not-sure {
+      background: var(--burgundy);
+      padding: 48px 32px;
+      text-align: center;
+      margin-top: 0;
+    }
+    .not-sure h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color: var(--parchment);
+      margin-bottom: 14px;
+    }
+    .not-sure p {
+      font-size: 15px;
+      color: rgba(245,240,232,0.82);
+      line-height: 1.8;
+      max-width: 540px;
+      margin: 0 auto 28px;
+    }
+    .not-sure .btn-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-gold {
+      display: inline-block;
+      padding: 13px 30px;
+      background: var(--gold);
+      color: var(--ink);
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.03em;
+      transition: background 0.2s;
+    }
+    .btn-gold:hover { background: #b8943c; }
+    .btn-outline-light {
+      display: inline-block;
+      padding: 13px 30px;
+      background: transparent;
+      color: var(--parchment);
+      border: 1px solid rgba(245,240,232,0.45);
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline-light:hover { border-color: var(--parchment); color: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--cork);
+      color: #c8bfb0;
+      text-align: center;
+      padding: 40px 32px;
+      font-size: 13px;
+      line-height: 2;
+    }
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+      margin: 0 10px;
+      transition: opacity 0.2s;
+    }
+    footer a:hover { opacity: 0.75; }
+    .footer-logo {
+      font-family: 'Caveat', cursive;
+      font-size: 22px;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 12px;
+    }
+    .footer-links { margin-bottom: 16px; }
+    .footer-copy { font-size: 12px; color: #7a6a5a; margin-top: 8px; }
+
+    @media (max-width: 640px) {
+      nav { padding: 4px 20px; }
+      .nav-links { gap: 14px; }
+      .hero { padding: 48px 20px 36px; }
+      .hero h1 { font-size: 36px; }
+      .pull-quote { padding: 36px 20px 0; }
+      .body-wrap { padding: 0 20px; }
+      .reed-cards { grid-template-columns: 1fr; }
+      .not-sure { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="images/logo.png" alt="Caliber Reeds by Ben" style="height:140px; width:auto; display:block;">
+    </a>
+    <ul class="nav-links">
+      <li><a href="about.html">About Ben</a></li>
+      <li><a href="behind-the-reed.html">Behind the Reed</a></li>
+      <li><a href="contact.html">Contact Ben</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="choosing-a-reed.html" class="active">Choosing a Reed</a></li>
+      <li><a href="reed-care.html">Reed Care</a></li>
+      <!-- <li><a href="reviews.html">Reviews</a></li> -->
+      <li><a href="shop.html" class="nav-shop-btn">Shop Now</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="eyebrow">A guide for players</div>
+    <h1>Choosing a <em>Reed</em></h1>
+    <p class="hero-sub">Every player's embouchure, instrument, air, and preference are a little different. Here's how to find the right fit before you order.</p>
+  </div>
+
+  <!-- Pull Quote -->
+  <div class="pull-quote">
+    <blockquote>
+      Choosing a reed can feel personal — because it is personal. My goal with Caliber Reeds is to make reeds that are carefully finished, responsive, and reliable for every player who orders them.
+    </blockquote>
+    <cite>— Ben, Caliber Reeds</cite>
+  </div>
+
+  <div class="body-wrap">
+
+    <!-- Student vs Advanced -->
+    <div class="section">
+      <div class="section-label">Student vs. Advanced</div>
+      <h2>Which reed is right for you?</h2>
+      <p>The most important decision when ordering is choosing between student and advanced reeds. Both are handcrafted with the same care — the difference is in how they're finished and what they ask of the player.</p>
+      <div class="reed-cards">
+        <div class="reed-card">
+          <span class="tag">Student</span>
+          <h3>Student Reeds</h3>
+          <p>Usually the best choice for newer players, younger students, or anyone who needs a reed that responds easily without requiring too much resistance. If you're still building your embouchure and air support, start here.</p>
+        </div>
+        <div class="reed-card">
+          <span class="tag">Advanced</span>
+          <h3>Advanced Reeds</h3>
+          <p>Intended for players who have more developed air support and want more flexibility, depth, and control. If you're playing at a high school or collegiate level or beyond, advanced reeds are likely the right fit.</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <strong>Not sure which to choose?</strong> If you're on the fence, err toward student reeds. It's easier to grow into an advanced reed than to fight one that's too resistant too soon. Or just contact Ben — he's happy to help you decide.
+      </div>
+    </div>
+
+    <!-- Oboe vs English Horn -->
+    <div class="section">
+      <div class="section-label">Instrument Type</div>
+      <h2>Oboe and English horn reeds are different</h2>
+      <p>Caliber Reeds makes reeds for both oboe and English horn. These are different instruments with different reed needs — the staple length, cane dimensions, and finishing are all specific to each instrument.</p>
+      <p><strong>Please make sure you are ordering the correct reed type before checkout.</strong> If you play both instruments, you'll want to order separately for each.</p>
+    </div>
+
+    <!-- Break In -->
+    <div class="section">
+      <div class="section-label">Breaking In a New Reed</div>
+      <h2>New reeds need a little time</h2>
+      <p>Many handmade reeds benefit from a short break-in period. A brand-new reed may not feel fully vibrant right away — that's normal. The cane is still settling.</p>
+      <p>I usually recommend playing a new reed for about <strong>5–10 minutes a day for the first week</strong>, allowing it to vibrate more freely over time. Avoid forcing a new reed to do everything immediately. Let it loosen gradually and it will reward you.</p>
+      <div class="tip-box">
+        <strong>Rotate your reeds.</strong> Playing on one reed exclusively wears it out faster. If you have two or three reeds in rotation, each one lasts longer and stays more consistent.
+      </div>
+    </div>
+
+    <!-- Returns -->
+    <div class="section">
+      <div class="section-label">Returns & Reed Problems</div>
+      <h2>Inspect your reeds within 48 hours</h2>
+      <p>Reeds are not returnable once purchased — this is standard in the handmade reed world, and it's why I encourage you to reach out before ordering if you have any questions.</p>
+      <p>That said, if there is a genuine problem with a reed, <strong>please contact me within 48 hours of receiving your order</strong> and I'll do my best to make it right. After 48 hours I'm unable to address issues with your order.</p>
+      <p>If your package arrives visibly damaged in transit, the shipping damage may need to be addressed with the carrier directly.</p>
+    </div>
+
+  </div>
+
+  <!-- Not Sure CTA -->
+  <div class="not-sure">
+    <h2>Not sure what to order?</h2>
+    <p>Whether you're a student, a parent, a teacher, or an advancing player — if you're not certain which reed is the right choice, please reach out before placing your order. I'm happy to help you make the best decision, no matter where you are in your playing journey.</p>
+    <div class="btn-row">
+      <a href="contact.html" class="btn-gold">Contact Ben →</a>
+      <a href="shop.html" class="btn-outline-light">Browse the Shop</a>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-logo">Caliber Reeds by Ben</span>
+    <div class="footer-links">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="behind-the-reed.html">Behind the Reed</a>
+      <a href="faq.html">FAQ</a>
+      <a href="choosing-a-reed.html">Choosing a Reed</a>
+      <a href="reed-care.html">Reed Care</a>
+      <!-- <a href="reviews.html">Reviews</a> -->
+      <a href="contact.html">Contact Ben</a>
+      <a href="https://www.youtube.com/@caliberreeds" target="_blank">YouTube</a>
+      <a href="admin.html">🔒</a>
+    </div>
+    <div class="footer-copy">&copy; 2025 Caliber Reeds by Ben. All rights reserved.</div>
+  </footer>
+
+</body>
+</html>
