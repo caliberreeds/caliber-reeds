@@ -321,47 +321,110 @@
 
     /* ── Behind the Reed ── */
     .craft-section {
-      padding: 80px;
+      padding: 0;
       text-align: center;
-      background: #f7f0e3;
+      background-image: url('images/Reed_tools.jpg');
+      background-size: cover;
+      background-position: center;
       border-top: 1px solid var(--gray-light);
+      position: relative;
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+
+    .craft-overlay {
+      background: rgba(30, 60, 30, 0.48);
+      padding: 60px 80px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     .craft-section h2 {
       font-family: 'Caveat', cursive;
       font-size: 58px;
       font-weight: 700;
-      color: var(--green-dark);
+      color: #f7f0e3;
       margin-bottom: 10px;
     }
+
     .craft-section p {
       font-family: 'Cormorant Garamond', serif;
       font-size: 20px;
       font-style: italic;
-      color: var(--text-light);
+      color: #f0e8e0;
       max-width: 500px;
       margin: 0 auto 36px;
       line-height: 1.65;
     }
 
+    /* ── Contact Teaser ── */
+    .contact-teaser {
+      padding: 52px 48px;
+      text-align: center;
+      background: #f7f0e3;
+      border-top: 1px solid var(--gray-light);
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .contact-teaser-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--text-light);
+      margin: 0 0 8px;
+      line-height: 1.5;
+    }
+
+    .contact-teaser h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 52px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin: 0 0 24px;
+      line-height: 1;
+    }
+
     /* ── Choosing a Reed ── */
     .choosing-section {
-      padding: 80px;
+      padding: 0;
       text-align: center;
-      background: #f0e8e0;
+      background-image: url('images/horizontal_reeds.jpg');
+      background-size: cover;
+      background-position: center;
       border-top: 1px solid var(--gray-light);
+      position: relative;
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+
+    .choosing-overlay {
+      background: rgba(74, 20, 30, 0.62);
+      padding: 60px 80px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     .choosing-section h2 {
       font-family: 'Caveat', cursive;
       font-size: 58px;
       font-weight: 700;
-      color: #6b2737;
+      color: #f7f0e3;
       margin-bottom: 10px;
     }
+
     .choosing-section p {
       font-family: 'Cormorant Garamond', serif;
       font-size: 20px;
       font-style: italic;
-      color: var(--text-light);
+      color: #f0e8e0;
       max-width: 500px;
       margin: 0 auto 36px;
       line-height: 1.65;
@@ -379,6 +442,34 @@
       transition: background 0.2s;
     }
     .btn-burgundy:hover { background: #4e1c28; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .craft-inner,
+      .choosing-inner {
+        flex-direction: column;
+      }
+
+      .craft-section,
+      .choosing-section {
+        text-align: center;
+        padding: 48px 24px;
+      }
+
+      .craft-inner .craft-text p,
+      .choosing-inner .choosing-text p {
+        margin: 0 auto 36px;
+      }
+
+      .choosing-inner .choosing-images {
+        width: 100%;
+      }
+
+      .choosing-inner .choosing-images img {
+        width: 50%;
+        max-height: 220px;
+      }
+    }
 
     /* ── YouTube ── */
     .youtube-section {
@@ -600,16 +691,27 @@
 
   <!-- Behind the Reed -->
   <section class="craft-section">
-    <h2>Behind the Reed</h2>
-    <p>From raw cane to finished reed — a look at the tools, techniques, and care that goes into every single one.</p>
-    <a href="behind-the-reed.html" class="btn-green">See the Process</a>
+    <div class="craft-overlay">
+      <h2>Behind the Reed</h2>
+      <p>From raw cane to finished reed — a look at the tools, techniques, and care that goes into every single one.</p>
+      <a href="behind-the-reed.html" class="btn-green">See the Process</a>
+    </div>
+  </section>
+
+  <!-- Contact Teaser -->
+  <section class="contact-teaser">
+    <p class="contact-teaser-label">Questions? Orders? Just curious?</p>
+    <h2>I'd love to hear from you.</h2>
+    <a href="contact.html" class="btn-amber">Get in Touch</a>
   </section>
 
   <!-- Choosing a Reed -->
   <section class="choosing-section">
-    <h2>Choosing a Reed</h2>
-    <p>Student or advanced? Oboe or English horn? A little guidance before you order goes a long way.</p>
-    <a href="choosing-a-reed.html" class="btn-burgundy">Read the Guide</a>
+    <div class="choosing-overlay">
+      <h2>Choosing a Reed</h2>
+      <p>Student or advanced? Oboe or English horn? A little guidance before you order goes a long way.</p>
+      <a href="choosing-a-reed.html" class="btn-burgundy">Read the Guide</a>
+    </div>
   </section>
 
   <!-- YouTube -->
