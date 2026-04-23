@@ -477,55 +477,50 @@
     localStorage.removeItem("reedDelayAcknowledged");
   }
 
-  async function handlePayment(method) {
-    const customerData = validate();
-    if (!customerData) return;
+  let pendingPaymentMethod = null;
+  let pendingCustomerData = null;
+
+  function openConfirmModal(method, customerData) {
+    pendingPaymentMethod = method;
+    pendingCustomerData = customerData;
+
+    // Populate items
+    const itemsList = document.getElementById("modalItemsList");
+    itemsList.innerHTML = Object.entries(counts).map(([item, qty]) =>
+      `<div style="display:flex; justify-content:space-between;"><span>${item} × ${qty}</span><span>$${(prices[item] * qty).toFixed(2)}</span></div>`
+    ).join("");
+
+    // Populate totals
+    const grandTotal = subtotal + parseFloat(shipping);
+    document.getElementById("modalShipping").textContent = parseFloat(shipping) === 0 ? "Free" : `$${parseFloat(shipping).toFixed(2)}`;
+    document.getElementById("modalTotal").textContent = `$${grandTotal.toFixed(2)}`;
+
+    // Populate payment method
+    const isVenmo = method === "venmo";
+    document.getElementById("modalPayIcon").textContent = isVenmo ? "💙" : "💚";
+    document.getElementById("modalPayMethod").textContent = isVenmo ? "Venmo" : "Zelle";
+
+    // Wire up confirm button
+    document.getElementById("confirmPlaceBtn").onclick = () => confirmAndPlace();
+
+    // Show modal
+    const modal = document.getElementById("confirmModal");
+    modal.style.display = "flex";
+  }
+
+  function closeConfirmModal() {
+    document.getElementById("confirmModal").style.display = "none";
+    pendingPaymentMethod = null;
+    pendingCustomerData = null;
+  }
+
+  async function confirmAndPlace() {
+    closeConfirmModal();
     setLoading(true);
+    const method = pendingPaymentMethod;
+    const customerData = pendingCustomerData;
 
-    if (method === "card") {
-      try {
-        localStorage.setItem("reedCustomer", JSON.stringify(customerData));
-        localStorage.setItem("reedPayMethod", "card");
-
-        const grandTotal = subtotal + parseFloat(shipping);
-        localStorage.setItem("reedTotal", grandTotal.toFixed(2));
-        localStorage.setItem("reedCounts", JSON.stringify(counts));
-        localStorage.setItem("reedOrderText", buildOrderText());
-
-        const response = await fetch("/.netlify/functions/create-checkout-session", {
-          method:  "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            cart:       cart,
-            shipping:   shipping,
-            total:      grandTotal.toFixed(2),
-            email:      customerData.email,
-            name:       customerData.name,
-            address:   customerData.address,
-            street:    customerData.street,
-            city:      customerData.city,
-            state:     customerData.state,
-            zip:       customerData.zip,
-            notes:      customerData.notes,
-            successUrl: window.location.origin + "/success.html",
-            cancelUrl:  window.location.href
-          })
-        });
-
-        const data = await response.json();
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          throw new Error(data.error || "Could not create checkout session");
-        }
-      } catch (err) {
-        setLoading(false);
-        const errBox = document.getElementById("errorMsg");
-        errBox.style.display = "block";
-        errBox.textContent   = "Something went wrong. Please try again or contact us directly.";
-      }
-
-    } else if (method === "venmo") {
+    if (method === "venmo") {
       try {
         await submitToSheets(customerData, "venmo");
         localStorage.setItem("reedCustomer", JSON.stringify(customerData));
@@ -533,7 +528,6 @@
       } catch (err) {
         setLoading(false);
       }
-
     } else if (method === "zelle") {
       try {
         await submitToSheets(customerData, "zelle");
@@ -544,6 +538,87 @@
       }
     }
   }
+
+  async function handlePayment(method) {
+    const customerData = validate();
+    if (!customerData) return;
+
+    if (method === "venmo" || method === "zelle") {
+      openConfirmModal(method, customerData);
+      return;
+    }
+
+    // Card flow unchanged
+    setLoading(true);
+    try {
+      localStorage.setItem("reedCustomer", JSON.stringify(customerData));
+      localStorage.setItem("reedPayMethod", "card");
+
+      const grandTotal = subtotal + parseFloat(shipping);
+      localStorage.setItem("reedTotal", grandTotal.toFixed(2));
+      localStorage.setItem("reedCounts", JSON.stringify(counts));
+      localStorage.setItem("reedOrderText", buildOrderText());
+
+      const response = await fetch("/.netlify/functions/create-checkout-session", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cart:       cart,
+          shipping:   shipping,
+          total:      grandTotal.toFixed(2),
+          email:      customerData.email,
+          name:       customerData.name,
+          address:    customerData.address,
+          street:     customerData.street,
+          city:       customerData.city,
+          state:      customerData.state,
+          zip:        customerData.zip,
+          notes:      customerData.notes,
+          successUrl: window.location.origin + "/success.html",
+          cancelUrl:  window.location.href
+        })
+      });
+
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || "Could not create checkout session");
+      }
+    } catch (err) {
+      setLoading(false);
+      const errBox = document.getElementById("errorMsg");
+      errBox.style.display = "block";
+      errBox.textContent = "Something went wrong. Please try again or contact us directly.";
+    }
+  }
 </script>
+  <!-- Venmo/Zelle Confirmation Modal -->
+  <div id="confirmModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:12px; padding:32px 28px; max-width:420px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.18); font-family:'Playfair Display', serif;">
+      <h2 style="margin:0 0 6px; font-size:1.3rem; color:#3d2b1f;">Confirm Your Order</h2>
+      <p style="margin:0 0 18px; font-size:0.9rem; color:#6b5c4a;">Please review before placing your order.</p>
+
+      <div style="background:#f5f1ea; border-radius:8px; padding:14px 16px; margin-bottom:18px; font-size:0.92rem; color:#3d2b1f;">
+        <div id="modalItemsList" style="margin-bottom:8px; line-height:1.7;"></div>
+        <div style="border-top:1px solid #ddd5c8; padding-top:8px; display:flex; justify-content:space-between;">
+          <span>Shipping</span><span id="modalShipping"></span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-weight:700; margin-top:4px;">
+          <span>Total</span><span id="modalTotal"></span>
+        </div>
+      </div>
+
+      <div style="background:#f5f1ea; border-radius:8px; padding:12px 16px; margin-bottom:22px; font-size:0.92rem; color:#3d2b1f; display:flex; align-items:center; gap:10px;">
+        <span id="modalPayIcon" style="font-size:1.3rem;"></span>
+        <span>Paying with <strong id="modalPayMethod"></strong> — payment instructions will be on the next page.</span>
+      </div>
+
+      <div style="display:flex; gap:12px;">
+        <button onclick="closeConfirmModal()" style="flex:1; padding:12px; border:2px solid #c9a84c; background:transparent; color:#3d2b1f; border-radius:8px; font-size:0.95rem; cursor:pointer; font-family:'Playfair Display', serif;">Go Back</button>
+        <button id="confirmPlaceBtn" style="flex:2; padding:12px; background:#c9a84c; border:none; color:#fff; border-radius:8px; font-size:0.95rem; font-weight:700; cursor:pointer; font-family:'Playfair Display', serif;">Confirm & Place Order</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

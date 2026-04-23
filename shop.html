@@ -54,38 +54,7 @@
       color: var(--text);
       max-width: 860px;
       margin: 0 auto;
-      padding: 80px 32px 60px;
-    }
-
-    /* ── Cart Bar ── */
-    #cartBar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      background: var(--green-dark);
-      color: var(--white);
-      padding: 13px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      font-family: 'Source Sans 3', sans-serif;
-      font-weight: 600;
-      font-size: 15px;
-      letter-spacing: 0.04em;
-      z-index: 1000;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    #cartBar:hover { background: var(--green-mid); }
-    #cartBar .cart-icon { font-size: 18px; }
-    #cartBadge {
-      background: var(--gold);
-      color: var(--green-dark);
-      border-radius: 50px;
-      padding: 2px 9px;
-      font-size: 13px;
-      font-weight: 700;
+      padding: 0 32px 60px;
     }
 
     /* ── Header ── */
@@ -528,7 +497,18 @@
       <li><a href="choosing-a-reed.html">Choosing a Reed</a></li>
       <li><a href="reed-care.html">Reed Care</a></li>
       <!-- <li><a href="reviews.html">Reviews</a></li> -->
-      <li><a href="shop.html" class="nav-shop-btn">Shop Now</a></li>
+      <li style="position:relative;">
+        <a href="shop.html" class="nav-shop-btn">Shop Now</a>
+        <a href="shop.html#cartSection" id="navCartIcon" style="position:absolute; top:100%; left:50%; transform:translateX(-50%); text-decoration:none; margin-top:16px; display:inline-block;">
+          <svg width="32" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 2h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L24 6H6" stroke="#3d2b1f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="9" cy="23" r="1.5" fill="#3d2b1f"/>
+            <circle cx="20" cy="23" r="1.5" fill="#3d2b1f"/>
+            <circle cx="23" cy="5" r="9" fill="#c9a84c"/>
+            <text x="24" y="9" text-anchor="middle" style="fill:white; font-size:11px; font-weight:700;" font-family="sans-serif" id="navCartCount">0</text>
+          </svg>
+        </a>
+      </li>
     </ul>
   </nav>
   <!-- Pause Banner -->
@@ -558,12 +538,6 @@
       </div>
     </div>
   </div>
-
-  <a href="#cartSection" id="cartBar">
-    <span class="cart-icon">🛒</span>
-    <span>Your Cart</span>
-    <span id="cartBadge">0</span>
-  </a>
 
   <div class="header">
     <div class="header-label">Handcrafted · Professional Quality</div>
@@ -630,7 +604,7 @@
       <text class="sk-label" x="610" y="116" text-anchor="middle">In Your</text>
       <text class="sk-label" x="610" y="132" text-anchor="middle">Hands ✓</text>
       <!-- Caption -->
-      <text class="sk-sub" x="340" y="30" text-anchor="middle" style="font-size:15px; letter-spacing:0.05em;">— every reed, made just for you —</text>
+      <text class="sk-sub" x="340" y="30" text-anchor="middle" style="font-size:19px; letter-spacing:0.05em;">— every reed, made just for you —</text>
     </svg>
     <!-- Processing time line, populated by JS -->
     <p id="processingTimeNote" style="display:none; font-family:'Source Sans 3',sans-serif; font-size:14px; color:#7a6a5a; font-style:italic; margin-top:4px;"></p>
@@ -808,7 +782,12 @@
       grid.innerHTML = html;
       render();
 
+      if (window.location.hash === "#cartSection") {
+        document.getElementById("cartSection").scrollIntoView({ behavior: "smooth" });
+      }
+
     } catch (err) {
+      console.error("loadProducts error:", err);
       document.getElementById("productGrid").innerHTML =
         '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray-mid);">Could not load products. Please refresh the page.</div>';
     }
@@ -823,7 +802,6 @@
     const emptyMsg     = document.getElementById("emptyMsg");
     const cartTotals   = document.getElementById("cartTotals");
     const checkoutBtns = document.getElementById("checkoutButtons");
-    const badge        = document.getElementById("cartBadge");
     const cartTitle    = document.getElementById("cartTitle");
 
     list.innerHTML = "";
@@ -863,7 +841,8 @@
       ? "Your Cart"
       : `Your Cart (${cart.length} item${cart.length !== 1 ? "s" : ""})`;
 
-    badge.textContent = cart.length;
+    const navCartCount = document.getElementById("navCartCount");
+    if (navCartCount) navCartCount.textContent = cart.length;
     localStorage.setItem("reedCart", JSON.stringify(cart));
   }
 
@@ -928,6 +907,19 @@
 
     document.getElementById("disclaimerModal").classList.add("active");
   }
+
+  if (window.location.hash === "#cartSection") {
+    window.addEventListener("load", function() {
+      document.getElementById("cartSection").scrollIntoView({ behavior: "smooth" });
+    });
+  }
+
+
+  (function() {
+    const cart = JSON.parse(localStorage.getItem("reedCart") || "[]");
+    const countEl = document.getElementById("navCartCount");
+      if (countEl) countEl.textContent = cart.length;
+  })();
 
   function confirmCheckout() {
     if (cartPaused && !document.getElementById("disclaimerCheck").checked) {
