@@ -321,6 +321,9 @@
     @media (max-width: 640px) {
       nav { padding: 4px 20px; }
       .nav-links { gap: 14px; }
+      .nav-links li { display: none; }
+      .nav-links li:has(.nav-shop-btn),
+      .nav-links li:has(#navCartCount) { display: flex; }
       .hero { padding: 48px 20px 36px; }
       .hero h1 { font-size: 36px; }
       .pull-quote { padding: 36px 20px 0; }

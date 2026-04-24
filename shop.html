@@ -54,7 +54,7 @@
       color: var(--text);
       max-width: 860px;
       margin: 0 auto;
-      padding: 0 32px 60px;
+      padding: 0 32px 0px;
     }
 
     /* ── Header ── */
@@ -320,12 +320,27 @@
     .btn-card:hover      { background: #b8963e; }
 
     /* ── Footer ── */
-    .footer-note {
-      text-align: center;
-      margin-top: 48px;
+    footer {
+      background: var(--bg-cork);
+      color: rgba(255,255,255,0.4);
+      padding: 32px 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       font-size: 13px;
-      color: var(--gray-mid);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      margin-top: 48px;
+      width: 100vw;
     }
+    footer a {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--cane); }
+    .footer-links { display: flex; gap: 24px; }
 
     .nav-contact-btn {
       background: var(--amber) !important;
@@ -338,7 +353,7 @@
 
     /* ── Responsive ── */
     @media (max-width: 580px) {
-      body { padding: 70px 18px 40px; }
+      body { padding: 0 18px 40px; }
       .header h1 { font-size: 34px; }
       .product-grid { grid-template-columns: 1fr; }
       .checkout-buttons { flex-direction: column; }
@@ -481,7 +496,7 @@
       nav { padding: 12px 20px; }
       .nav-links { gap: 14px; }
       .nav-links li:not(:last-child) { display: none; }
-      footer { flex-direction: column; gap: 14px; padding: 28px 20px; text-align: center; }
+      footer { flex-direction: column; gap: 14px; padding: 28px 20px; text-align: center; width: 100vw; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); }
       .footer-links { flex-wrap: wrap; justify-content: center; }
     }
   </style>
@@ -626,7 +641,6 @@
   </div>
 
   <div id="cartSection">
-  <div id="cartSection">
     <h2 id="cartTitle">Your Cart</h2>
     <div id="emptyMsg" class="empty-cart">Your cart is empty.</div>
     <ul id="cartList"></ul>
@@ -650,7 +664,21 @@
     </div>
   </div>
 
-  <p class="footer-note">© Caliber Reeds by Ben · All reeds handmade to order · <a href="contact.html">Contact Ben</a> · <a href="admin.html" style="opacity:0.3; font-size:14px; text-decoration:none;" title="Admin">🔒</a></p>
+  <footer>
+    <span>© Caliber Reeds by Ben · All reeds handmade to order</span>
+    <div class="footer-links">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="behind-the-reed.html">Behind the Reed</a>
+      <a href="contact.html">Contact Ben</a>
+      <a href="faq.html">FAQ</a>
+      <a href="choosing-a-reed.html">Choosing a Reed</a>
+      <a href="reed-care.html">Reed Care</a>
+      <!-- <a href="reviews.html">Reviews</a> -->
+      <a href="https://www.youtube.com/@byoder5912" target="_blank">YouTube</a>
+      <a href="admin.html" style="opacity:0.3; font-size:14px;" title="Admin">🔒</a>
+    </div>
+  </footer>
 
 <script>
   let cartPaused = false;
