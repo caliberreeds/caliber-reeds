@@ -443,6 +443,7 @@
       <button class="filter-btn" onclick="filterOrders('unpaid', this)">Unpaid</button>
       <button class="filter-btn" onclick="filterOrders('paid', this)">Paid</button>
       <button class="filter-btn" onclick="filterOrders('shipped', this)">Shipped</button>
+      <button class="filter-btn" onclick="filterOrders('comp', this)">🎁 Comp</button>
       <button class="filter-btn" id="archivedToggle" onclick="toggleArchived(this)">📦 Show Archived</button>
     </div>
 
@@ -615,6 +616,8 @@
         filtered = filtered.filter(o => o.archived || (o.status && o.status.includes("Paid")));
       } else if (activeFilter === "shipped") {
         filtered = filtered.filter(o => o.archived || o.status === "Shipped");
+      } else if (activeFilter === "comp") {
+        filtered = filtered.filter(o => o.archived || o.payMethod === "comp");
       }
 
       // Apply search filter
