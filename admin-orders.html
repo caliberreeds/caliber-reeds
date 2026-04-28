@@ -1,29 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orders - Caliber Reeds Admin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap"
+    rel="stylesheet">
   <style>
     :root {
-      --green-dark:  #1e3d2a;
-      --green-mid:   #2f5e3f;
+      --green-dark: #1e3d2a;
+      --green-mid: #2f5e3f;
       --green-light: #4a8c60;
-      --gold:        #c9a84c;
-      --cream:       #f7f4ee;
-      --white:       #ffffff;
-      --gray-light:  #e8e4dc;
-      --gray-mid:    #999;
-      --text:        #1a1a1a;
-      --shadow:      0 4px 20px rgba(0,0,0,0.10);
-      --red:         #c0392b;
-      --red-light:   #fadbd8;
+      --gold: #c9a84c;
+      --cream: #f7f4ee;
+      --white: #ffffff;
+      --gray-light: #e8e4dc;
+      --gray-mid: #999;
+      --text: #1a1a1a;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
+      --red: #c0392b;
+      --red-light: #fadbd8;
       --green-light2: #d4edda;
-      --blue-light:  #cce5ff;
+      --blue-light: #cce5ff;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: 'Source Sans 3', sans-serif;
@@ -43,16 +52,19 @@
       padding-bottom: 16px;
       border-bottom: 1px solid var(--gray-light);
     }
+
     .admin-header h1 {
       font-family: 'Playfair Display', serif;
       font-size: 32px;
       color: var(--green-dark);
     }
+
     .admin-header p {
       font-size: 13px;
       color: var(--gray-mid);
       margin-top: 4px;
     }
+
     .header-right {
       display: flex;
       align-items: center;
@@ -66,6 +78,7 @@
       margin-bottom: 28px;
       flex-wrap: wrap;
     }
+
     .admin-nav a {
       padding: 8px 16px;
       border-radius: 6px;
@@ -77,8 +90,16 @@
       color: var(--green-dark);
       transition: all 0.2s;
     }
-    .admin-nav a:hover { background: var(--green-dark); color: white; }
-    .admin-nav a.active { background: var(--green-dark); color: white; }
+
+    .admin-nav a:hover {
+      background: var(--green-dark);
+      color: white;
+    }
+
+    .admin-nav a.active {
+      background: var(--green-dark);
+      color: white;
+    }
 
     /* ── Filters ── */
     .filters {
@@ -87,6 +108,7 @@
       margin-bottom: 24px;
       flex-wrap: wrap;
     }
+
     .filter-btn {
       padding: 8px 18px;
       border-radius: 50px;
@@ -99,8 +121,17 @@
       transition: all 0.2s;
       font-family: 'Source Sans 3', sans-serif;
     }
-    .filter-btn:hover { border-color: var(--green-mid); color: var(--green-mid); }
-    .filter-btn.active { background: var(--green-dark); border-color: var(--green-dark); color: white; }
+
+    .filter-btn:hover {
+      border-color: var(--green-mid);
+      color: var(--green-mid);
+    }
+
+    .filter-btn.active {
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+      color: white;
+    }
 
     /* ── Stats bar ── */
     .stats-bar {
@@ -109,6 +140,7 @@
       gap: 16px;
       margin-bottom: 28px;
     }
+
     .stat {
       background: var(--white);
       border: 1px solid var(--gray-light);
@@ -116,12 +148,14 @@
       padding: 16px 20px;
       text-align: center;
     }
+
     .stat-number {
       font-family: 'Playfair Display', serif;
       font-size: 28px;
       color: var(--green-dark);
       font-weight: 700;
     }
+
     .stat-label {
       font-size: 12px;
       color: var(--gray-mid);
@@ -140,12 +174,32 @@
       margin-bottom: 16px;
       border-left: 5px solid var(--gray-light);
     }
-    .order-card.status-new-unpaid    { border-left-color: #c0392b; }
-    .order-card.status-new-paid      { border-left-color: #27ae60; }
-    .order-card.status-progress-unpaid { border-left-color: #c0392b; }
-    .order-card.status-progress-paid { border-left-color: #27ae60; }
-    .order-card.status-shipped       { border-left-color: #2980b9; }
-    .order-card.status-cancelled     { border-left-color: #7f8c8d; }
+
+    .order-card.status-new-unpaid {
+      border-left-color: #c0392b;
+    }
+
+    .order-card.status-new-paid {
+      border-left-color: #27ae60;
+    }
+
+    .order-card.status-progress-unpaid {
+      border-left-color: #c0392b;
+    }
+
+    .order-card.status-progress-paid {
+      border-left-color: #27ae60;
+    }
+
+    .order-card.status-shipped {
+      border-left-color: #2980b9;
+    }
+
+    .order-card.status-cancelled {
+      border-left-color: #7f8c8d;
+    }
+
+    .order-card.status-comp { border-left: 4px solid #f0c040; background: #fffdf0; }
 
     .order-top {
       display: flex;
@@ -155,17 +209,20 @@
       flex-wrap: wrap;
       gap: 12px;
     }
+
     .order-number {
       font-family: 'Playfair Display', serif;
       font-size: 20px;
       color: var(--green-dark);
       font-weight: 700;
     }
+
     .order-date {
       font-size: 13px;
       color: var(--gray-mid);
       margin-top: 2px;
     }
+
     .order-total {
       font-family: 'Playfair Display', serif;
       font-size: 22px;
@@ -179,6 +236,7 @@
       gap: 12px;
       margin-bottom: 16px;
     }
+
     .order-field label {
       font-size: 11px;
       font-weight: 600;
@@ -188,6 +246,7 @@
       display: block;
       margin-bottom: 3px;
     }
+
     .order-field span {
       font-size: 14px;
       color: var(--text);
@@ -213,7 +272,10 @@
       color: var(--text);
       cursor: pointer;
     }
-    .status-select:focus { outline: 2px solid var(--green-light); }
+
+    .status-select:focus {
+      outline: 2px solid var(--green-light);
+    }
 
     .btn {
       padding: 8px 16px;
@@ -227,16 +289,51 @@
       text-decoration: none;
       display: inline-block;
     }
-    .btn-green  { background: var(--green-mid); color: white; }
-    .btn-green:hover  { background: var(--green-dark); }
-    .btn-gold   { background: var(--gold); color: var(--green-dark); }
-    .btn-gold:hover   { background: #b8963e; }
-    .btn-blue   { background: #2980b9; color: white; }
-    .btn-blue:hover   { background: #2471a3; }
-    .btn-gray   { background: var(--gray-light); color: var(--text); }
-    .btn-gray:hover   { background: #d5d0c8; }
-    .btn-red    { background: var(--red); color: white; }
-    .btn-red:hover    { background: #a93226; }
+
+    .btn-green {
+      background: var(--green-mid);
+      color: white;
+    }
+
+    .btn-green:hover {
+      background: var(--green-dark);
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--green-dark);
+    }
+
+    .btn-gold:hover {
+      background: #b8963e;
+    }
+
+    .btn-blue {
+      background: #2980b9;
+      color: white;
+    }
+
+    .btn-blue:hover {
+      background: #2471a3;
+    }
+
+    .btn-gray {
+      background: var(--gray-light);
+      color: var(--text);
+    }
+
+    .btn-gray:hover {
+      background: #d5d0c8;
+    }
+
+    .btn-red {
+      background: var(--red);
+      color: white;
+    }
+
+    .btn-red:hover {
+      background: #a93226;
+    }
 
     .save-status {
       font-size: 13px;
@@ -272,16 +369,33 @@
       font-family: 'Source Sans 3', sans-serif;
       transition: all 0.2s;
     }
-    .logout-btn:hover { background: var(--gray-light); color: var(--text); }
+
+    .logout-btn:hover {
+      background: var(--gray-light);
+      color: var(--text);
+    }
 
     @media (max-width: 600px) {
-      body { padding: 32px 18px 48px; }
-      .stats-bar { grid-template-columns: 1fr 1fr; }
-      .order-grid { grid-template-columns: 1fr; }
-      .admin-header { flex-direction: column; gap: 12px; }
+      body {
+        padding: 32px 18px 48px;
+      }
+
+      .stats-bar {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .order-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-header {
+        flex-direction: column;
+        gap: 12px;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <div id="mainContent" style="display:none;">
@@ -354,19 +468,23 @@
   </div>
 
   <!-- Cancel/Refund Modal -->
-  <div id="cancelModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
-    <div style="background:white; border-radius:12px; padding:36px; max-width:440px; width:90%; box-shadow:0 8px 40px rgba(0,0,0,0.2);">
+  <div id="cancelModal"
+    style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div
+      style="background:white; border-radius:12px; padding:36px; max-width:440px; width:90%; box-shadow:0 8px 40px rgba(0,0,0,0.2);">
       <h2 style="font-family:'Playfair Display',serif; color:#c0392b; margin-bottom:8px;">Cancel Order</h2>
       <p id="cancelModalDesc" style="font-size:14px; color:#555; margin-bottom:20px;"></p>
 
       <div style="margin-bottom:16px;">
-        <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Reason for Cancellation</label>
+        <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Reason for
+          Cancellation</label>
         <input type="text" id="cancelReason" placeholder="e.g. Customer requested, damaged reed..."
           style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif; box-sizing:border-box;">
       </div>
 
       <div id="refundSection" style="display:none; margin-bottom:20px;">
-        <p id="refundSectionLabel" style="font-size:13px; font-weight:600; color:#1e3d2a; margin-bottom:10px;">Refund</p>
+        <p id="refundSectionLabel" style="font-size:13px; font-weight:600; color:#1e3d2a; margin-bottom:10px;">Refund
+        </p>
         <div style="display:flex; gap:10px; margin-bottom:10px;">
           <button class="btn btn-green" onclick="setRefundType('full')" id="refundFullBtn">Full Refund</button>
           <button class="btn btn-gray" onclick="setRefundType('partial')" id="refundPartialBtn">Partial Refund</button>
@@ -378,7 +496,8 @@
             style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif;">
         </div>
         <div id="manualRefRow" style="display:none; margin-top:8px;">
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Manual Refund Reference</label>
+          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Manual Refund
+            Reference</label>
           <input type="text" id="manualRefInput" placeholder="e.g. Venmo transaction ID"
             style="width:100%; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:'Source Sans 3',sans-serif;">
         </div>
@@ -396,157 +515,158 @@
     <a href="admin.html" style="color: #2f5e3f; font-weight:600;">← Go to Admin Login</a>
   </div>
 
-<script>
-  const GET_ORDERS_URL    = "/.netlify/functions/get-orders";
-  const UPDATE_ORDER_URL  = "/.netlify/functions/update-order";
+  <script>
+    const GET_ORDERS_URL = "/.netlify/functions/get-orders";
+    const UPDATE_ORDER_URL = "/.netlify/functions/update-order";
 
-  let allOrders = [];
-  let adminPassword = sessionStorage.getItem("adminPassword") || "";
+    let allOrders = [];
+    let adminPassword = sessionStorage.getItem("adminPassword") || "";
 
-  const statusColors = {
-    "New - Unpaid":          "status-new-unpaid",
-    "New - Paid":            "status-new-paid",
-    "In Progress - Unpaid":  "status-progress-unpaid",
-    "In Progress - Paid":    "status-progress-paid",
-    "Shipped":               "status-shipped",
-    "Cancelled":             "status-cancelled"
-  };
+    const statusColors = {
+      "New - Unpaid": "status-new-unpaid",
+      "New - Paid": "status-new-paid",
+      "In Progress - Unpaid": "status-progress-unpaid",
+      "In Progress - Paid": "status-progress-paid",
+      "Shipped": "status-shipped",
+      "Cancelled": "status-cancelled",
+      "Comp": "status-comp"
+    };
 
-  async function init() {
-    if (!adminPassword) {
-      document.getElementById("authError").style.display = "block";
-      return;
-    }
-    document.getElementById("mainContent").style.display = "block";
-    await loadOrders();
-  }
-
-  async function loadOrders() {
-    try {
-      const response = await fetch(GET_ORDERS_URL + "?password=" + encodeURIComponent(adminPassword));
-      if (response.status === 401) {
-        sessionStorage.removeItem("adminPassword");
-        document.getElementById("mainContent").style.display = "none";
+    async function init() {
+      if (!adminPassword) {
         document.getElementById("authError").style.display = "block";
         return;
       }
-      allOrders = await response.json();
-      updateStats();
+      document.getElementById("mainContent").style.display = "block";
+      await loadOrders();
+    }
+
+    async function loadOrders() {
+      try {
+        const response = await fetch(GET_ORDERS_URL + "?password=" + encodeURIComponent(adminPassword));
+        if (response.status === 401) {
+          sessionStorage.removeItem("adminPassword");
+          document.getElementById("mainContent").style.display = "none";
+          document.getElementById("authError").style.display = "block";
+          return;
+        }
+        allOrders = await response.json();
+        updateStats();
+        applyFilters();
+      } catch (err) {
+        document.getElementById("ordersContainer").innerHTML =
+          '<div class="empty-state">Could not load orders. Please try again.</div>';
+      }
+    }
+
+    function updateStats() {
+      const total = allOrders.length;
+      const unpaid = allOrders.filter(o => o.status && o.status.includes("Unpaid")).length;
+      const shipped = allOrders.filter(o => o.status === "Shipped").length;
+      const revenue = allOrders.reduce((sum, o) => sum + (parseFloat(o.total) || 0), 0);
+
+      document.getElementById("statTotal").textContent = total;
+      document.getElementById("statUnpaid").textContent = unpaid;
+      document.getElementById("statShipped").textContent = shipped;
+      document.getElementById("statRevenue").textContent = "$" + revenue.toFixed(0);
+    }
+
+    let activeFilter = "all";
+    let showArchived = false;
+
+    function filterOrders(filter, btn) {
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeFilter = filter;
       applyFilters();
-    } catch (err) {
-      document.getElementById("ordersContainer").innerHTML =
-        '<div class="empty-state">Could not load orders. Please try again.</div>';
     }
-  }
 
-  function updateStats() {
-    const total    = allOrders.length;
-    const unpaid   = allOrders.filter(o => o.status && o.status.includes("Unpaid")).length;
-    const shipped  = allOrders.filter(o => o.status === "Shipped").length;
-    const revenue  = allOrders.reduce((sum, o) => sum + (parseFloat(o.total) || 0), 0);
+    function applyFilters() {
+      const search = document.getElementById("searchInput").value.toLowerCase().trim();
+      const sort = document.getElementById("sortSelect").value;
 
-    document.getElementById("statTotal").textContent   = total;
-    document.getElementById("statUnpaid").textContent  = unpaid;
-    document.getElementById("statShipped").textContent = shipped;
-    document.getElementById("statRevenue").textContent = "$" + revenue.toFixed(0);
-  }
+      // Apply status filter
+      let filtered = allOrders;
 
-  let activeFilter = "all";
-  let showArchived = false;
+      // Always filter out archived unless showArchived is true or search matches
+      if (search) {
+        // Show archived orders if they match search
+        filtered = filtered.filter(o =>
+          !o.archived || (
+            (o.orderNumber && o.orderNumber.toString().includes(search)) ||
+            (o.name && o.name.toLowerCase().includes(search)) ||
+            (o.email && o.email.toLowerCase().includes(search)) ||
+            (o.address && o.address.toLowerCase().includes(search)) ||
+            (o.items && o.items.toLowerCase().includes(search)) ||
+            (o.status && o.status.toLowerCase().includes(search)) ||
+            (o.payMethod && o.payMethod.toLowerCase().includes(search)) ||
+            (o.tracking && o.tracking.toLowerCase().includes(search)) ||
+            (o.notes && o.notes.toLowerCase().includes(search))
+          )
+        );
+      } else {
+        filtered = filtered.filter(o => !o.archived || showArchived);
+      }
 
-  function filterOrders(filter, btn) {
-    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    activeFilter = filter;
-    applyFilters();
-  }
+      // Apply status filter (skip for archived)
+      if (activeFilter === "unpaid") {
+        filtered = filtered.filter(o => o.archived || (o.status && o.status.includes("Unpaid")));
+      } else if (activeFilter === "paid") {
+        filtered = filtered.filter(o => o.archived || (o.status && o.status.includes("Paid")));
+      } else if (activeFilter === "shipped") {
+        filtered = filtered.filter(o => o.archived || o.status === "Shipped");
+      }
 
-  function applyFilters() {
-    const search = document.getElementById("searchInput").value.toLowerCase().trim();
-    const sort   = document.getElementById("sortSelect").value;
-
-    // Apply status filter
-    let filtered = allOrders;
-
-    // Always filter out archived unless showArchived is true or search matches
-    if (search) {
-      // Show archived orders if they match search
-      filtered = filtered.filter(o =>
-        !o.archived || (
+      // Apply search filter
+      if (search) {
+        filtered = filtered.filter(o =>
           (o.orderNumber && o.orderNumber.toString().includes(search)) ||
-          (o.name        && o.name.toLowerCase().includes(search)) ||
-          (o.email       && o.email.toLowerCase().includes(search)) ||
-          (o.address     && o.address.toLowerCase().includes(search)) ||
-          (o.items       && o.items.toLowerCase().includes(search)) ||
-          (o.status      && o.status.toLowerCase().includes(search)) ||
-          (o.payMethod   && o.payMethod.toLowerCase().includes(search)) ||
-          (o.tracking    && o.tracking.toLowerCase().includes(search)) ||
-          (o.notes       && o.notes.toLowerCase().includes(search))
-        )
-      );
-    } else {
-      filtered = filtered.filter(o => !o.archived || showArchived);
+          (o.name && o.name.toLowerCase().includes(search)) ||
+          (o.email && o.email.toLowerCase().includes(search)) ||
+          (o.address && o.address.toLowerCase().includes(search)) ||
+          (o.items && o.items.toLowerCase().includes(search)) ||
+          (o.status && o.status.toLowerCase().includes(search)) ||
+          (o.payMethod && o.payMethod.toLowerCase().includes(search)) ||
+          (o.tracking && o.tracking.toLowerCase().includes(search)) ||
+          (o.notes && o.notes.toLowerCase().includes(search))
+        );
+      }
+
+      // Apply sort
+      filtered = [...filtered].sort((a, b) => {
+        if (sort === "newest") return new Date(b.date) - new Date(a.date);
+        if (sort === "oldest") return new Date(a.date) - new Date(b.date);
+        if (sort === "total-high") return (parseFloat(b.total) || 0) - (parseFloat(a.total) || 0);
+        if (sort === "total-low") return (parseFloat(a.total) || 0) - (parseFloat(b.total) || 0);
+        if (sort === "name") return (a.name || "").localeCompare(b.name || "");
+        if (sort === "status") return (a.status || "").localeCompare(b.status || "");
+        return 0;
+      });
+
+      renderOrders(filtered);
     }
 
-    // Apply status filter (skip for archived)
-    if (activeFilter === "unpaid") {
-      filtered = filtered.filter(o => o.archived || (o.status && o.status.includes("Unpaid")));
-    } else if (activeFilter === "paid") {
-      filtered = filtered.filter(o => o.archived || (o.status && o.status.includes("Paid")));
-    } else if (activeFilter === "shipped") {
-      filtered = filtered.filter(o => o.archived || o.status === "Shipped");
+    function toggleArchived(btn) {
+      showArchived = !showArchived;
+      btn.classList.toggle("active", showArchived);
+      btn.textContent = showArchived ? "📦 Hide Archived" : "📦 Show Archived";
+      applyFilters();
     }
 
-    // Apply search filter
-    if (search) {
-      filtered = filtered.filter(o =>
-        (o.orderNumber && o.orderNumber.toString().includes(search)) ||
-        (o.name        && o.name.toLowerCase().includes(search)) ||
-        (o.email       && o.email.toLowerCase().includes(search)) ||
-        (o.address     && o.address.toLowerCase().includes(search)) ||
-        (o.items       && o.items.toLowerCase().includes(search)) ||
-        (o.status      && o.status.toLowerCase().includes(search)) ||
-        (o.payMethod   && o.payMethod.toLowerCase().includes(search)) ||
-        (o.tracking    && o.tracking.toLowerCase().includes(search)) ||
-        (o.notes       && o.notes.toLowerCase().includes(search))
-      );
-    }
+    function renderOrders(orders) {
+      const container = document.getElementById("ordersContainer");
+      if (orders.length === 0) {
+        container.innerHTML = '<div class="empty-state">No orders found.</div>';
+        return;
+      }
 
-    // Apply sort
-    filtered = [...filtered].sort((a, b) => {
-      if (sort === "newest")     return new Date(b.date) - new Date(a.date);
-      if (sort === "oldest")     return new Date(a.date) - new Date(b.date);
-      if (sort === "total-high") return (parseFloat(b.total) || 0) - (parseFloat(a.total) || 0);
-      if (sort === "total-low")  return (parseFloat(a.total) || 0) - (parseFloat(b.total) || 0);
-      if (sort === "name")       return (a.name || "").localeCompare(b.name || "");
-      if (sort === "status")     return (a.status || "").localeCompare(b.status || "");
-      return 0;
-    });
+      container.innerHTML = orders.map(order => {
+        const statusClass = statusColors[order.status] || "";
+        const dateStr = order.date ? new Date(order.date).toLocaleDateString("en-US", {
+          year: "numeric", month: "short", day: "numeric"
+        }) : "—";
 
-    renderOrders(filtered);
-  }
-
-  function toggleArchived(btn) {
-    showArchived = !showArchived;
-    btn.classList.toggle("active", showArchived);
-    btn.textContent = showArchived ? "📦 Hide Archived" : "📦 Show Archived";
-    applyFilters();
-  }
-
-  function renderOrders(orders) {
-    const container = document.getElementById("ordersContainer");
-    if (orders.length === 0) {
-      container.innerHTML = '<div class="empty-state">No orders found.</div>';
-      return;
-    }
-
-    container.innerHTML = orders.map(order => {
-      const statusClass = statusColors[order.status] || "";
-      const dateStr = order.date ? new Date(order.date).toLocaleDateString("en-US", {
-        year: "numeric", month: "short", day: "numeric"
-      }) : "—";
-
-      return `
+        return `
         <div class="order-card ${statusClass}" id="card-${order.orderNumber}" ${order.archived ? 'style="opacity:0.7; border-left-color:#999;"' : ''}>
           ${order.archived ? '<div style="background:#f0f0f0; padding:4px 16px; font-size:12px; color:#999; font-weight:600; border-radius:4px; display:inline-block; margin-bottom:12px;">📦 ARCHIVED</div>' : ''}
           <div class="order-top">
@@ -572,7 +692,7 @@
             </div>
             <div class="order-field">
               <label>Payment</label>
-              <span>${order.payMethod === "card" ? "💳 Credit/Debit Card" : order.payMethod === "venmo" ? "💙 Venmo" : order.payMethod === "zelle" ? "💚 Zelle" : "—"}</span>
+              <span>${order.payMethod === "card" ? "💳 Credit/Debit Card" : order.payMethod === "venmo" ? "💙 Venmo" : order.payMethod === "zelle" ? "💚 Zelle" : order.payMethod === "comp" ? "🎁 Complimentary" : "—"}</span>
             </div>
             <div class="order-field">
               <label>Ship To</label>
@@ -611,12 +731,12 @@
           <div class="order-actions">
             <select class="status-select" id="status-${order.orderNumber}"
               onchange="updateStatus('${order.orderNumber}', this)">
-              <option ${order.status === "New - Unpaid"          ? "selected" : ""}>New - Unpaid</option>
-              <option ${order.status === "New - Paid"            ? "selected" : ""}>New - Paid</option>
-              <option ${order.status === "In Progress - Unpaid"  ? "selected" : ""}>In Progress - Unpaid</option>
-              <option ${order.status === "In Progress - Paid"    ? "selected" : ""}>In Progress - Paid</option>
-              <option ${order.status === "Shipped"               ? "selected" : ""}>Shipped</option>
-              <option ${order.status === "Cancelled"             ? "selected" : ""}>Cancelled</option>
+              <option ${order.status === "New - Unpaid" ? "selected" : ""}>New - Unpaid</option>
+              <option ${order.status === "New - Paid" ? "selected" : ""}>New - Paid</option>
+              <option ${order.status === "In Progress - Unpaid" ? "selected" : ""}>In Progress - Unpaid</option>
+              <option ${order.status === "In Progress - Paid" ? "selected" : ""}>In Progress - Paid</option>
+              <option ${order.status === "Shipped" ? "selected" : ""}>Shipped</option>
+              <option ${order.status === "Cancelled" ? "selected" : ""}>Cancelled</option>
             </select>
 
             <span class="save-status" id="save-${order.orderNumber}">✓ Saved!</span>
@@ -627,7 +747,7 @@
               <a href="${order.packingSlip}" target="_blank" class="btn btn-gold">📄 Old Packing Slip</a>
             ` : ""}
 
-            ${order.labelUrl && !["ADDRESS_PARSE_FAILED","NO_RATE_FOUND","LABEL_FAILED",""].includes(order.labelUrl) ? `
+            ${order.labelUrl && !["ADDRESS_PARSE_FAILED", "NO_RATE_FOUND", "LABEL_FAILED", ""].includes(order.labelUrl) ? `
               <a href="${order.labelUrl}" target="_blank" class="btn btn-blue">🏷️ Label</a>
               <button class="btn btn-gray" onclick="generateLabel('${order.orderNumber}', '${order.labelUrl}')">🔄 Regenerate</button>
             ` : `
@@ -665,466 +785,467 @@
             </div>
           </div>` : ""}
         </div>`;
-    }).join("");
-  }
-
-  async function updateStatus(orderNumber, select) {
-    const newStatus = select.value;
-    const card = document.getElementById("card-" + orderNumber);
-
-    // Update card color
-    Object.values(statusColors).forEach(c => card.classList.remove(c));
-    card.classList.add(statusColors[newStatus] || "");
-
-    try {
-      await fetch(UPDATE_ORDER_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          password:    adminPassword,
-          orderNumber: orderNumber,
-          status:      newStatus
-        })
-      });
-
-      const msg = document.getElementById("save-" + orderNumber);
-      msg.style.display = "inline";
-      setTimeout(() => msg.style.display = "none", 2000);
-
-      // Update local data
-      const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
-      if (order) order.status = newStatus;
-      updateStats();
-
-    } catch (err) {
-      alert("Could not save. Please try again.");
-    }
-  }
-
-  // ── Receipt Modal ──
-  // ── Receipt Inline Panel ──
-  function toggleReceiptPanel(orderNumber) {
-    const panel = document.getElementById("receiptPanel-" + orderNumber);
-    const btn   = document.getElementById("receiptBtn-" + orderNumber);
-    const isOpen = panel.style.display === "block";
-    panel.style.display = isOpen ? "none" : "block";
-    btn.textContent = isOpen ? "📧 Send Receipt" : "✕ Close";
-    if (!isOpen) {
-      document.getElementById("receiptRef-" + orderNumber).focus();
-    }
-  }
-
-  async function confirmSendReceipt(orderNumber) {
-    const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
-    if (!order) return;
-
-    const reference = document.getElementById("receiptRef-" + orderNumber).value.trim();
-
-    try {
-      const res = await fetch("/.netlify/functions/send-receipt", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          password:        adminPassword,
-          orderNumber:     order.orderNumber,
-          name:            order.name,
-          email:           order.email,
-          items:           order.items,
-          shipping:        order.shipping,
-          total:           order.total,
-          address:         order.address,
-          date:            order.date,
-          paymentIntentId: order.paymentIntentId || "",
-          reference:       reference
-        })
-      });
-      const data = await res.json();
-      if (data.success) {
-        toggleReceiptPanel(orderNumber);
-        alert("✅ Receipt sent to " + order.email);
-        await loadOrders();
-      } else {
-        alert("⚠️ Could not send receipt: " + (data.error || "Unknown error"));
-      }
-    } catch (err) {
-      alert("⚠️ Could not send receipt. Please try again.");
-    }
-  }
-
-  // ── Cancel Modal ──
-  let cancelOrderNumber = null;
-  let refundType = "full";
-
-  function openCancelModal(orderNumber) {
-    const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
-    if (!order) return;
-    cancelOrderNumber = orderNumber;
-    refundType = "full";
-
-    document.getElementById("cancelModalDesc").textContent =
-      `Cancel Order #${orderNumber} for ${order.name} ($${order.total})?`;
-
-    document.getElementById("cancelReason").value = "";
-    document.getElementById("manualRefInput").value = "";
-    document.getElementById("partialAmount").value = "";
-
-    const refundSection = document.getElementById("refundSection");
-    const refundLabel = document.getElementById("refundSectionLabel");
-    const isCard = order.paymentIntentId && !order.paymentIntentId.startsWith("pi_") === false;
-
-    if (order.paymentIntentId) {
-      refundLabel.textContent = "Stripe Refund";
-      refundSection.style.display = "block";
-      document.getElementById("manualRefRow").style.display = "none";
-    } else {
-      refundLabel.textContent = "Manual Refund";
-      refundSection.style.display = "block";
-      document.getElementById("manualRefRow").style.display = "none";
+      }).join("");
     }
 
-    setRefundType("full");
-    document.getElementById("cancelModal").style.display = "flex";
-  }
+    async function updateStatus(orderNumber, select) {
+      const newStatus = select.value;
+      const card = document.getElementById("card-" + orderNumber);
 
-  function closeCancelModal() {
-    document.getElementById("cancelModal").style.display = "none";
-    cancelOrderNumber = null;
-  }
+      // Update card color
+      Object.values(statusColors).forEach(c => card.classList.remove(c));
+      card.classList.add(statusColors[newStatus] || "");
 
-  function setRefundType(type) {
-    refundType = type;
-    const order = allOrders.find(o => o.orderNumber.toString() === cancelOrderNumber.toString());
-    const isCard = order && order.payMethod === "card";
+      try {
+        await fetch(UPDATE_ORDER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            password: adminPassword,
+            orderNumber: orderNumber,
+            status: newStatus
+          })
+        });
 
-    document.getElementById("refundFullBtn").className    = "btn " + (type === "full"    ? "btn-green" : "btn-gray");
-    document.getElementById("refundPartialBtn").className = "btn " + (type === "partial" ? "btn-green" : "btn-gray");
-    document.getElementById("refundNoneBtn").className    = "btn " + (type === "none"    ? "btn-green" : "btn-gray");
-
-    document.getElementById("partialAmountRow").style.display = type === "partial" ? "block" : "none";
-
-    // Show manual reference field for Venmo/Zelle when refund is full or partial
-    document.getElementById("manualRefRow").style.display =
-      (!isCard && type !== "none") ? "block" : "none";
-  }
-
-  async function confirmCancel() {
-    const order = allOrders.find(o => o.orderNumber.toString() === cancelOrderNumber.toString());
-    if (!order) return;
-
-    const reason = document.getElementById("cancelReason").value.trim();
-    if (!reason) {
-      alert("Please enter a reason for cancellation.");
-      return;
-    }
-
-    let refundAmount = null;
-    if (refundType === "partial") {
-      refundAmount = parseFloat(document.getElementById("partialAmount").value);
-      if (isNaN(refundAmount) || refundAmount <= 0) {
-        alert("Please enter a valid refund amount.");
-        return;
-      }
-    }
-
-    const manualReference = document.getElementById("manualRefInput").value.trim();
-    const isCard = order.payMethod === "card";
-
-    if (!isCard && refundType !== "none" && !manualReference) {
-      alert("Please enter a manual refund reference.");
-      return;
-    }
-
-    closeCancelModal();
-
-    // Issue refund
-    let refundRef = "";
-    let refundRecord = "";
-    try {
-      const refundBody = {
-        password:        adminPassword,
-        orderNumber:     order.orderNumber,
-        reason:          reason,
-        paymentMethod:   isCard ? "card" : (order.paymentMethod || "Venmo/Zelle"),
-        manualReference: manualReference
-      };
-      if (isCard) refundBody.paymentIntentId = order.paymentIntentId;
-      if (refundType === "partial") refundBody.amount = refundAmount;
-      if (refundType === "none") refundBody.skipRefund = true;
-
-      const refundRes = await fetch("/.netlify/functions/refund-order", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(refundBody)
-      });
-      const refundData = await refundRes.json();
-      if (refundData.success) {
-        refundRef = refundData.refundId || manualReference || "";
-        refundRecord = refundData.refundRecord || "";
-      } else {
-        alert("⚠️ Refund failed: " + (refundData.error || "Unknown error"));
-        return;
-      }
-    } catch (err) {
-      alert("⚠️ Refund request failed. Please refund manually.");
-      return;
-    }
-
-    // Update status — partial refund keeps current status, full/none sets to Cancelled
-    const newStatus = refundType === "partial" ? order.status : "Cancelled";
-    try {
-      await fetch("/.netlify/functions/update-order", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          password:    adminPassword,
-          orderNumber: order.orderNumber,
-          status:      newStatus
-        })
-      });
-    } catch (err) {
-      alert("⚠️ Could not update order status. Please update manually.");
-    }
-
-    // Send cancellation email
-    try {
-      await fetch("/.netlify/functions/send-cancellation", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          password:      adminPassword,
-          orderNumber:   order.orderNumber,
-          name:          order.name,
-          email:         order.email,
-          items:         order.items,
-          total:         order.total,
-          refundAmount:  refundAmount || order.total,
-          refundType:    refundType,
-          reason:        reason,
-          refundRef:     refundRef,
-          paymentMethod: isCard ? "card" : (order.paymentMethod || "Venmo/Zelle")
-        })
-      });
-    } catch (err) {
-      console.warn("Cancellation email failed:", err);
-    }
-
-    // Update local data and UI
-    const orderObj = allOrders.find(o => o.orderNumber.toString() === order.orderNumber.toString());
-    if (orderObj) orderObj.status = newStatus;
-    await loadOrders();
-
-    alert(
-      `✅ Order #${order.orderNumber} ${refundType === "partial" ? "partially refunded" : "cancelled"}.\n` +
-      (refundRecord ? refundRecord + "\n" : "") +
-      `Email sent to ${order.email}.`
-    );
-  }
-
-  async function generateLabel(orderNumber, existingLabel) {
-    const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
-    if (!order) return;
-
-    if (existingLabel) {
-      const confirm = window.confirm(`Order #${orderNumber} already has a label. Generate a new one anyway?`);
-      if (!confirm) return;
-    }
-
-    const btn = document.getElementById("labelBtn-" + orderNumber);
-    if (btn) btn.textContent = "Generating...";
-
-    try {
-      const res = await fetch("/.netlify/functions/generate-label", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          password:    adminPassword,
-          orderNumber: order.orderNumber,
-          name:        order.name,
-          address:     order.address,
-          shipping:    order.shipping
-        })
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        // Update local order data
-        order.labelUrl = data.labelUrl;
-        // Re-apply filters to maintain current view
-        applyFilters();
-        // Open label in new tab
-        window.open(data.labelUrl, "_blank");
-      } else {
-        alert("⚠️ " + (data.error || "Could not generate label. Please try again."));
-        if (btn) btn.textContent = "🏷️ Generate Label";
-      }
-
-    } catch (err) {
-      alert("⚠️ Could not generate label. Please try again.");
-      if (btn) btn.textContent = "🏷️ Generate Label";
-    }
-  }  
-  
-  // ── Tracking ──
-  function toggleTrackingEdit(orderNumber) {
-    const editDiv = document.getElementById("trackingEdit-" + orderNumber);
-    const isOpen  = editDiv.style.display === "block";
-    editDiv.style.display = isOpen ? "none" : "block";
-    if (!isOpen) {
-      document.getElementById("trackingInput-" + orderNumber).focus();
-    }
-  }
-
-  async function saveTracking(orderNumber) {
-    const tracking = document.getElementById("trackingInput-" + orderNumber).value.trim();
-    if (!tracking) {
-      alert("Please enter a tracking number.");
-      return;
-    }
-
-    try {
-      const res = await fetch("/.netlify/functions/update-tracking", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          password:    adminPassword,
-          orderNumber: orderNumber,
-          tracking:    tracking
-        })
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        // Update display
-        const display = document.getElementById("trackingDisplay-" + orderNumber);
-        display.textContent = tracking;
-        display.style.color = "var(--text)";
-        display.style.fontStyle = "normal";
+        const msg = document.getElementById("save-" + orderNumber);
+        msg.style.display = "inline";
+        setTimeout(() => msg.style.display = "none", 2000);
 
         // Update local data
         const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
-        if (order) order.tracking = tracking;
-
-        alert("✅ Tracking number saved! Customer will receive a tracking email shortly.");
-        await loadOrders();
-      } else {
-        alert("⚠️ Could not save tracking number: " + (data.error || "Unknown error"));
-      }
-    } catch (err) {
-      alert("⚠️ Could not save tracking number. Please try again.");
-    }
-  }
-
-  async function archiveOrder(orderNumber) {
-    const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
-    if (!order) return;
-
-    const confirm = window.confirm(
-      `Archive Order #${orderNumber} for ${order.name}?\n\nThis will move it to the Archive tab in Google Sheets and remove it from this view.`
-    );
-    if (!confirm) return;
-
-    try {
-      const res = await fetch("/.netlify/functions/archive-order", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          password:    adminPassword,
-          orderNumber: orderNumber
-        })
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        allOrders = allOrders.filter(o => o.orderNumber.toString() !== orderNumber.toString());
+        if (order) order.status = newStatus;
         updateStats();
-        applyFilters();
-        alert(`✅ Order #${orderNumber} has been archived.`);
-      } else {
-        alert("⚠️ Could not archive order: " + (data.error || "Unknown error"));
+
+      } catch (err) {
+        alert("Could not save. Please try again.");
       }
-    } catch (err) {
-      alert("⚠️ Could not archive order. Please try again.");
-    }
-  }
-
-  function toggleMessagePanel(orderNumber) {
-    const panel = document.getElementById("messagePanel-" + orderNumber);
-    panel.style.display = panel.style.display === "none" ? "block" : "none";
-    if (panel.style.display === "block") {
-      document.getElementById("messageBody-" + orderNumber).value = "";
-    }
-  }
-
-  async function sendMessage(orderNumber) {
-    const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
-    if (!order) return;
-
-    const message = document.getElementById("messageBody-" + orderNumber).value.trim();
-    if (!message) {
-      alert("Please enter a message.");
-      return;
     }
 
-    try {
-      const res = await fetch("/.netlify/functions/send-message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          password:    adminPassword,
+    // ── Receipt Modal ──
+    // ── Receipt Inline Panel ──
+    function toggleReceiptPanel(orderNumber) {
+      const panel = document.getElementById("receiptPanel-" + orderNumber);
+      const btn = document.getElementById("receiptBtn-" + orderNumber);
+      const isOpen = panel.style.display === "block";
+      panel.style.display = isOpen ? "none" : "block";
+      btn.textContent = isOpen ? "📧 Send Receipt" : "✕ Close";
+      if (!isOpen) {
+        document.getElementById("receiptRef-" + orderNumber).focus();
+      }
+    }
+
+    async function confirmSendReceipt(orderNumber) {
+      const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+      if (!order) return;
+
+      const reference = document.getElementById("receiptRef-" + orderNumber).value.trim();
+
+      try {
+        const res = await fetch("/.netlify/functions/send-receipt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            password: adminPassword,
+            orderNumber: order.orderNumber,
+            name: order.name,
+            email: order.email,
+            items: order.items,
+            shipping: order.shipping,
+            total: order.total,
+            address: order.address,
+            date: order.date,
+            paymentIntentId: order.paymentIntentId || "",
+            reference: reference
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          toggleReceiptPanel(orderNumber);
+          alert("✅ Receipt sent to " + order.email);
+          await loadOrders();
+        } else {
+          alert("⚠️ Could not send receipt: " + (data.error || "Unknown error"));
+        }
+      } catch (err) {
+        alert("⚠️ Could not send receipt. Please try again.");
+      }
+    }
+
+    // ── Cancel Modal ──
+    let cancelOrderNumber = null;
+    let refundType = "full";
+
+    function openCancelModal(orderNumber) {
+      const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+      if (!order) return;
+      cancelOrderNumber = orderNumber;
+      refundType = "full";
+
+      document.getElementById("cancelModalDesc").textContent =
+        `Cancel Order #${orderNumber} for ${order.name} ($${order.total})?`;
+
+      document.getElementById("cancelReason").value = "";
+      document.getElementById("manualRefInput").value = "";
+      document.getElementById("partialAmount").value = "";
+
+      const refundSection = document.getElementById("refundSection");
+      const refundLabel = document.getElementById("refundSectionLabel");
+      const isCard = order.paymentIntentId && !order.paymentIntentId.startsWith("pi_") === false;
+
+      if (order.paymentIntentId) {
+        refundLabel.textContent = "Stripe Refund";
+        refundSection.style.display = "block";
+        document.getElementById("manualRefRow").style.display = "none";
+      } else {
+        refundLabel.textContent = "Manual Refund";
+        refundSection.style.display = "block";
+        document.getElementById("manualRefRow").style.display = "none";
+      }
+
+      setRefundType("full");
+      document.getElementById("cancelModal").style.display = "flex";
+    }
+
+    function closeCancelModal() {
+      document.getElementById("cancelModal").style.display = "none";
+      cancelOrderNumber = null;
+    }
+
+    function setRefundType(type) {
+      refundType = type;
+      const order = allOrders.find(o => o.orderNumber.toString() === cancelOrderNumber.toString());
+      const isCard = order && order.payMethod === "card";
+
+      document.getElementById("refundFullBtn").className = "btn " + (type === "full" ? "btn-green" : "btn-gray");
+      document.getElementById("refundPartialBtn").className = "btn " + (type === "partial" ? "btn-green" : "btn-gray");
+      document.getElementById("refundNoneBtn").className = "btn " + (type === "none" ? "btn-green" : "btn-gray");
+
+      document.getElementById("partialAmountRow").style.display = type === "partial" ? "block" : "none";
+
+      // Show manual reference field for Venmo/Zelle when refund is full or partial
+      document.getElementById("manualRefRow").style.display =
+        (!isCard && type !== "none") ? "block" : "none";
+    }
+
+    async function confirmCancel() {
+      const order = allOrders.find(o => o.orderNumber.toString() === cancelOrderNumber.toString());
+      if (!order) return;
+
+      const reason = document.getElementById("cancelReason").value.trim();
+      if (!reason) {
+        alert("Please enter a reason for cancellation.");
+        return;
+      }
+
+      let refundAmount = null;
+      if (refundType === "partial") {
+        refundAmount = parseFloat(document.getElementById("partialAmount").value);
+        if (isNaN(refundAmount) || refundAmount <= 0) {
+          alert("Please enter a valid refund amount.");
+          return;
+        }
+      }
+
+      const manualReference = document.getElementById("manualRefInput").value.trim();
+      const isCard = order.payMethod === "card";
+
+      if (!isCard && refundType !== "none" && !manualReference) {
+        alert("Please enter a manual refund reference.");
+        return;
+      }
+
+      closeCancelModal();
+
+      // Issue refund
+      let refundRef = "";
+      let refundRecord = "";
+      try {
+        const refundBody = {
+          password: adminPassword,
           orderNumber: order.orderNumber,
-          name:        order.name,
-          email:       order.email,
-          message:     message
-        })
-      });
-      const data = await res.json();
-      if (data.success) {
-        toggleMessagePanel(orderNumber);
-        alert("✅ Message sent to " + order.email);
-      } else {
-        alert("⚠️ Could not send message: " + (data.error || "Unknown error"));
+          reason: reason,
+          paymentMethod: isCard ? "card" : (order.paymentMethod || "Venmo/Zelle"),
+          manualReference: manualReference
+        };
+        if (isCard) refundBody.paymentIntentId = order.paymentIntentId;
+        if (refundType === "partial") refundBody.amount = refundAmount;
+        if (refundType === "none") refundBody.skipRefund = true;
+
+        const refundRes = await fetch("/.netlify/functions/refund-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(refundBody)
+        });
+        const refundData = await refundRes.json();
+        if (refundData.success) {
+          refundRef = refundData.refundId || manualReference || "";
+          refundRecord = refundData.refundRecord || "";
+        } else {
+          alert("⚠️ Refund failed: " + (refundData.error || "Unknown error"));
+          return;
+        }
+      } catch (err) {
+        alert("⚠️ Refund request failed. Please refund manually.");
+        return;
       }
-    } catch (err) {
-      alert("⚠️ Could not send message. Please try again.");
+
+      // Update status — partial refund keeps current status, full/none sets to Cancelled
+      const newStatus = refundType === "partial" ? order.status : "Cancelled";
+      try {
+        await fetch("/.netlify/functions/update-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            password: adminPassword,
+            orderNumber: order.orderNumber,
+            status: newStatus
+          })
+        });
+      } catch (err) {
+        alert("⚠️ Could not update order status. Please update manually.");
+      }
+
+      // Send cancellation email
+      try {
+        await fetch("/.netlify/functions/send-cancellation", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            password: adminPassword,
+            orderNumber: order.orderNumber,
+            name: order.name,
+            email: order.email,
+            items: order.items,
+            total: order.total,
+            refundAmount: refundAmount || order.total,
+            refundType: refundType,
+            reason: reason,
+            refundRef: refundRef,
+            paymentMethod: isCard ? "card" : (order.paymentMethod || "Venmo/Zelle")
+          })
+        });
+      } catch (err) {
+        console.warn("Cancellation email failed:", err);
+      }
+
+      // Update local data and UI
+      const orderObj = allOrders.find(o => o.orderNumber.toString() === order.orderNumber.toString());
+      if (orderObj) orderObj.status = newStatus;
+      await loadOrders();
+
+      alert(
+        `✅ Order #${order.orderNumber} ${refundType === "partial" ? "partially refunded" : "cancelled"}.\n` +
+        (refundRecord ? refundRecord + "\n" : "") +
+        `Email sent to ${order.email}.`
+      );
     }
-  }
-  
-  async function sendReviewRequest(orderNumber) {
-  const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
-  if (!order) return;
 
-  if (!confirm(`Send a review request email to ${order.name}?`)) return;
+    async function generateLabel(orderNumber, existingLabel) {
+      const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+      if (!order) return;
 
-  try {
-    const res = await fetch("/.netlify/functions/send-review-request", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        password: adminPassword,
-        orderNumber: order.orderNumber,
-        name: order.name,
-        email: order.email,
-        items: order.items
-      })
-    });
-    const result = await res.json();
-    if (result.success) {
-      alert(`Review request sent to ${order.name}!`);
-    } else {
-      alert("Could not send email: " + (result.error || "Unknown error"));
+      if (existingLabel) {
+        const confirm = window.confirm(`Order #${orderNumber} already has a label. Generate a new one anyway?`);
+        if (!confirm) return;
+      }
+
+      const btn = document.getElementById("labelBtn-" + orderNumber);
+      if (btn) btn.textContent = "Generating...";
+
+      try {
+        const res = await fetch("/.netlify/functions/generate-label", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            password: adminPassword,
+            orderNumber: order.orderNumber,
+            name: order.name,
+            address: order.address,
+            shipping: order.shipping
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          // Update local order data
+          order.labelUrl = data.labelUrl;
+          // Re-apply filters to maintain current view
+          applyFilters();
+          // Open label in new tab
+          window.open(data.labelUrl, "_blank");
+        } else {
+          alert("⚠️ " + (data.error || "Could not generate label. Please try again."));
+          if (btn) btn.textContent = "🏷️ Generate Label";
+        }
+
+      } catch (err) {
+        alert("⚠️ Could not generate label. Please try again.");
+        if (btn) btn.textContent = "🏷️ Generate Label";
+      }
     }
-  } catch (err) {
-    alert("Error: " + err.message);
-  }
-}
 
-  function logout() {
-    sessionStorage.removeItem("adminPassword");
-    window.location.href = "admin.html";
-  }
+    // ── Tracking ──
+    function toggleTrackingEdit(orderNumber) {
+      const editDiv = document.getElementById("trackingEdit-" + orderNumber);
+      const isOpen = editDiv.style.display === "block";
+      editDiv.style.display = isOpen ? "none" : "block";
+      if (!isOpen) {
+        document.getElementById("trackingInput-" + orderNumber).focus();
+      }
+    }
 
-  init();
-</script>
+    async function saveTracking(orderNumber) {
+      const tracking = document.getElementById("trackingInput-" + orderNumber).value.trim();
+      if (!tracking) {
+        alert("Please enter a tracking number.");
+        return;
+      }
+
+      try {
+        const res = await fetch("/.netlify/functions/update-tracking", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            password: adminPassword,
+            orderNumber: orderNumber,
+            tracking: tracking
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          // Update display
+          const display = document.getElementById("trackingDisplay-" + orderNumber);
+          display.textContent = tracking;
+          display.style.color = "var(--text)";
+          display.style.fontStyle = "normal";
+
+          // Update local data
+          const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+          if (order) order.tracking = tracking;
+
+          alert("✅ Tracking number saved! Customer will receive a tracking email shortly.");
+          await loadOrders();
+        } else {
+          alert("⚠️ Could not save tracking number: " + (data.error || "Unknown error"));
+        }
+      } catch (err) {
+        alert("⚠️ Could not save tracking number. Please try again.");
+      }
+    }
+
+    async function archiveOrder(orderNumber) {
+      const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+      if (!order) return;
+
+      const confirm = window.confirm(
+        `Archive Order #${orderNumber} for ${order.name}?\n\nThis will move it to the Archive tab in Google Sheets and remove it from this view.`
+      );
+      if (!confirm) return;
+
+      try {
+        const res = await fetch("/.netlify/functions/archive-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            password: adminPassword,
+            orderNumber: orderNumber
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          allOrders = allOrders.filter(o => o.orderNumber.toString() !== orderNumber.toString());
+          updateStats();
+          applyFilters();
+          alert(`✅ Order #${orderNumber} has been archived.`);
+        } else {
+          alert("⚠️ Could not archive order: " + (data.error || "Unknown error"));
+        }
+      } catch (err) {
+        alert("⚠️ Could not archive order. Please try again.");
+      }
+    }
+
+    function toggleMessagePanel(orderNumber) {
+      const panel = document.getElementById("messagePanel-" + orderNumber);
+      panel.style.display = panel.style.display === "none" ? "block" : "none";
+      if (panel.style.display === "block") {
+        document.getElementById("messageBody-" + orderNumber).value = "";
+      }
+    }
+
+    async function sendMessage(orderNumber) {
+      const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+      if (!order) return;
+
+      const message = document.getElementById("messageBody-" + orderNumber).value.trim();
+      if (!message) {
+        alert("Please enter a message.");
+        return;
+      }
+
+      try {
+        const res = await fetch("/.netlify/functions/send-message", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            password: adminPassword,
+            orderNumber: order.orderNumber,
+            name: order.name,
+            email: order.email,
+            message: message
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          toggleMessagePanel(orderNumber);
+          alert("✅ Message sent to " + order.email);
+        } else {
+          alert("⚠️ Could not send message: " + (data.error || "Unknown error"));
+        }
+      } catch (err) {
+        alert("⚠️ Could not send message. Please try again.");
+      }
+    }
+
+    async function sendReviewRequest(orderNumber) {
+      const order = allOrders.find(o => o.orderNumber.toString() === orderNumber.toString());
+      if (!order) return;
+
+      if (!confirm(`Send a review request email to ${order.name}?`)) return;
+
+      try {
+        const res = await fetch("/.netlify/functions/send-review-request", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            password: adminPassword,
+            orderNumber: order.orderNumber,
+            name: order.name,
+            email: order.email,
+            items: order.items
+          })
+        });
+        const result = await res.json();
+        if (result.success) {
+          alert(`Review request sent to ${order.name}!`);
+        } else {
+          alert("Could not send email: " + (result.error || "Unknown error"));
+        }
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem("adminPassword");
+      window.location.href = "admin.html";
+    }
+
+    init();
+  </script>
 </body>
+
 </html>

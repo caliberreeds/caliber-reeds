@@ -513,6 +513,56 @@
       </div>
     </div>
 
+    <div style="background:#fff;border:1px solid var(--gray-light);border-radius:10px;padding:28px;margin-bottom:32px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--green-dark);margin-bottom:6px;">Create Complimentary Order</h2>
+      <p style="font-size:13px;color:var(--gray-mid);margin-bottom:20px;">Submits a $0 order directly to the sheet and sends confirmation emails.</p>
+    
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div>
+          <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text);display:block;margin-bottom:4px;">Customer Name</label>
+          <input id="compName" type="text" style="width:100%;padding:9px 12px;border:1px solid var(--gray-light);border-radius:6px;font-size:14px;">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text);display:block;margin-bottom:4px;">Email</label>
+          <input id="compEmail" type="email" style="width:100%;padding:9px 12px;border:1px solid var(--gray-light);border-radius:6px;font-size:14px;">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text);display:block;margin-bottom:4px;">Street</label>
+          <input id="compStreet" type="text" style="width:100%;padding:9px 12px;border:1px solid var(--gray-light);border-radius:6px;font-size:14px;">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text);display:block;margin-bottom:4px;">City</label>
+          <input id="compCity" type="text" style="width:100%;padding:9px 12px;border:1px solid var(--gray-light);border-radius:6px;font-size:14px;">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text);display:block;margin-bottom:4px;">State</label>
+          <input id="compState" type="text" maxlength="2" style="width:100%;padding:9px 12px;border:1px solid var(--gray-light);border-radius:6px;font-size:14px;">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text);display:block;margin-bottom:4px;">ZIP</label>
+          <input id="compZip" type="text" style="width:100%;padding:9px 12px;border:1px solid var(--gray-light);border-radius:6px;font-size:14px;">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text);display:block;margin-bottom:8px;">Items</label>
+          <div id="compProductPicker" style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:13px;color:var(--gray-mid);">Loading products...</div>
+          </div>
+          <button type="button" onclick="addCompProductRow()" style="margin-top:10px;padding:6px 14px;background:transparent;border:1px solid var(--green-dark);color:var(--green-dark);border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">+ Add Another Item</button>
+        </div>
+        <div style="grid-column:1/-1;">
+          <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text);display:block;margin-bottom:4px;">Reason for Comp</label>
+          <input id="compReason" type="text" placeholder="e.g. Teacher gift, replacement, giveaway" style="width:100%;padding:9px 12px;border:1px solid var(--gray-light);border-radius:6px;font-size:14px;">
+        </div>
+      </div>
+    
+      <div id="compError" style="display:none;margin-top:14px;padding:10px 14px;background:var(--red-light);color:var(--red);border-radius:6px;font-size:13px;"></div>
+      <div id="compSuccess" style="display:none;margin-top:14px;padding:10px 14px;background:#d4edda;color:#1e3d2a;border-radius:6px;font-size:13px;"></div>
+    
+      <button onclick="submitCompOrder()" style="margin-top:20px;padding:12px 28px;background:var(--green-dark);color:#fff;border:none;border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.04em;">
+        Submit Comp Order
+      </button>
+    </div>
+
   </div>
 
 <script>
@@ -524,6 +574,7 @@
   // Auto-login if password already in session
   if (adminPassword) {
     loadSettings().then(() => {
+      loadCompProducts();
       document.getElementById("loginScreen").style.display = "none";
       document.getElementById("adminScreen").style.display = "block";
     }).catch(() => {
@@ -538,6 +589,7 @@
   };
 
   async function login() {
+    console.log("login called");
     const password = document.getElementById("passwordInput").value;
     if (!password) return;
 
@@ -557,6 +609,8 @@
       adminPassword = password;
       sessionStorage.setItem("adminPassword", password);
       await loadSettings();
+      console.log("about to call loadCompProducts");
+      setTimeout(loadCompProducts, 100);
       document.getElementById("loginScreen").style.display = "none";
       document.getElementById("adminScreen").style.display = "block";
 
@@ -776,6 +830,117 @@
       }
     } catch (err) {
       alert("Could not change password. Please try again.");
+    }
+  }
+
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzerDX-cX31WB9oLJ7430QAc-6TRLhjWAIyIUBI39APdaV0dresQSl478M5bhocJJhL/exec";
+
+  let compProducts = [];
+
+  async function loadCompProducts() {
+    try {
+      const res  = await fetch("/.netlify/functions/get-products");
+      const data = await res.json();
+      console.log("products data:", data);
+      compProducts = (data.products || []).filter(p => p.active);
+      console.log("compProducts:", compProducts);
+      const picker = document.getElementById("compProductPicker");
+      console.log("picker element:", picker);
+      picker.innerHTML = "";
+      addCompProductRow();
+    } catch (err) {
+      console.log("loadCompProducts error:", err);
+      document.getElementById("compProductPicker").innerHTML =
+        '<div style="font-size:13px;color:var(--red);">Could not load products.</div>';
+    }
+  }
+
+  function addCompProductRow() {
+    const picker  = document.getElementById("compProductPicker");
+    const row     = document.createElement("div");
+    row.className = "comp-product-row";
+    row.style.cssText = "display:flex;gap:8px;align-items:center;";
+    const options = compProducts.map(p =>
+      `<option value="${p.name}">${p.name} — $${p.price}</option>`
+    ).join("");
+    row.innerHTML = `
+      <select style="flex:2;padding:9px 12px;border:1px solid var(--gray-light);border-radius:6px;font-size:14px;">
+        ${options}
+      </select>
+      <input type="number" value="1" min="1" max="20"
+        style="width:70px;padding:9px 12px;border:1px solid var(--gray-light);border-radius:6px;font-size:14px;">
+      <button type="button" onclick="this.parentElement.remove()"
+        style="padding:8px 12px;background:transparent;border:1px solid var(--gray-light);border-radius:6px;font-size:13px;color:var(--gray-mid);cursor:pointer;">✕</button>
+    `;
+    picker.appendChild(row);
+  }
+
+  function buildCompItemsText() {
+    const rows = document.querySelectorAll(".comp-product-row");
+    return Array.from(rows).map(row => {
+      const name = row.querySelector("select").value;
+      const qty  = row.querySelector("input").value;
+      return `${name} x${qty}`;
+    }).filter(Boolean).join(", ");
+  }
+
+  async function submitCompOrder() {
+    const name   = document.getElementById("compName").value.trim();
+    const email  = document.getElementById("compEmail").value.trim();
+    const street = document.getElementById("compStreet").value.trim();      const city   = document.getElementById("compCity").value.trim();
+    const state  = document.getElementById("compState").value.trim().toUpperCase();
+    const zip    = document.getElementById("compZip").value.trim();
+    const items = buildCompItemsText();
+    const reason = document.getElementById("compReason").value.trim();
+
+    const errBox     = document.getElementById("compError");
+    const successBox = document.getElementById("compSuccess");
+    errBox.style.display     = "none";
+    successBox.style.display = "none";
+
+    if (!name || !email || !street || !city || !state || !zip || !items) {
+      errBox.textContent   = "Please fill out all fields.";
+      errBox.style.display = "block";
+      return;
+    }
+
+    const payload = {
+      name,
+      email,
+      street,
+      city,
+      state,
+      zip,
+      address: `${street}, ${city}, ${state} ${zip}`,
+      items,
+      shipping: "0",
+      total:    "0",
+      payMethod: "comp",
+      notes:    reason ? `COMP ORDER — ${reason}` : "COMP ORDER"
+    };
+
+    try {
+      const res  = await fetch(SCRIPT_URL, {
+        method:  "POST",
+        headers: { "Content-Type": "text/plain" },
+        body:    JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.result === "success") {
+        successBox.textContent   = `✓ Comp order #${data.orderNumber} created successfully.`;
+        successBox.style.display = "block";
+        // Clear the form
+        ["compName","compEmail","compStreet","compCity","compState","compZip","compReason"]
+          .forEach(id => document.getElementById(id).value = "");
+        // Reset product picker
+        document.getElementById("compProductPicker").innerHTML = "";
+        addCompProductRow();
+      } else {
+        throw new Error(data.message || "Unknown error");
+      }
+    } catch (err) {
+      errBox.textContent   = "Error submitting order: " + err.message;
+      errBox.style.display = "block";
     }
   }
   
