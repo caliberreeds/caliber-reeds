@@ -60,12 +60,13 @@ exports.handler = async (event) => {
       // Get order details for email
       const orderDetails = await sheets.spreadsheets.values.get({
         spreadsheetId,
-        range: `Orders!A${sheetRow}:G${sheetRow}`
+        range: `Orders!A${sheetRow}:H${sheetRow}`
       });
       const orderRow = (orderDetails.data.values || [[]])[0];
       const customerName  = orderRow[5] || "";
       const customerEmail = orderRow[6] || "";
       const items         = orderRow[2] || "";
+      const address       = orderRow[7] || "";
 
       await fetch(SCRIPT_URL, {
         method:  "POST",
@@ -76,6 +77,7 @@ exports.handler = async (event) => {
           customerName:  customerName,
           customerEmail: customerEmail,
           items:         items,
+          address:       address,
           trackingNumber: data.tracking
         })
       });
